@@ -1,0 +1,19 @@
+{
+  "eslint.workingDirectories": [
+    "./styles",
+    "./components",
+    "./lib",
+    "./pages",
+    "./templates",
+    "./studio"
+  ],
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.format.semicolons": "remove",
+  "typescript.format.semicolons": "remove",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true, // automatically fix errors on save
+  },
+  "editor.formatOnSave": true, // Tell VSCode to format files on save
+  "editor.defaultFormatter": "esbenp.prettier-vscode" // Tell VSCode to use Prettier as default file formatter
+}

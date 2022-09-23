@@ -9,6 +9,7 @@ import publishedText from './publishedText'
 import speech from './speech'
 import statement from './statement'
 import category from './category'
+import project from './project'
 
 export default [
   publisher,
@@ -22,4 +23,5 @@ export default [
   speech,
   statement,
   category,
+  project,
 ]

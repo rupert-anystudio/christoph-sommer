@@ -8,6 +8,10 @@ export const defaultItems = [
     icon: BiStar,
     items: [
       getDocTypeListItem({
+        type: 'project',
+        title: 'Projects',
+      }),
+      getDocTypeListItem({
         type: 'publishedText',
         title: 'Texts',
       }),

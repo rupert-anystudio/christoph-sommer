@@ -4,6 +4,7 @@ import doiLink from './doiLink.js'
 import externalLink from './externalLink'
 import links from './links'
 import people from './people'
+import timeframe from './timeframe'
 import title from './title'
 
 export default [
@@ -14,4 +15,5 @@ export default [
   doiLink,
   links,
   categories,
+  timeframe,
 ]

@@ -12,6 +12,10 @@ export default {
       title: 'Title',
     },
     {
+      type: 'categories',
+      name: 'categories',
+    },
+    {
       type: 'text',
       name: 'excerpt',
       title: 'Excerpt',
@@ -34,11 +38,6 @@ export default {
       type: 'links',
       name: 'links',
       title: 'Links',
-    },
-    {
-      name: 'categories',
-      title: 'Categories',
-      type: 'tags',
     },
   ],
   preview: {

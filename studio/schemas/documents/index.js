@@ -8,6 +8,7 @@ import publisher from './publisher'
 import publishedText from './publishedText'
 import speech from './speech'
 import statement from './statement'
+import category from './category'
 
 export default [
   publisher,
@@ -20,4 +21,5 @@ export default [
   publishedText,
   speech,
   statement,
+  category,
 ]

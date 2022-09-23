@@ -12,6 +12,10 @@ export default {
       title: 'Title',
     },
     {
+      type: 'categories',
+      name: 'categories',
+    },
+    {
       type: 'text',
       name: 'context',
       title: 'Context / Info',
@@ -39,11 +43,6 @@ export default {
       type: 'links',
       name: 'links',
       title: 'Links',
-    },
-    {
-      name: 'categories',
-      title: 'Categories',
-      type: 'tags',
     },
     {
       name: 'video',

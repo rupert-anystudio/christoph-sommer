@@ -1,7 +1,7 @@
 {
   "root": true,
   "project": {
-    "name": "christoph-sommer"
+    "name": "Christoph Sommer"
   },
   "api": {
     "projectId": "jzd1x7me",
@@ -11,20 +11,21 @@
     "@sanity/base",
     "@sanity/default-layout",
     "@sanity/default-login",
-    "@sanity/desk-tool",
-    "autocomplete-tags"
+    "@sanity/desk-tool"
   ],
   "env": {
     "development": {
-      "plugins": [
-        "@sanity/vision"
-      ]
+      "plugins": ["@sanity/vision"]
     }
   },
   "parts": [
     {
       "name": "part:@sanity/base/schema",
       "path": "./schemas/schema"
+    },
+    {
+      "name": "part:@sanity/desk-tool/structure",
+      "path": "./deskStructure"
     }
   ]
 }

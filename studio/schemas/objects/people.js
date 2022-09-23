@@ -4,7 +4,13 @@ export default {
   type: 'array',
   of: [
     {
-      type: 'person',
+      type: 'reference',
+      name: 'person',
+      to: [
+        {
+          type: 'person',
+        },
+      ],
     },
   ],
 }

@@ -7,9 +7,10 @@ export default {
   icon: BiBuildings,
   fields: [
     {
-      type: 'title',
+      type: 'string',
       name: 'title',
       title: 'Name',
+      validation: (Rule) => Rule.required(),
     },
     {
       type: 'externalLink',

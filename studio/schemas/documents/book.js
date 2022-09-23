@@ -7,9 +7,10 @@ export default {
   icon: BiBook,
   fields: [
     {
-      type: 'title',
+      type: 'string',
       name: 'title',
-      title: 'Name',
+      title: 'Title',
+      validation: (Rule) => Rule.required(),
     },
     {
       type: 'date',

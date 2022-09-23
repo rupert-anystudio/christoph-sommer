@@ -4,20 +4,27 @@ export default {
   type: 'object',
   fields: [
     {
-      type: 'string',
-      name: 'title',
-      title: 'Title',
-    },
-    {
       type: 'url',
       name: 'url',
       title: 'URL',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      type: 'string',
+      name: 'title',
+      title: 'Title',
     },
   ],
   preview: {
     select: {
       title: 'title',
-      subtitle: 'url',
+      url: 'url',
+    },
+    prepare: ({ title, url }) => {
+      return {
+        title: title ?? 'External Link',
+        subtitle: url,
+      }
     },
   },
 }

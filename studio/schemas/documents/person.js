@@ -23,18 +23,24 @@ export default {
       name: 'website',
       title: 'Website',
     },
+    {
+      type: 'image',
+      name: 'image',
+      title: 'Image',
+    },
   ],
   preview: {
     select: {
       name: 'name',
       surname: 'surname',
       websiteUrl: 'website.url',
+      image: 'image.asset',
     },
-    prepare: ({ name, surname, websiteUrl }) => {
+    prepare: ({ name, surname, websiteUrl, image }) => {
       return {
         title: [name, surname].filter(Boolean).join(' '),
         subtitle: websiteUrl,
-        media: null,
+        media: image,
       }
     },
   },

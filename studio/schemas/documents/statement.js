@@ -7,23 +7,14 @@ export default {
   icon: BiMessageAltDetail,
   fields: [
     {
-      type: 'title',
+      type: 'string',
       name: 'title',
       title: 'Title',
+      validation: (Rule) => Rule.required(),
     },
     {
       type: 'categories',
       name: 'categories',
-    },
-    {
-      type: 'text',
-      name: 'context',
-      title: 'Context / Info',
-    },
-    {
-      type: 'text',
-      name: 'excerpt',
-      title: 'Excerpt',
     },
     {
       type: 'date',
@@ -31,8 +22,14 @@ export default {
       title: 'Date',
     },
     {
-      type: 'content',
-      name: 'content',
+      type: 'links',
+      name: 'links',
+      title: 'Links',
+    },
+    {
+      type: 'text',
+      name: 'context',
+      title: 'Context / Info',
     },
     {
       type: 'image',
@@ -40,9 +37,13 @@ export default {
       title: 'Image',
     },
     {
-      type: 'links',
-      name: 'links',
-      title: 'Links',
+      type: 'text',
+      name: 'excerpt',
+      title: 'Excerpt',
+    },
+    {
+      type: 'content',
+      name: 'content',
     },
     {
       name: 'video',

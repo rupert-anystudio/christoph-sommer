@@ -7,5 +7,9 @@ export default {
       type: 'externalLink',
       name: 'externalLink',
     },
+    {
+      type: 'doiLink',
+      name: 'doiLink',
+    },
   ],
 }

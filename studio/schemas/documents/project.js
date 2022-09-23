@@ -7,13 +7,29 @@ export default {
   icon: BiFlag,
   fields: [
     {
-      type: 'title',
+      type: 'string',
       name: 'title',
       title: 'Title',
+      validation: (Rule) => Rule.required(),
     },
     {
       type: 'categories',
       name: 'categories',
+    },
+    {
+      type: 'timeframe',
+      name: 'timeframe',
+      title: 'Timeframe',
+    },
+    {
+      type: 'links',
+      name: 'links',
+      title: 'Links',
+    },
+    {
+      type: 'image',
+      name: 'image',
+      title: 'Image',
     },
     {
       type: 'text',
@@ -23,26 +39,6 @@ export default {
     {
       type: 'content',
       name: 'content',
-    },
-    {
-      type: 'image',
-      name: 'image',
-      title: 'Image',
-    },
-    {
-      type: 'doiLink',
-      name: 'doiLink',
-      title: 'DOI Link',
-    },
-    {
-      type: 'links',
-      name: 'links',
-      title: 'Links',
-    },
-    {
-      type: 'timeframe',
-      name: 'timeframe',
-      title: 'Timeframe',
     },
   ],
   preview: {

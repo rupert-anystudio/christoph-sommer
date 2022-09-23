@@ -7,13 +7,24 @@ export default {
   icon: BiText,
   fields: [
     {
-      type: 'title',
+      type: 'string',
       name: 'title',
       title: 'Title',
+      validation: (Rule) => Rule.required(),
     },
     {
       type: 'categories',
       name: 'categories',
+    },
+    {
+      type: 'people',
+      name: 'coAuthors',
+      title: 'Co-authors',
+    },
+    {
+      type: 'links',
+      name: 'links',
+      title: 'Links',
     },
     {
       type: 'text',
@@ -24,25 +35,11 @@ export default {
       type: 'content',
       name: 'content',
     },
-    {
-      type: 'people',
-      name: 'coAuthors',
-      title: 'Co-authors',
-    },
-    {
-      type: 'doiLink',
-      name: 'doiLink',
-      title: 'DOI Link',
-    },
-    {
-      type: 'links',
-      name: 'links',
-      title: 'Links',
-    },
   ],
   preview: {
     select: {
       title: 'title',
+      subtitle: 'excerpt',
     },
   },
 }

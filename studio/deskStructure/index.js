@@ -1,9 +1,10 @@
 import S from '@sanity/desk-tool/structure-builder'
 import sanityClient from 'part:@sanity/base/client'
-import apiVersion from '../../lib/sanityApiVersion'
+import sanityConfig from '../../lib/sanity.config'
 import config from '../sanity.json'
 import { adminItems, defaultItems } from './deskStructure'
 
+const { apiVersion } = sanityConfig
 const client = sanityClient.withConfig({ apiVersion })
 const projectName = config.project.name
 

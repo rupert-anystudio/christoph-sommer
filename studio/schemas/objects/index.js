@@ -1,5 +1,6 @@
 import categories from './categories'
 import content from './content'
+import contentSimple from './contentSimple'
 import doiLink from './doiLink.js'
 import externalLink from './externalLink'
 import links from './links'
@@ -11,6 +12,7 @@ export default [
   externalLink,
   people,
   content,
+  contentSimple,
   doiLink,
   links,
   categories,

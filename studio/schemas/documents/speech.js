@@ -13,6 +13,11 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {
+      type: 'string',
+      name: 'context',
+      title: 'Context / Info',
+    },
+    {
       type: 'categories',
       name: 'categories',
     },
@@ -27,17 +32,12 @@ export default {
       title: 'Links',
     },
     {
-      type: 'text',
-      name: 'context',
-      title: 'Context / Info',
-    },
-    {
       type: 'image',
       name: 'image',
       title: 'Image',
     },
     {
-      type: 'text',
+      type: 'contentSimple',
       name: 'excerpt',
       title: 'Excerpt',
     },
@@ -45,23 +45,23 @@ export default {
       type: 'content',
       name: 'content',
     },
-    {
-      name: 'video',
-      title: 'Video',
-      type: 'array',
-      of: [
-        {
-          type: 'file',
-          name: 'videoFile',
-          title: 'Video File',
-        },
-        {
-          type: 'url',
-          name: 'videoUrl',
-          title: 'Video URL',
-        },
-      ],
-    },
+    // {
+    //   name: 'video',
+    //   title: 'Video',
+    //   type: 'array',
+    //   of: [
+    //     {
+    //       type: 'file',
+    //       name: 'videoFile',
+    //       title: 'Video File',
+    //     },
+    //     {
+    //       type: 'url',
+    //       name: 'videoUrl',
+    //       title: 'Video URL',
+    //     },
+    //   ],
+    // },
   ],
   preview: {
     select: {

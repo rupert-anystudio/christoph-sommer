@@ -24,14 +24,14 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {
-      type: 'date',
-      name: 'date',
-      title: 'Date',
-    },
-    {
       type: 'string',
       name: 'title',
       title: 'Title',
+    },
+    {
+      type: 'date',
+      name: 'date',
+      title: 'Date',
     },
     {
       type: 'image',
@@ -41,8 +41,15 @@ export default {
   ],
   preview: {
     select: {
-      title: 'magazine.title',
-      subtitle: 'issue',
+      magazine: 'magazine.title',
+      title: 'title',
+      issue: 'issue',
+      image: 'image.asset',
     },
+    prepare: ({ magazine, issue, title, image }) => ({
+      title: magazine,
+      subtitle: [title, issue].filter(Boolean).join(' - '),
+      media: image,
+    }),
   },
 }

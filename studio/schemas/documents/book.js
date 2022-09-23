@@ -13,6 +13,11 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {
+      type: 'string',
+      name: 'subtitle',
+      title: 'Subtitle',
+    },
+    {
       type: 'date',
       name: 'date',
       title: 'Publishing Date',
@@ -51,7 +56,14 @@ export default {
   preview: {
     select: {
       title: 'title',
-      subtitle: 'publisher.title',
+      subtitle: 'subtitle',
+      publisher: 'publisher.title',
+      image: 'image.asset',
     },
+    prepare: ({ title, subtitle, publisher, image }) => ({
+      title,
+      subtitle: [subtitle, publisher].filter(Boolean).join(' - '),
+      media: image,
+    }),
   },
 }

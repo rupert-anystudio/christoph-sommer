@@ -32,7 +32,7 @@ export default {
       title: 'Image',
     },
     {
-      type: 'text',
+      type: 'contentSimple',
       name: 'excerpt',
       title: 'Excerpt',
     },
@@ -44,7 +44,6 @@ export default {
   preview: {
     select: {
       title: 'title',
-      subtitle: 'excerpt',
     },
   },
 }

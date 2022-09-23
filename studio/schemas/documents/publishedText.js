@@ -27,6 +27,28 @@ export default {
       title: 'Links',
     },
     {
+      type: 'array',
+      name: 'publications',
+      title: 'Publications',
+      of: [
+        {
+          type: 'publicationNewspaper',
+        },
+        {
+          type: 'reference',
+          name: 'magazineIssue',
+          title: 'Magazine Issue',
+          to: [{ type: 'magazineIssue' }],
+        },
+        {
+          type: 'reference',
+          name: 'book',
+          title: 'Book',
+          to: [{ type: 'book' }],
+        },
+      ],
+    },
+    {
       type: 'text',
       name: 'excerpt',
       title: 'Excerpt',

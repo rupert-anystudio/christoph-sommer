@@ -42,7 +42,7 @@ export const defaultItems = [
           }),
           getDocTypeListItem({
             type: 'magazineIssue',
-            title: 'Magazine Issues',
+            title: 'Issues',
           }),
         ],
       }),

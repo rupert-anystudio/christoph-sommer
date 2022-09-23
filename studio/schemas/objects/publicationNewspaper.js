@@ -1,15 +1,14 @@
-import { BiReceipt } from 'react-icons/bi'
+import { BiNews } from 'react-icons/bi'
 
 export default {
-  title: 'Newspaper Article',
-  name: 'newspaperArticle',
-  type: 'document',
-  icon: BiReceipt,
+  type: 'object',
+  name: 'publicationNewspaper',
+  title: 'Newspaper',
+  icon: BiNews,
   fields: [
     {
       type: 'reference',
       name: 'newspaper',
-      title: 'Newspaper',
       validation: (Rule) => Rule.required(),
       to: [
         {
@@ -20,20 +19,24 @@ export default {
     {
       type: 'date',
       name: 'date',
-      title: 'Date',
-      validation: (Rule) => Rule.required(),
     },
     {
       type: 'image',
       name: 'image',
-      title: 'Image',
     },
   ],
   preview: {
     select: {
-      title: 'newspaper.title',
-      subtitle: 'date',
-      media: 'image->asset',
+      newspaper: 'newspaper.title',
+      date: 'date',
+      image: 'image.asset',
+    },
+    prepare: ({ newspaper, date, image }) => {
+      return {
+        title: newspaper,
+        subtitle: date,
+        media: image,
+      }
     },
   },
 }

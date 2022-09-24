@@ -25,8 +25,9 @@ const Card = styled.div`
 `
 
 export const CardTitle = styled.div`
-  font-size: var(--fs-large);
-  line-height: var(--lh-large);
+  font-size: var(--fs-larger);
+  line-height: var(--lh-larger);
+  font-family: var(--ff-title);
 `
 
 export const CardTags = styled.div`

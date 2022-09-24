@@ -29,6 +29,16 @@ export const CardTitle = styled.div`
   line-height: var(--lh-large);
 `
 
+export const CardTags = styled.div`
+  display: flex;
+  flex-direction: row;
+  > * {
+    &:not(:last-child) {
+      margin-right: 0.6rem;
+    }
+  }
+`
+
 const getKey_ = (entry) => entry?._id ?? null
 
 const renderContent_ = (entry) => <strong>{entry?.title ?? ''}</strong>

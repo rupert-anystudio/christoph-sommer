@@ -3,6 +3,10 @@ import { BiLibrary, BiStar } from 'react-icons/bi'
 import { getDocTypeListItem, getListItemItems } from './deskStructureUtils'
 
 export const defaultItems = [
+  getDocTypeListItem({
+    type: 'annoucement',
+    title: 'Annoucements',
+  }),
   getListItemItems({
     title: 'Portfolio',
     icon: BiStar,

@@ -11,6 +11,7 @@ export default {
       name: 'title',
       title: 'Title',
       validation: (Rule) => Rule.required(),
+      description: 'The name of this category.',
     },
   ],
   preview: {

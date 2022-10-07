@@ -11,11 +11,13 @@ export default {
       name: 'title',
       title: 'Name',
       validation: (Rule) => Rule.required(),
+      description: 'The name of this newspaper.',
     },
     {
       type: 'externalLink',
       name: 'website',
       title: 'Website',
+      description: 'The website related to this newspaper.',
     },
   ],
   preview: {

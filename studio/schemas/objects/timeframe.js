@@ -14,6 +14,7 @@ export default {
       name: 'end',
       title: 'End Date',
       validation: (Rule) => Rule.min(Rule.valueOfField('start')),
+      hidden: ({ parent, value }) => !value && !parent?.start,
     },
   ],
 }

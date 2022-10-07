@@ -11,22 +11,26 @@ export default {
       name: 'name',
       title: 'Name',
       validation: (Rule) => Rule.required(),
+      description: 'The name of this person.',
     },
     {
       type: 'string',
       name: 'surname',
       title: 'Surname',
       validation: (Rule) => Rule.required(),
+      description: 'The surname of this person.',
     },
     {
       type: 'externalLink',
       name: 'website',
       title: 'Website',
+      description: 'The website / online persence of this person, if present.',
     },
     {
       type: 'image',
       name: 'image',
       title: 'Image',
+      description: 'An portrait of this person, if present.',
     },
   ],
   preview: {

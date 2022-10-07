@@ -11,6 +11,7 @@ export default {
       name: 'title',
       title: 'Title',
       validation: (Rule) => Rule.required(),
+      description: 'The name of this speech.',
     },
     {
       type: 'string',
@@ -20,21 +21,25 @@ export default {
     {
       type: 'categories',
       name: 'categories',
+      description: 'A list of categories this sppech is related to.',
     },
     {
       type: 'date',
       name: 'date',
       title: 'Date',
+      description: 'The date this speech was held.',
     },
     {
       type: 'links',
       name: 'links',
       title: 'Links',
+      description: 'A list of accompanying links for this speech.',
     },
     {
       type: 'image',
       name: 'image',
       title: 'Image',
+      description: 'Will be used as a preview thumbnail in the frontend.',
     },
     {
       type: 'contentSimple',

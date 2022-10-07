@@ -11,20 +11,24 @@ export default {
       name: 'title',
       title: 'Title',
       validation: (Rule) => Rule.required(),
+      description: 'The title of this text.',
     },
     {
       type: 'categories',
       name: 'categories',
+      description: 'A list of categories this text is related to.',
     },
     {
       type: 'people',
       name: 'coAuthors',
       title: 'Co-authors',
+      description: 'A list of authors who contributed to this text.',
     },
     {
       type: 'links',
       name: 'links',
       title: 'Links',
+      description: 'A list of accompanying links for this text.',
     },
     {
       type: 'array',
@@ -52,10 +56,13 @@ export default {
       type: 'contentSimple',
       name: 'excerpt',
       title: 'Excerpt',
+      description:
+        'A shortended version this text for more digestible previews.',
     },
     {
       type: 'content',
       name: 'content',
+      description: 'The complete version of this text.',
     },
   ],
   preview: {

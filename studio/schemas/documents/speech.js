@@ -17,6 +17,8 @@ export default {
       type: 'string',
       name: 'context',
       title: 'Context / Info',
+      description:
+        'The context this speech was held in. This can be a place, an event or anything alike.',
     },
     {
       type: 'categories',
@@ -45,10 +47,13 @@ export default {
       type: 'contentSimple',
       name: 'excerpt',
       title: 'Excerpt',
+      description:
+        'A short version of this speech for more digestible previews.',
     },
     {
       type: 'content',
       name: 'content',
+      description: 'The full content of this speech.',
     },
     // {
     //   name: 'video',

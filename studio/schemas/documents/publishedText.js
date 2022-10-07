@@ -34,6 +34,7 @@ export default {
       type: 'array',
       name: 'publications',
       title: 'Publications',
+      description: 'A list publications for this text.',
       of: [
         {
           type: 'publicationNewspaper',

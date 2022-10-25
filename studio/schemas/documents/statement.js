@@ -48,12 +48,7 @@ export default {
       name: 'excerpt',
       title: 'Excerpt',
       description:
-        'A short version of this statements for more digestible previews.',
-    },
-    {
-      type: 'content',
-      name: 'content',
-      description: 'The full content of this statement.',
+        'A short version of this statement for more digestible previews.',
     },
     // {
     //   name: 'video',

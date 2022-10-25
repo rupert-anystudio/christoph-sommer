@@ -44,11 +44,6 @@ export default {
       description:
         'A shortended version of the actual content for more digestible previews.',
     },
-    {
-      type: 'content',
-      name: 'content',
-      description: 'The complete story and content describing this project.',
-    },
   ],
   preview: {
     select: {

@@ -60,11 +60,6 @@ export default {
       description:
         'A shortended version this text for more digestible previews.',
     },
-    {
-      type: 'content',
-      name: 'content',
-      description: 'The complete version of this text.',
-    },
   ],
   preview: {
     select: {

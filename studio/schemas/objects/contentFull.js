@@ -2,7 +2,7 @@ import React from 'react'
 
 export default {
   title: 'Content',
-  name: 'content',
+  name: 'contentFull',
   type: 'array',
   of: [
     // {

@@ -50,11 +50,6 @@ export default {
       description:
         'A short version of this speech for more digestible previews.',
     },
-    {
-      type: 'content',
-      name: 'content',
-      description: 'The full content of this speech.',
-    },
     // {
     //   name: 'video',
     //   title: 'Video',

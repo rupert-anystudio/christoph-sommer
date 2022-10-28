@@ -1,43 +1,11 @@
+import React from 'react'
 import styled from 'styled-components'
 
 const Grid = styled.div`
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
   padding: 2rem;
-`
-
-const Card = styled.div`
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  > * {
-    &:not(:first-child) {
-      margin-top: 1rem;
-    }
-  }
-`
-
-export const CardTitle = styled.div`
-  font-size: var(--fs-larger);
-  line-height: var(--lh-larger);
-  font-family: var(--ff-title);
-`
-
-export const CardTags = styled.div`
-  display: flex;
-  flex-direction: row;
-  > * {
-    &:not(:last-child) {
-      margin-right: 0.6rem;
-    }
-  }
 `
 
 const getKey_ = (entry) => entry?._id ?? null
@@ -54,7 +22,7 @@ const CardGrid = ({
       {entries.map((entry) => {
         const key = getKey(entry)
         if (!key) return null
-        return <Card key={key}>{renderContent(entry)}</Card>
+        return <React.Fragment key={key}>{renderContent(entry)}</React.Fragment>
       })}
     </Grid>
   )

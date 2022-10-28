@@ -14,7 +14,7 @@ export default {
       description: 'The name of this statement.',
     },
     {
-      type: 'string',
+      type: 'text',
       name: 'context',
       title: 'Context / Info',
       description:

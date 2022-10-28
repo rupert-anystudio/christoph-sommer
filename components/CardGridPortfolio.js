@@ -1,40 +1,38 @@
-import CardGrid, { CardTags, CardTitle } from './CardGrid'
+import CardGrid from './CardGrid'
 import Tag from './Tag'
 import PortableText from './PortableText'
 import { getEntryTypeColor, getEntryTypeLabel } from '../lib/entryHelpers'
+import { CardTitle, Small } from './Primitives'
+import CardTags from './CardTags'
+import Card from './Card'
 
-const getEntryTags = (entry) => {
-  const color = getEntryTypeColor(entry)
-  const typeTag = {
-    key: 'typeTag',
-    label: getEntryTypeLabel(entry),
-    color,
-  }
-  const otherTags = (entry?.categories ?? []).map((c) => ({
+const getEntryTags = (categories = []) =>
+  (categories || []).map((c) => ({
     key: c._id,
     label: c.title,
-    color,
   }))
-  return [typeTag, ...otherTags]
-}
 
 const CardGridPortfolio = ({ portfolio = [] }) => {
   const getKey = (entry) => entry?._id ?? null
 
   const renderContent = (entry) => {
-    const tags = getEntryTags(entry)
+    const { _type, title, categories, excerpt } = entry
+    const tags = getEntryTags(categories)
     return (
-      <>
-        <CardTags>
-          {tags.map((tag) => (
-            <Tag key={tag.key} style={{ backgroundColor: tag.color }}>
-              {tag.label}
-            </Tag>
-          ))}
-        </CardTags>
-        <CardTitle>{entry?.title}</CardTitle>
-        <PortableText value={entry?.excerpt} />
-      </>
+      <Card data-cardtype={_type}>
+        <div>
+          <Small>{getEntryTypeLabel(_type)}</Small>
+        </div>
+        <CardTitle as="h2">{title}</CardTitle>
+        {tags.length > 0 && (
+          <CardTags>
+            {tags.map((tag) => (
+              <Tag key={tag.key}>{tag.label}</Tag>
+            ))}
+          </CardTags>
+        )}
+        <PortableText value={excerpt} />
+      </Card>
     )
   }
 

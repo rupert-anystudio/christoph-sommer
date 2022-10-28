@@ -14,7 +14,7 @@ export default {
       description: 'The name of this speech.',
     },
     {
-      type: 'string',
+      type: 'text',
       name: 'context',
       title: 'Context / Info',
       description:

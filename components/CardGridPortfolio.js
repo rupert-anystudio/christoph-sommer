@@ -2,9 +2,11 @@ import CardGrid from './CardGrid'
 import Tag from './Tag'
 import PortableText from './PortableText'
 import { getEntryTypeColor, getEntryTypeLabel } from '../lib/entryHelpers'
-import { CardTitle, Small } from './Primitives'
+import { Body, CardTitle, Small } from './Primitives'
 import CardTags from './CardTags'
 import Card from './Card'
+import CardToggle from './CardToggle'
+import CardSection from './CardSection'
 
 const getEntryTags = (categories = []) =>
   (categories || []).map((c) => ({
@@ -16,7 +18,7 @@ const CardGridPortfolio = ({ portfolio = [] }) => {
   const getKey = (entry) => entry?._id ?? null
 
   const renderContent = (entry) => {
-    const { _type, title, categories, excerpt } = entry
+    const { _type, title, categories, excerpt, context } = entry
     const tags = getEntryTags(categories)
     return (
       <Card data-cardtype={_type}>
@@ -31,7 +33,15 @@ const CardGridPortfolio = ({ portfolio = [] }) => {
             ))}
           </CardTags>
         )}
-        <PortableText value={excerpt} />
+        {context && (
+          <CardSection title={'Kontext'}>
+            <Body>{context}</Body>
+          </CardSection>
+        )}
+        <CardSection>
+          <PortableText value={excerpt} />
+        </CardSection>
+        <CardToggle />
       </Card>
     )
   }

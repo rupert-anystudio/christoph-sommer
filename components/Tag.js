@@ -7,6 +7,7 @@ const Tag = styled(Small)`
   color: var(--color-txt);
   padding: 0.3rem 0.8em;
   border-radius: 4rem;
+  white-space: pre;
   &:before {
     content: '';
     position: absolute;

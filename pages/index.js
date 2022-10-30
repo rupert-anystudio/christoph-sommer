@@ -1,9 +1,11 @@
 import { getClient } from '../lib/sanity.server'
 import CardGridPortfolio from '../components/CardGridPortfolio'
+import ThemeToggle from '../components/ThemeToggle'
 
 export default function Home({ portfolio = [] }) {
   return (
     <>
+      <ThemeToggle />
       <CardGridPortfolio portfolio={portfolio} />
     </>
   )

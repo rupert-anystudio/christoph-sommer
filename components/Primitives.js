@@ -28,3 +28,11 @@ export const CardTitle = styled(Text)`
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
 `
+
+export const SmallPill = styled(Small)`
+  position: relative;
+  display: inline-block;
+  padding: 0.3rem 0.8em;
+  border-radius: 4rem;
+  white-space: pre;
+`

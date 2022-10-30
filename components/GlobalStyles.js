@@ -1,6 +1,7 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
+import { useAppContext } from './AppContext'
 
-const GlobalStyles = createGlobalStyle`
+const Styles = createGlobalStyle`
   :root {
     
     /* DIMENSIONS */
@@ -13,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
     --color-offwhite: #f9f9f9;
     --color-grey: #CFCFCF;
     --color-black: black;
+    --color-offblack: #333333;
     --color-blue:#3959FF;
     --color-teal: #BEF5E5;
 
@@ -20,14 +22,14 @@ const GlobalStyles = createGlobalStyle`
     --color-border: var(--color-grey);
     --color-bg: var(--color-white);
     --color-txt: var(--color-blue);
-    /* --color-project-bg: var(--color-blue);
+    --color-project-bg: var(--color-blue);
     --color-project-txt: var(--color-teal);
     --color-text-bg: var(--color-teal);
     --color-text-txt: var(--color-blue);
     --color-statement-bg: var(--color-grey);
     --color-statement-txt: var(--color-black);
     --color-speech-bg: var(--color-black);
-    --color-speech-txt: var(--color-teal); */
+    --color-speech-txt: var(--color-teal);
 
     /* STYLE PALETTE^*/
     --tag-opacity: 0.3;
@@ -55,6 +57,23 @@ const GlobalStyles = createGlobalStyle`
     --fs-big: 3rem;
     --lh-big: 1.3;
   }
+  ${(p) =>
+    p.theme === 'Dark' &&
+    css`
+      :root {
+        --color-border: var(--color-grey);
+        --color-bg: var(--color-black);
+        --color-txt: var(--color-white);
+        --color-project-bg: var(--color-offblack);
+        --color-project-txt: var(--color-teal);
+        --color-text-bg: var(--color-offblack);
+        --color-text-txt: var(--color-blue);
+        --color-statement-bg: var(--color-offblack);
+        --color-statement-txt: var(--color-black);
+        --color-speech-bg: var(--color-offblack);
+        --color-speech-txt: var(--color-teal);
+      }
+    `}
   *, *:before, *:after {
     box-sizing: border-box;
   }
@@ -94,5 +113,10 @@ const GlobalStyles = createGlobalStyle`
     margin: 0 auto;
   }
 `
+
+const GlobalStyles = () => {
+  const { theme } = useAppContext()
+  return <Styles theme={theme} />
+}
 
 export default GlobalStyles

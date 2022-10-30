@@ -1,91 +1,24 @@
 import { getClient } from '../lib/sanity.server'
 import CardGridPortfolio from '../components/CardGridPortfolio'
+import { entryQuery } from '../lib/entryHelpers'
 
-export default function Home({ portfolio = [] }) {
+export default function Home({ docs = [] }) {
   return (
     <>
-      <CardGridPortfolio portfolio={portfolio} />
+      <CardGridPortfolio portfolio={docs} />
     </>
   )
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
-  const portfolio = await client.fetch(
-    `*[_type in ["publishedText", "project", "statement", "speech"]]|order(_createdAt desc){
-      _id,
-      _type,
-      title,
-      categories[]{
-        _key,
-        ...@->{
-          title,
-        }
-      },
-      excerpt[],
-      links[],
-      _type == "project" => {
-        timeframe,
-      },
-      _type in ["statement", "speech"] => {
-        context,
-        date,
-      },
-      _type == "publishedText" => {
-        coAuthors[]{
-          _key,
-          ...@->{
-            name,
-            surname,
-            website,
-          }
-        },
-        publications[]{
-          _type,
-          _key,
-          _type == "publicationNewspaper" => {
-            date,
-            newspaper->{
-              title,
-              website,
-            },
-          },
-          _type == "magazineIssue" => {
-            ...@->{
-              issue,
-              title,
-              magazine->{
-                title,
-                website,
-                publisher->{
-                  title,
-                  website,
-                },
-              },
-            },
-          },
-          _type == "book" => {
-            ...@->{
-              title,
-              subtitle,
-              date,
-              publisher->{
-                title,
-                website,
-              },
-              editors[]->,
-              authors[]->,
-            },
-          },
-        },
-      },
-    }`
-  )
+  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(_createdAt desc)${entryQuery}`
+  const docs = await client.fetch(docsQuery)
   return {
     revalidate: 10,
     props: {
       preview,
-      portfolio,
+      docs,
     },
   }
 }

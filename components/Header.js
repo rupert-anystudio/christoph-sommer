@@ -9,6 +9,14 @@ const Wrap = styled.div`
   top: 0;
   background: var(--color-bg);
   border-bottom: 2px solid var(--color-border);
+  padding: var(--padding-page);
+  display: flex;
+  flex-direction: row;
+  > * {
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
 `
 
 const Header = ({ children }) => {

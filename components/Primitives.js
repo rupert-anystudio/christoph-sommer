@@ -36,3 +36,13 @@ export const SmallPill = styled(Small)`
   border-radius: 4rem;
   white-space: pre;
 `
+
+export const SmallPillButton = styled(SmallPill).attrs({ as: 'button' })`
+  background: var(--color-txt);
+  color: var(--color-bg-root);
+  appearance: none;
+  border: none;
+  @media (hover: hover) {
+    cursor: pointer;
+  }
+`

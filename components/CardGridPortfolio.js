@@ -18,6 +18,15 @@ const getEntryTags = (categories = []) =>
 
 const getKey = (entry) => entry?._id ?? null
 
+const returnEntryPath = (entry) => {
+  const { _id, _type } = entry
+  if (_type === 'publishedText') return `/text/${_id}`
+  // if (_type === 'statement') return `/statemnt/${_id}`
+  // if (_type === 'speech') return `/vortrag/${_id}`
+  // if (_type === 'project') return `/projekt/${_id}`
+  return null
+}
+
 const returnPublicationProps = (p) => {
   const { issue, title, magazine, newspaper, date, subtitle } = p
   if (p._type === 'magazineIssue') {
@@ -96,7 +105,7 @@ const CardGridPortfolio = ({ portfolio = [] }) => {
             <PortableText value={excerpt} />
           </CardSection>
         )}
-        <CardToggle />
+        <CardToggle href={returnEntryPath(entry)} />
       </Card>
     )
   }

@@ -1,6 +1,7 @@
+import Link from 'next/link'
 import styled from 'styled-components'
 import Card from './Card'
-import { SmallPill } from './Primitives'
+import { SmallPillButton } from './Primitives'
 
 const Wrap = styled.div`
   position: absolute;
@@ -33,21 +34,22 @@ const Content = styled.div`
   }
 `
 
-const Toggle = styled(SmallPill).attrs({ as: 'button' })`
+const Toggle = styled(SmallPillButton)`
   background: var(--color-txt);
   color: var(--color-bg-root);
-  appearance: none;
-  border: none;
-  @media (hover: hover) {
-    cursor: pointer;
-  }
 `
 
-const CardToggle = () => {
+const CardToggle = ({ href }) => {
   return (
     <Wrap>
       <Content>
-        <Toggle>...</Toggle>
+        {href ? (
+          <Link href={href} passHref>
+            <Toggle as="a">...</Toggle>
+          </Link>
+        ) : (
+          <Toggle>...</Toggle>
+        )}
       </Content>
     </Wrap>
   )

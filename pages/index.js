@@ -1,11 +1,9 @@
 import { getClient } from '../lib/sanity.server'
 import CardGridPortfolio from '../components/CardGridPortfolio'
-import ThemeToggle from '../components/ThemeToggle'
 
 export default function Home({ portfolio = [] }) {
   return (
     <>
-      <ThemeToggle />
       <CardGridPortfolio portfolio={portfolio} />
     </>
   )
@@ -18,9 +16,11 @@ export async function getStaticProps({ preview = false }) {
       _id,
       _type,
       title,
-      categories[]->{
-        _id,
-        title,
+      categories[]{
+        _key,
+        ...@->{
+          title,
+        }
       },
       excerpt[],
       links[],
@@ -32,10 +32,13 @@ export async function getStaticProps({ preview = false }) {
         date,
       },
       _type == "publishedText" => {
-        coAuthors[]->{
-          _id,
-          name,
-          surname,
+        coAuthors[]{
+          _key,
+          ...@->{
+            name,
+            surname,
+            website,
+          }
         },
         publications[]{
           _type,

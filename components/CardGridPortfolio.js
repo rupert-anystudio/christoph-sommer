@@ -7,18 +7,53 @@ import CardTags from './CardTags'
 import Card from './Card'
 import CardToggle from './CardToggle'
 import CardSection from './CardSection'
+import React from 'react'
+import Publication from './Publication'
 
 const getEntryTags = (categories = []) =>
   (categories || []).map((c) => ({
-    key: c._id,
+    key: c._key,
     label: c.title,
   }))
 
-const CardGridPortfolio = ({ portfolio = [] }) => {
-  const getKey = (entry) => entry?._id ?? null
+const getKey = (entry) => entry?._id ?? null
 
+const returnPublicationProps = (p) => {
+  const { issue, title, magazine, newspaper, date, subtitle } = p
+  if (p._type === 'magazineIssue') {
+    return {
+      value: [magazine.title, title].filter(Boolean).join(' - '),
+      date: issue,
+      url: magazine?.website?.url,
+    }
+  }
+  if (p._type === 'publicationNewspaper') {
+    return {
+      value: newspaper.title,
+      date: date,
+      url: newspaper?.website?.url,
+    }
+  }
+  if (p._type === 'book') {
+    return {
+      value: [title, subtitle].filter(Boolean).join(' - '),
+      date: date,
+    }
+  }
+  return null
+}
+
+const CardGridPortfolio = ({ portfolio = [] }) => {
   const renderContent = (entry) => {
-    const { _type, title, categories, excerpt, context } = entry
+    const {
+      _type,
+      title,
+      categories,
+      excerpt,
+      context,
+      publications,
+      coAuthors,
+    } = entry
     const tags = getEntryTags(categories)
     return (
       <Card data-cardtype={_type}>
@@ -33,14 +68,34 @@ const CardGridPortfolio = ({ portfolio = [] }) => {
             ))}
           </CardTags>
         )}
+        {coAuthors && (
+          <CardSection title={'Mit'}>
+            {coAuthors.map((a) => {
+              return (
+                <Body key={a._key}>
+                  {[a.name, a.surname].filter(Boolean).join(' ')}
+                </Body>
+              )
+            })}
+          </CardSection>
+        )}
         {context && (
           <CardSection title={'Kontext'}>
             <Body>{context}</Body>
           </CardSection>
         )}
-        <CardSection>
-          <PortableText value={excerpt} />
-        </CardSection>
+        {publications && (
+          <CardSection title={'Veröffentlichungen'}>
+            {publications.map((p) => {
+              return <Publication key={p._key} {...returnPublicationProps(p)} />
+            })}
+          </CardSection>
+        )}
+        {excerpt && (
+          <CardSection>
+            <PortableText value={excerpt} />
+          </CardSection>
+        )}
         <CardToggle />
       </Card>
     )

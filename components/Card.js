@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 const Card = styled.div`
-  position: relative;
   /* &[data-cardtype='publishedText'] {
     --color-bg: var(--color-teal);
     --color-txt: var(--color-blue);
@@ -42,6 +41,7 @@ const Card = styled.div`
     --color-txt: var(--color-statement-txt);
     --tag-opacity: 0.2;
   }
+  position: relative;
   padding: var(--padding-card-v) var(--padding-card-h);
   display: flex;
   flex-direction: column;
@@ -51,10 +51,14 @@ const Card = styled.div`
   color: var(--color-txt);
   height: 60rem;
   overflow: hidden;
+  /* border-image: var(--color-bg); */
   > * {
     &:not(:first-child) {
       margin-top: 1rem;
     }
+  }
+  @media (hover: hover) {
+    /* cursor: pointer; */
   }
 `
 

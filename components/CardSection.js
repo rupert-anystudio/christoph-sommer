@@ -6,7 +6,7 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  max-width: 100%;
+  width: 100%;
   border-top: 2px solid var(--color-txt);
   padding: var(--padding-card-h) 0;
 `

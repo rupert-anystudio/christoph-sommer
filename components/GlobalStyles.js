@@ -16,7 +16,9 @@ const Styles = createGlobalStyle`
     --color-black: black;
     --color-offblack: #131313;
     --color-blue:#3959FF;
+    --color-blue--rgb: 57, 89, 255;
     --color-teal: #BEF5E5;
+    --color-teal--rgb: 190, 245, 229;
 
     /* DEFAULT THEME */
     --color-bg-root: var(--color-white);
@@ -65,15 +67,15 @@ const Styles = createGlobalStyle`
         --color-border: var(--color-blue);
         --color-bg: var(--color-black);
         --color-bg-root: var(--color-black);
-        --color-txt: var(--color-offwhite);
+        --color-txt: var(--color-blue);
         --color-project-bg: var(--color-offblack);
         --color-project-txt: var(--color-teal);
         --color-text-bg: var(--color-offblack);
         --color-text-txt: var(--color-blue);
         --color-statement-bg: var(--color-offblack);
         --color-statement-txt: var(--color-offwhite);
-        --color-speech-bg: var(--color-black);
-        --color-speech-txt: var(--color-teal);
+        --color-speech-bg: var(--color-grey);
+        --color-speech-txt: var(--color-blue);
       }
     `}
   *, *:before, *:after {

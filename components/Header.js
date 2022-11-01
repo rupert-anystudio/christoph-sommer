@@ -12,6 +12,8 @@ const Wrap = styled.div`
   padding: var(--padding-page);
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
   > * {
     &:not(:last-child) {
       margin-right: 1rem;

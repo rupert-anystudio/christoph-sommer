@@ -6,7 +6,7 @@ const defaultElem = styled.span`
   text-decoration: none;
 `
 
-export const AnyLink = ({
+const AnyLink = ({
   children,
   href,
   isActive = false,
@@ -54,3 +54,5 @@ export const AnyLink = ({
     </Elem>
   )
 }
+
+export default AnyLink

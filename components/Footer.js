@@ -1,20 +1,16 @@
 import styled from 'styled-components'
 
-const Header = styled.header`
+const Footer = styled.footer`
   position: relative;
-  position: sticky;
-  flex: 0;
-  top: 0;
-  left: 0;
   width: 100%;
-  z-index: 100;
+  flex: 0;
   background: var(--color-bg);
-  border-bottom: 2px solid var(--color-txt);
-  padding: var(--padding-page);
+  border-top: 2px solid var(--color-txt);
+  padding: 2rem var(--padding-page) 4rem var(--padding-page);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   > * {
     &:not(:last-child) {
       margin-right: 1rem;
@@ -22,4 +18,4 @@ const Header = styled.header`
   }
 `
 
-export default Header
+export default Footer

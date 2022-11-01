@@ -23,8 +23,8 @@ const Styles = createGlobalStyle`
     /* DEFAULT THEME */
     --color-bg-root: var(--color-white);
     --color-bg: var(--color-white);
-    --color-txt: var(--color-black);
-    --color-border: var(--color-grey);
+    --color-txt: var(--color-blue);
+  
     --color-project-bg: var(--color-blue);
     --color-project-txt: var(--color-teal);
     --color-text-bg: var(--color-teal);

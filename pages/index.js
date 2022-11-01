@@ -6,7 +6,6 @@ import PortableText from '../components/PortableText'
 import Section from '../components/Section'
 
 export default function Home({ docs = [], about = {} }) {
-  console.log({ about })
   return (
     <>
       <ExpandableSection>

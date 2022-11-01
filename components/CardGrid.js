@@ -5,7 +5,6 @@ const Grid = styled.div`
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(42rem, 1fr));
-  padding: 2rem;
 `
 
 const getKey_ = (entry) => entry?._id ?? null

@@ -29,6 +29,14 @@ export const defaultItems = [
       }),
     ],
   }),
+  getDocTypeListItem({
+    type: 'siteSettings',
+    title: 'Site Settings',
+  }),
+  getDocTypeListItem({
+    type: 'aboutPage',
+    title: 'About',
+  }),
   getListItemItems({
     title: 'Library',
     icon: BiLibrary,

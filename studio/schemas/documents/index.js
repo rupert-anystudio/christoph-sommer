@@ -10,6 +10,8 @@ import statement from './statement'
 import category from './category'
 import project from './project'
 import annoucement from './annoucement'
+import aboutPage from './aboutPage'
+import siteSettings from './siteSettings'
 
 export default [
   publisher,
@@ -24,4 +26,6 @@ export default [
   category,
   project,
   annoucement,
+  aboutPage,
+  siteSettings,
 ]

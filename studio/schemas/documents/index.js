@@ -12,6 +12,8 @@ import project from './project'
 import annoucement from './annoucement'
 import aboutPage from './aboutPage'
 import siteSettings from './siteSettings'
+import imprintPage from './imprintPage'
+import privacyPage from './privacyPage'
 
 export default [
   publisher,
@@ -28,4 +30,6 @@ export default [
   annoucement,
   aboutPage,
   siteSettings,
+  imprintPage,
+  privacyPage,
 ]

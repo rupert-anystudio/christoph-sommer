@@ -5,7 +5,7 @@ import ExpandableSection from '../components/ExpandableSection'
 import PortableText from '../components/PortableText'
 import Section from '../components/Section'
 
-export default function Home({ docs = [], about = {} }) {
+export default function Home({ docs = [], about = {}, annoucements = [] }) {
   return (
     <>
       <ExpandableSection>
@@ -29,12 +29,16 @@ export async function getStaticProps({ preview = false }) {
   // fetch about content
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`
   const about = await client.fetch(aboutQuery)
+  // fetch annoucements
+  const annoucementsQuery = `*[_type == "annoucement"]{ title, content, date }`
+  const annoucements = await client.fetch(annoucementsQuery)
   return {
     revalidate: 10,
     props: {
       preview,
       docs,
       about,
+      annoucements,
     },
   }
 }

@@ -1,4 +1,5 @@
 import 'normalize.css'
+import Annoucements from '../components/Annoucements'
 import { AppContextProvider } from '../components/AppContext'
 import Footer from '../components/Footer'
 import FooterNav from '../components/FooterNav'
@@ -13,11 +14,13 @@ function MyApp({ Component, pageProps }) {
     { key: 'imprint', href: '/impressum', label: 'Impressum' },
     { key: 'privacy', href: '/datenschutz', label: 'Datenschutz' },
   ]
+  const { annoucements } = pageProps
   return (
     <AppContextProvider>
       <GlobalStyles />
       <Header>
         <HeaderLogo />
+        <Annoucements annoucements={annoucements} />
         <ThemeToggle />
       </Header>
       <Main>

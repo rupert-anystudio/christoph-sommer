@@ -1,8 +1,30 @@
 import S from '@sanity/desk-tool/structure-builder'
-import { BiLibrary, BiStar } from 'react-icons/bi'
+import { BiDesktop, BiLibrary, BiStar } from 'react-icons/bi'
 import { getDocTypeListItem, getListItemItems } from './deskStructureUtils'
 
 export const defaultItems = [
+  getListItemItems({
+    title: 'Site',
+    icon: BiDesktop,
+    items: [
+      getDocTypeListItem({
+        type: 'siteSettings',
+        title: 'General',
+      }),
+      getDocTypeListItem({
+        type: 'aboutPage',
+        title: 'About',
+      }),
+      getDocTypeListItem({
+        type: 'imprintPage',
+        title: 'Imprint',
+      }),
+      getDocTypeListItem({
+        type: 'privacyPage',
+        title: 'Data Privacy',
+      }),
+    ],
+  }),
   getDocTypeListItem({
     type: 'annoucement',
     title: 'Annoucements',
@@ -28,14 +50,6 @@ export const defaultItems = [
         title: 'Speeches',
       }),
     ],
-  }),
-  getDocTypeListItem({
-    type: 'siteSettings',
-    title: 'Site Settings',
-  }),
-  getDocTypeListItem({
-    type: 'aboutPage',
-    title: 'About',
   }),
   getListItemItems({
     title: 'Library',

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styled from 'styled-components'
 
-const Logo = styled.a`
+const ChristophSommer = styled.a`
   font-size: 6rem;
   line-height: 0.8334;
   font-family: var(--ff-suisse);
@@ -19,15 +19,15 @@ const Logo = styled.a`
   }
 `
 
-const HeaderLogo = () => {
+const Logo = () => {
   return (
     <Link passHref href="/">
-      <Logo>
+      <ChristophSommer>
         <span>Christoph</span>
         <span>Sommer</span>
-      </Logo>
+      </ChristophSommer>
     </Link>
   )
 }
 
-export default HeaderLogo
+export default Logo

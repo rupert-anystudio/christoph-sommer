@@ -6,7 +6,7 @@ import Footer from '../components/Footer'
 import FooterNav from '../components/FooterNav'
 import GlobalStyles from '../components/GlobalStyles'
 import Header from '../components/Header'
-import HeaderLogo from '../components/HeaderLogo'
+import Logo from '../components/Logo'
 import Main from '../components/Main'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
 import ThemeToggle from '../components/ThemeToggle'
@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
         <FilterContextProvider>
           <GlobalStyles />
           <Header>
-            <HeaderLogo />
+            <Logo />
             <Annoucements />
             <ThemeToggle />
           </Header>

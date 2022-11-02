@@ -6,7 +6,7 @@ export default {
   type: 'document',
   icon: BiBook,
   isSingleton: true,
-  editOnly: false,
+  editOnly: true,
   fields: [
     {
       type: 'string',

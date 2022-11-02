@@ -6,7 +6,7 @@ export default {
   type: 'document',
   icon: BiLock,
   isSingleton: true,
-  editOnly: false,
+  editOnly: true,
   fields: [
     {
       type: 'string',

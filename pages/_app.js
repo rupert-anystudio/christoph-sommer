@@ -10,6 +10,11 @@ import Logo from '../components/Logo'
 import Main from '../components/Main'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
 import ThemeToggle from '../components/ThemeToggle'
+import { gsap } from 'gsap'
+import { CSSPlugin } from 'gsap/CSSPlugin'
+import { MorphSVGPlugin } from 'gsap/dist/MorphSVGPlugin'
+
+gsap.registerPlugin(CSSPlugin, MorphSVGPlugin)
 
 function MyApp({ Component, pageProps }) {
   return (

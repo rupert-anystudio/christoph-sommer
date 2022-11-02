@@ -14,7 +14,7 @@ export default function Home({ docs = [], about = {}, annoucements = [] }) {
     filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
   return (
     <>
-      <ExpandableSection>
+      {/* <ExpandableSection>
         <PortableText value={about?.missionStatement} />
       </ExpandableSection>
       <ExpandableSection title="About">
@@ -22,7 +22,7 @@ export default function Home({ docs = [], about = {}, annoucements = [] }) {
       </ExpandableSection>
       <FilterSection>
         <FilterSelect />
-      </FilterSection>
+      </FilterSection> */}
       <Section>
         <CardGridPortfolio portfolio={filteredDocs} />
       </Section>

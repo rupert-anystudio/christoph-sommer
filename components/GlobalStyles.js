@@ -1,5 +1,5 @@
 import { createGlobalStyle, css } from 'styled-components'
-import { useAppContext } from './AppContext'
+import { useThemeContext } from './ThemeContext'
 
 const Styles = createGlobalStyle`
   :root {
@@ -118,7 +118,7 @@ const Styles = createGlobalStyle`
 `
 
 const GlobalStyles = () => {
-  const { theme } = useAppContext()
+  const { theme } = useThemeContext()
   return <Styles theme={theme} />
 }
 

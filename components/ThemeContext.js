@@ -1,9 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect'
 
-export const AppContext = createContext()
+export const ThemeContext = createContext()
 
-export const AppContextProvider = ({ children }) => {
+export const ThemeContextProvider = ({ children }) => {
   const [theme, setTheme] = useState('Light')
   const onThemeToggle = () => {
     setTheme((prev) => {
@@ -22,7 +22,7 @@ export const AppContextProvider = ({ children }) => {
     theme,
     onThemeToggle,
   }
-  return <AppContext.Provider value={state}>{children}</AppContext.Provider>
+  return <ThemeContext.Provider value={state}>{children}</ThemeContext.Provider>
 }
 
-export const useAppContext = () => useContext(AppContext)
+export const useThemeContext = () => useContext(ThemeContext)

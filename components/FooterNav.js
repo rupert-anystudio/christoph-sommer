@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import AnyLink from './AnyLink'
+import { usePagePropsContext } from './PagePropsContext'
 import { Small } from './Primitives'
 
 const NavLink = styled(Small).attrs({ as: 'a' })`
@@ -7,10 +8,11 @@ const NavLink = styled(Small).attrs({ as: 'a' })`
   color: var(--color-txt);
 `
 
-const FooterNav = ({ nav = [] }) => {
+const FooterNav = () => {
+  const { footerNav } = usePagePropsContext()
   return (
     <>
-      {nav.map(({ key, label, href }) => (
+      {footerNav.map(({ key, label, href }) => (
         <AnyLink href={href} key={key} Elem={NavLink}>
           {label}
         </AnyLink>

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "svgs": "npx @svgr/cli -d svgs svgs --ref"
   },
   "dependencies": {
     "@portabletext/react": "^1.0.6",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@sanity/cli": "^2.33.3",
+    "@svgr/cli": "^6.5.1",
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.1",
     "eslint-config-prettier": "^8.5.0",

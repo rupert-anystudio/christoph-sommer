@@ -1,6 +1,7 @@
 import 'normalize.css'
 import Annoucements from '../components/Annoucements'
 import { AppContextProvider } from '../components/AppContext'
+import { FilterContextProvider } from '../components/FilterContext'
 import Footer from '../components/Footer'
 import FooterNav from '../components/FooterNav'
 import GlobalStyles from '../components/GlobalStyles'
@@ -17,18 +18,20 @@ function MyApp({ Component, pageProps }) {
   const { annoucements } = pageProps
   return (
     <AppContextProvider>
-      <GlobalStyles />
-      <Header>
-        <HeaderLogo />
-        <Annoucements annoucements={annoucements} />
-        <ThemeToggle />
-      </Header>
-      <Main>
-        <Component {...pageProps} />
-      </Main>
-      <Footer>
-        <FooterNav nav={footerNav} />
-      </Footer>
+      <FilterContextProvider>
+        <GlobalStyles />
+        <Header>
+          <HeaderLogo />
+          <Annoucements annoucements={annoucements} />
+          <ThemeToggle />
+        </Header>
+        <Main>
+          <Component {...pageProps} />
+        </Main>
+        <Footer>
+          <FooterNav nav={footerNav} />
+        </Footer>
+      </FilterContextProvider>
     </AppContextProvider>
   )
 }

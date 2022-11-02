@@ -4,8 +4,14 @@ import { entryQuery } from '../lib/entryHelpers'
 import ExpandableSection from '../components/ExpandableSection'
 import PortableText from '../components/PortableText'
 import Section from '../components/Section'
+import FilterSelect from '../components/FilterSelect'
+import FilterSection from '../components/FilterSection'
+import { useFilterContext } from '../components/FilterContext'
 
 export default function Home({ docs = [], about = {}, annoucements = [] }) {
+  const { filter } = useFilterContext()
+  const filteredDocs =
+    filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
   return (
     <>
       <ExpandableSection>
@@ -14,8 +20,11 @@ export default function Home({ docs = [], about = {}, annoucements = [] }) {
       <ExpandableSection title="About">
         <PortableText value={about?.aboutText} />
       </ExpandableSection>
+      <FilterSection>
+        <FilterSelect />
+      </FilterSection>
       <Section>
-        <CardGridPortfolio portfolio={docs} />
+        <CardGridPortfolio portfolio={filteredDocs} />
       </Section>
     </>
   )

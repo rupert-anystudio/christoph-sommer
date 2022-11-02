@@ -20,7 +20,7 @@ const getKey = (entry) => entry?._id ?? null
 
 const returnEntryPath = (entry) => {
   const { _id, _type } = entry
-  if (_type === 'publishedText') return `/text/${_id}`
+  // if (_type === 'publishedText') return `/text/${_id}`
   // if (_type === 'statement') return `/statemnt/${_id}`
   // if (_type === 'speech') return `/vortrag/${_id}`
   // if (_type === 'project') return `/projekt/${_id}`

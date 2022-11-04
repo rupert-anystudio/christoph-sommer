@@ -19,8 +19,8 @@ function MyApp({ Component, pageProps }) {
           <GlobalStyles />
           <Header>
             <Logo />
-            <Annoucements />
             <ThemeToggle />
+            <Annoucements />
           </Header>
           <Main>
             <Component {...pageProps} />

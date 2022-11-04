@@ -13,6 +13,14 @@ export const Body = styled(Text)`
   font-style: var(--fx-suisse);
 `
 
+export const Input = styled(Text)`
+  font-size: var(--fs-root);
+  line-height: var(--lh-root);
+  font-family: var(--ff-inter);
+  font-weight: var(--fw-inter);
+  font-style: var(--fx-inter);
+`
+
 export const Small = styled(Text)`
   font-size: var(--fs-small);
   line-height: var(--lh-small);

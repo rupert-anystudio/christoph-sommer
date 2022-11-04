@@ -1,7 +1,8 @@
+import { useCallback } from 'react'
 import styled from 'styled-components'
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { entryLabels, entryTypes } from '../lib/entryHelpers'
 import { useFilterContext } from './FilterContext'
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { Input } from './Primitives'
 
 const Wrap = styled.div`
@@ -13,15 +14,23 @@ const Wrap = styled.div`
 const Label = styled(Input).attrs({ as: 'label' })`
   cursor: pointer;
   margin-right: 2rem;
+  user-select: none;
 `
 const Root = RadioGroupPrimitive.Root
 const Entry = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  user-select: none;
   &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
+  /* &[data-checked='unchecked'] {
+    display: none;
+    ${Wrap}:focus-within & {
+      display: flex;
+    }
+  } */
 `
 const Item = styled(RadioGroupPrimitive.Item)`
   all: unset;
@@ -58,19 +67,36 @@ const EntryLabel = styled(Input).attrs({ as: 'label' })`
 
 const FilterSelect = () => {
   const { filter, onFilterChange } = useFilterContext()
+  // const [isOpen, setIsOpen] = useState(false)
+  const handleValueChange = useCallback(
+    (val) => {
+      // console.log({ val })
+      onFilterChange(val)
+      // setIsOpen(false)
+    },
+    [onFilterChange]
+  )
+  // const handleFocusCapture = () => {
+  //   setIsOpen(true)
+  // }
   return (
     <Wrap>
       <Label>{'Filter:'}</Label>
       <Root
         value={filter}
-        onValueChange={onFilterChange}
+        onValueChange={handleValueChange}
         orientation="vertical"
       >
         {entryTypes.map((type) => {
           const id = `filter-option-${type}`
+          // if (!isOpen && type !== filter) return null
           return (
             <Entry key={type}>
-              <Item value={type} id={id}>
+              <Item
+                value={type}
+                id={id}
+                // onFocusCapture={handleFocusCapture}
+              >
                 <Indicator />
               </Item>
               <EntryLabel htmlFor={id}>{entryLabels[type]}</EntryLabel>

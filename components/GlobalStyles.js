@@ -17,6 +17,8 @@ const Styles = createGlobalStyle`
     --color-offblack: #131313;
     --color-blue:#3959FF;
     --color-blue--rgb: 57, 89, 255;
+    
+    --color-peach: #ffdebf;
     --color-teal: #BEF5E5;
     --color-teal--rgb: 190, 245, 229;
 
@@ -27,7 +29,7 @@ const Styles = createGlobalStyle`
   
     --color-project-bg: var(--color-blue);
     --color-project-txt: var(--color-teal);
-    --color-text-bg: var(--color-teal);
+    --color-text-bg: var(--color-peach);
     --color-text-txt: var(--color-blue);
     --color-statement-bg: var(--color-grey);
     --color-statement-txt: var(--color-black);

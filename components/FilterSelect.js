@@ -49,7 +49,7 @@ const Item = styled(RadioGroupPrimitive.Item)`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 0.2rem solid var(--color-txt);
+    border: var(--width-border-bold) solid var(--color-txt);
   }
 `
 const Indicator = styled(RadioGroupPrimitive.Indicator)`

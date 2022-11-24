@@ -3,9 +3,12 @@ import Section from './Section'
 
 const FilterSection = styled(Section)`
   position: sticky;
-  top: 14.2rem;
+  top: calc(var(--height-header) - 1px);
   z-index: 99;
   background: var(--color-bg);
+  @media (min-width: 40rem) {
+    top: 0;
+  }
 `
 
 export default FilterSection

@@ -5,7 +5,7 @@ const Footer = styled.footer`
   width: 100%;
   flex: 0;
   background: var(--color-bg);
-  border-top: 2px solid var(--color-txt);
+  border-top: var(--width-border-bold) solid var(--color-txt);
   padding: 2rem var(--padding-page) 4rem var(--padding-page);
   display: flex;
   flex-direction: row;
@@ -15,6 +15,12 @@ const Footer = styled.footer`
     &:not(:last-child) {
       margin-right: 1rem;
     }
+  }
+  @media (min-width: 40rem) {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - var(--width-col-0) - var(--width-col-1));
   }
 `
 

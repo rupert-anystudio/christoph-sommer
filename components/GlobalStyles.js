@@ -8,6 +8,14 @@ const Styles = createGlobalStyle`
     --padding-page: 2rem;
     --padding-card-h: 1rem;
     --padding-card-v: 2rem;
+    --height-header: 14.3rem;
+    --width-col-0: 70rem;
+    --width-col-1: 70rem;
+    --width-border: .1rem;
+    --width-border-bold: .2rem;
+    @media (min-width: 40rem) {
+      --height-header: 20rem;
+    }
 
     /* COLOR PALETTE */
     --color-white: white;
@@ -116,6 +124,16 @@ const Styles = createGlobalStyle`
     justify-content: flex-start;
     align-items: flex-start;
     margin: 0 auto;
+
+    @media (min-width: 60rem) {
+      /* display: grid;
+      grid-template-columns: 45rem 45rem 1fr;
+      grid-template-rows: var(--height-header) 1fr 1fr;
+      grid-template-areas:
+        "header page side"
+        "about page side"
+        "about page footer"; */
+    }
   }
 `
 

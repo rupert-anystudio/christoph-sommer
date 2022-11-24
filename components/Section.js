@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const Section = styled.section`
   padding: var(--padding-page);
   &:not(:last-child) {
-    border-bottom: 2px solid currentColor;
+    border-bottom: var(--width-border-bold) solid currentColor;
   }
 `
 

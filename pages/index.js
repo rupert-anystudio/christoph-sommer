@@ -7,6 +7,12 @@ import Section from '../components/Section'
 import FilterSelect from '../components/FilterSelect'
 import FilterSection from '../components/FilterSection'
 import { useFilterContext } from '../components/FilterContext'
+import {
+  MainFirst,
+  MainFirstContent,
+  MainMiddle,
+  MainLast,
+} from '../components/Main'
 
 export default function Home({ docs = [], about = {}, annoucements = [] }) {
   const { filter } = useFilterContext()
@@ -14,18 +20,26 @@ export default function Home({ docs = [], about = {}, annoucements = [] }) {
     filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
   return (
     <>
-      <ExpandableSection>
-        <PortableText value={about?.missionStatement} />
-      </ExpandableSection>
-      <ExpandableSection title="About">
-        <PortableText value={about?.aboutText} />
-      </ExpandableSection>
-      <FilterSection>
-        <FilterSelect />
-      </FilterSection>
-      <Section>
-        <CardGridPortfolio portfolio={filteredDocs} />
-      </Section>
+      <MainFirst>
+        <MainFirstContent>
+          <ExpandableSection>
+            <PortableText value={about?.missionStatement} />
+          </ExpandableSection>
+          <ExpandableSection title="About">
+            <PortableText value={about?.aboutText} />
+          </ExpandableSection>
+        </MainFirstContent>
+      </MainFirst>
+      <MainLast>
+        <FilterSection>
+          <FilterSelect />
+        </FilterSection>
+      </MainLast>
+      <MainMiddle>
+        <Section>
+          <CardGridPortfolio portfolio={filteredDocs} />
+        </Section>
+      </MainMiddle>
     </>
   )
 }

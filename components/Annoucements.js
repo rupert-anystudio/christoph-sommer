@@ -6,17 +6,20 @@ import { Body } from './Primitives'
 
 const Wrap = styled.div`
   position: absolute;
-  top: 7.3rem;
-  left: 29.6rem;
+  top: 77%;
+  left: 102%;
+  transform: translate3d(-50%, -50%, 0);
+  --circle-size: calc(var(--height-header) * 0.2);
 `
 
 const Circle = styled.button`
-  width: 4rem;
-  height: 4rem;
+  width: var(--circle-size);
+  height: var(--circle-size);
   border-radius: 50%;
   background-color: var(--color-txt);
   color: var(--color-bg);
-  line-height: 4rem;
+  line-height: var(--circle-size);
+  font-size: calc(var(--circle-size) * 0.7);
   text-align: center;
   appearance: none;
   border: none;

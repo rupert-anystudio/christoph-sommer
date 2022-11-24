@@ -8,10 +8,12 @@ import Footer from '../components/Footer'
 import FooterNav from '../components/FooterNav'
 import GlobalStyles from '../components/GlobalStyles'
 import Header from '../components/Header'
-import Logo from '../components/Logo'
+import Logo, { LogoWrap } from '../components/Logo'
 import Main from '../components/Main'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
-import ThemeToggle from '../components/ThemeToggle'
+// import ThemeToggle from '../components/ThemeToggle'
+// import AboutSections from '../components/AboutSections'
+import React from 'react'
 
 gsap.registerPlugin(CSSPlugin)
 
@@ -21,17 +23,21 @@ function MyApp({ Component, pageProps }) {
       <ThemeContextProvider>
         <FilterContextProvider>
           <GlobalStyles />
-          <Header>
-            <Logo />
-            <ThemeToggle />
-            <Annoucements />
-          </Header>
-          <Main>
-            <Component {...pageProps} />
-          </Main>
-          <Footer>
-            <FooterNav />
-          </Footer>
+          <React.StrictMode>
+            <Header>
+              <LogoWrap>
+                <Logo />
+                <Annoucements />
+              </LogoWrap>
+              {/* <ThemeToggle /> */}
+            </Header>
+            <Main>
+              <Component {...pageProps} />
+            </Main>
+            <Footer>
+              <FooterNav />
+            </Footer>
+          </React.StrictMode>
         </FilterContextProvider>
       </ThemeContextProvider>
     </PagePropsContextProvider>

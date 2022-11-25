@@ -10,17 +10,11 @@ const Wrap = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  @media (min-width: 40rem) {
-    /* flex-direction: column; */
-  }
 `
 const Label = styled(Input).attrs({ as: 'label' })`
   cursor: pointer;
   margin-right: 2rem;
   user-select: none;
-  @media (min-width: 40rem) {
-    margin-bottom: 2rem;
-  }
 `
 const Root = RadioGroupPrimitive.Root
 const Entry = styled.div`
@@ -31,12 +25,6 @@ const Entry = styled.div`
   &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
-  /* &[data-checked='unchecked'] {
-    display: none;
-    ${Wrap}:focus-within & {
-      display: flex;
-    }
-  } */
 `
 const Item = styled(RadioGroupPrimitive.Item)`
   all: unset;
@@ -55,7 +43,12 @@ const Item = styled(RadioGroupPrimitive.Item)`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: var(--border-input);
+    border: 2px solid currentColor;
+  }
+  &[data-state='checked'] {
+    &:after {
+      border-color: var(--color-element-bg);
+    }
   }
 `
 const Indicator = styled(RadioGroupPrimitive.Indicator)`
@@ -65,10 +58,13 @@ const Indicator = styled(RadioGroupPrimitive.Indicator)`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: var(--color-txt);
+  background: var(--color-element-bg);
 `
 const EntryLabel = styled(Input).attrs({ as: 'label' })`
   cursor: pointer;
+  ${Item}[data-state='checked'] ~ & {
+    color: var(--color-element-bg);
+  }
 `
 
 const FilterSelect = () => {

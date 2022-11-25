@@ -6,6 +6,7 @@ import { Small } from './Primitives'
 const NavLink = styled(Small).attrs({ as: 'a' })`
   text-decoration: none;
   color: var(--color-txt);
+  margin-right: var(--padding-page);
 `
 
 const FooterNav = () => {

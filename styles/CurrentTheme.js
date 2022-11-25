@@ -4,8 +4,12 @@ import ThemeLight from './ThemeLight'
 
 const CurrentTheme = () => {
   const { theme } = useThemeContext()
-  if (theme === 'Dark') return <ThemeDark />
-  return <ThemeLight />
+  return (
+    <>
+      <ThemeLight />
+      {theme === 'Dark' && <ThemeDark />}
+    </>
+  )
 }
 
 export default CurrentTheme

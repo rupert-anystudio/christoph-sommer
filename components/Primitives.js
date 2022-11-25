@@ -14,8 +14,8 @@ export const Body = styled(Text)`
 `
 
 export const Input = styled(Text)`
-  font-size: var(--fs-root);
-  line-height: var(--lh-root);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
   font-style: var(--fx-inter);
@@ -35,10 +35,6 @@ export const CardTitle = styled(Text)`
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
-  @media (min-width: 40rem) {
-    font-size: var(--fs-bigger);
-    line-height: var(--lh-bigger);
-  }
 `
 
 export const SmallPill = styled(Small)`

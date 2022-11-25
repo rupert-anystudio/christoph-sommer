@@ -11,6 +11,11 @@ import Sizings from '../styles/Sizings'
 import CurrentTheme from '../styles/CurrentTheme'
 import GlobalStyles from '../styles/GlobalStyles'
 import Layout from '../components/Layout'
+import 'normalize.css'
+import '@radix-ui/colors/blackA.css'
+import '@radix-ui/colors/mauve.css'
+import '@radix-ui/colors/violet.css'
+// import '../styles/sInfoAccordion.css'
 
 gsap.registerPlugin(CSSPlugin)
 

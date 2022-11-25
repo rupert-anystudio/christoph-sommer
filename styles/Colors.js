@@ -4,7 +4,7 @@ const Colors = createGlobalStyle`
   :root {
     /* COLOR PALETTE */
     --color-white: white;
-    --color-offwhite: #ebebeb;
+    --color-offwhite: #eeeeee;
     --color-grey: #CFCFCF;
     --color-black: black;
     --color-offblack: #080808;

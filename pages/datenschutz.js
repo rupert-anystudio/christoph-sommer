@@ -1,20 +1,13 @@
-import ExpandableSection from '../components/ExpandableSection'
-import { MainMiddle } from '../components/Main'
 import PortableText from '../components/PortableText'
 import { getClient } from '../lib/sanity.server'
 
 export default function Datenschutz({ page }) {
-  return (
-    <MainMiddle>
-      <ExpandableSection title={page?.title}>
-        <PortableText value={page?.content} />
-      </ExpandableSection>
-    </MainMiddle>
-  )
+  return <PortableText value={page?.content} />
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
+  const layout = 'static'
   // fetch page content
   const pageQuery = `*[_type == "privacyPage"][0]{ title, content }`
   const page = await client.fetch(pageQuery)
@@ -28,6 +21,7 @@ export async function getStaticProps({ preview = false }) {
     revalidate: 10,
     props: {
       preview,
+      layout,
       page,
       about,
       annoucements,

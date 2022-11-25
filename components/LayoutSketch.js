@@ -1,13 +1,5 @@
 import styled, { css } from 'styled-components'
-import Annoucements from './Annoucements'
-import FilterSelect from './FilterSelect'
-import FooterNav from './FooterNav'
-import InfoAccordion from './InfoAccordion'
-import Logo from './Logo'
-import { usePagePropsContext } from './PagePropsContext'
-import PortableText from './PortableText'
 import { Small } from './Primitives'
-import ThemeToggle from './ThemeToggle'
 
 const AreaLabel = styled.div`
   position: relative;
@@ -38,62 +30,61 @@ const Container = styled.div`
   grid-template-rows: var(--height-header) auto 1fr;
   grid-template-areas:
     'Header'
-    'Infos'
+    'Collapsibles'
     'Scrollables';
   @media (min-width: 1024px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr minmax(auto, 56rem);
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
       'Header Scrollables'
-      'Infos Scrollables';
+      'Collapsibles Scrollables';
   }
   @media (min-width: 1440px) {
     grid-template-columns: minmax(auto, 56rem) 1fr;
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
       'Header Scrollables'
-      'Infos Scrollables';
+      'Collapsibles Scrollables';
   }
 `
 const Area = styled.div``
 const Element = styled.div`
-  background: var(--color-bg);
-  padding: var(--padding-page);
+  border: var(--border);
+  background: var(--color-offblack);
 `
 const Header = styled(Element)`
   grid-area: Header;
   z-index: 100;
-  border-bottom: var(--border);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   @media (min-width: 1024px) {
     position: sticky;
     top: 0;
-    border-right: var(--border);
   }
 `
-const HeaderLogo = styled.div`
-  position: relative;
-`
-const Infos = styled(Area)`
-  grid-area: Infos;
+const Collapsibles = styled(Area)`
+  grid-area: Collapsibles;
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;
   @media (min-width: 1024px) {
     grid-template-rows: calc(100vh - var(--height-header));
-    border-right: var(--border);
   }
 `
-const InfosBlock = styled(Area)`
+const Blocks = styled(Area)`
   position: sticky;
   top: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-auto-rows: auto;
+  > div:not(:last-child) {
+    border-bottom: var(--border);
+  }
   @media (min-width: 1024px) {
     position: sticky;
     top: var(--height-header);
   }
 `
+const Block = styled(Element)``
 const Scrollables = styled(Area)`
   grid-area: Scrollables;
   display: grid;
@@ -110,27 +101,22 @@ const Scrollables = styled(Area)`
 `
 const Main = styled(Element)`
   @media (min-width: 1440px) {
+    /* left: 100%; */
     grid-area: Main;
-    border-right: var(--border);
-    min-height: calc(100vh + 2px);
   }
 `
 const Actions = styled(Element)`
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: var(--border);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
   @media (min-width: 1440px) {
+    /* left: 100%; */
     grid-area: Sidebar;
   }
 `
 const Footer = styled(Element)`
-  border-top: var(--border);
   @media (min-width: 1440px) {
+    /* left: 100%; */
     grid-area: Footer;
     z-index: 10;
     position: sticky;
@@ -138,33 +124,53 @@ const Footer = styled(Element)`
   }
 `
 
-const Layout = ({ children }) => {
-  const pageProps = usePagePropsContext()
-  const { about, docs, page, layout } = pageProps
+const LayoutSketch = ({ children }) => {
   return (
     <Container>
       <Header>
-        <HeaderLogo>
-          <Logo />
-          <Annoucements />
-        </HeaderLogo>
+        <AreaLabel>Header</AreaLabel>
       </Header>
-      <Infos>
-        <InfosBlock>{layout === 'landing' && <InfoAccordion />}</InfosBlock>
-      </Infos>
+      <Collapsibles>
+        <Blocks>
+          <Block>
+            <AreaLabel>Block</AreaLabel>
+          </Block>
+          <Block>
+            <AreaLabel>Block</AreaLabel>
+          </Block>
+          <Block>
+            <AreaLabel>Block</AreaLabel>
+          </Block>
+        </Blocks>
+      </Collapsibles>
       <Scrollables>
         <Actions>
-          {/* {layout === 'landing' && <FilterSelect />} */}
-          <div />
-          <ThemeToggle />
+          <AreaLabel>Actions</AreaLabel>
         </Actions>
-        <Main>{children}</Main>
+        <Main>
+          <AreaLabel>Main</AreaLabel>
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+          <Lorem />
+        </Main>
         <Footer>
-          <FooterNav />
+          <AreaLabel>Footer</AreaLabel>
         </Footer>
       </Scrollables>
     </Container>
   )
 }
 
-export default Layout
+export default LayoutSketch

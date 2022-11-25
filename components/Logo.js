@@ -13,7 +13,7 @@ const ChristophSommer = styled.a`
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
   text-decoration: none;
-  color: var(--color-txt);
+  color: currentColor;
   white-space: pre;
   text-align: center;
   span {

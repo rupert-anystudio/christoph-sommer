@@ -35,6 +35,10 @@ export const CardTitle = styled(Text)`
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
+  @media (min-width: 40rem) {
+    font-size: var(--fs-bigger);
+    line-height: var(--lh-bigger);
+  }
 `
 
 export const SmallPill = styled(Small)`
@@ -46,8 +50,8 @@ export const SmallPill = styled(Small)`
 `
 
 export const SmallPillButton = styled(SmallPill).attrs({ as: 'button' })`
-  background: var(--color-txt);
-  color: var(--color-bg-root);
+  background: var(--color-element-txt);
+  color: var(--color-element-bg);
   appearance: none;
   border: none;
   @media (hover: hover) {

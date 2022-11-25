@@ -6,6 +6,7 @@ const FilterSection = styled(Section)`
   top: calc(var(--height-header) - 1px);
   z-index: 99;
   background: var(--color-bg);
+  width: 100%;
   @media (min-width: 40rem) {
     top: 0;
   }

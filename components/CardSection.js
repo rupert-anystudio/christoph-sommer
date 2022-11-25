@@ -7,7 +7,7 @@ const Wrap = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  border-top: var(--width-border) solid var(--color-txt);
+  border-top: var(--border);
   padding: var(--padding-card-h) 0;
 `
 

@@ -36,7 +36,7 @@ const Content = styled.div`
 
 const Toggle = styled(SmallPillButton)`
   background: var(--color-txt);
-  color: var(--color-bg-root);
+  color: var(--color-bg);
 `
 
 const CardToggle = ({ href }) => {

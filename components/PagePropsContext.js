@@ -7,9 +7,9 @@ const footerNav = [
   { key: 'privacy', href: '/datenschutz', label: 'Datenschutz' },
 ]
 
-export const PagePropsContextProvider = ({ pageProps, children }) => {
+export const PagePropsContextProvider = ({ value, children }) => {
   const state = {
-    ...pageProps,
+    ...value,
     footerNav,
   }
   return (

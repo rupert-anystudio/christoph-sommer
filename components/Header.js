@@ -10,18 +10,12 @@ const Header = styled.header`
   width: 100%;
   z-index: 100;
   background: var(--color-bg);
-  border-bottom: var(--width-border-bold) solid var(--color-txt);
-  padding: var(--padding-page);
+  border-bottom: var(--border);
+  color: var(--color-txt);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  /* > * {
-    &:not(:last-child) {
-      margin-right: 1rem;
-    }
-  } */
-
   @media (min-width: 40rem) {
     position: fixed;
     top: 0;

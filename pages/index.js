@@ -15,39 +15,40 @@ import {
 } from '../components/Main'
 
 export default function Home({ docs = [], about = {}, annoucements = [] }) {
-  const { filter } = useFilterContext()
-  const filteredDocs =
-    filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
-  return (
-    <>
-      <MainFirst>
-        <MainFirstContent>
-          <ExpandableSection>
-            <PortableText value={about?.missionStatement} />
-          </ExpandableSection>
-          <ExpandableSection title="About">
-            <PortableText value={about?.aboutText} />
-          </ExpandableSection>
-        </MainFirstContent>
-      </MainFirst>
-      <MainLast>
-        <FilterSection>
-          <FilterSelect />
-        </FilterSection>
-      </MainLast>
-      <MainMiddle>
-        <Section>
-          <CardGridPortfolio portfolio={filteredDocs} />
-        </Section>
-      </MainMiddle>
-    </>
-  )
+  return null
+  // const { filter } = useFilterContext()
+  // const filteredDocs =
+  //   filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
+  // return (
+  //   <>
+  //     <MainFirst>
+  //       <MainFirstContent>
+  //         <ExpandableSection>
+  //           <PortableText value={about?.missionStatement} />
+  //         </ExpandableSection>
+  //         <ExpandableSection title="About">
+  //           <PortableText value={about?.aboutText} />
+  //         </ExpandableSection>
+  //       </MainFirstContent>
+  //     </MainFirst>
+  //     <MainLast>
+  //       <FilterSection>
+  //         <FilterSelect />
+  //       </FilterSection>
+  //     </MainLast>
+  //     <MainMiddle>
+  //       <Section>
+  //         <CardGridPortfolio portfolio={filteredDocs} />
+  //       </Section>
+  //     </MainMiddle>
+  //   </>
+  // )
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
   // fetch all docs for cards
-  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(_createdAt desc)${entryQuery}`
+  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(_createdAt desc)|order(timeframe.start desc)${entryQuery}`
   const docs = await client.fetch(docsQuery)
   // fetch about content
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`

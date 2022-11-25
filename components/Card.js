@@ -51,7 +51,7 @@ const Card = styled.div`
   color: var(--color-txt);
   height: 69rem;
   overflow: hidden;
-  /* border-image: var(--color-bg); */
+  border: var(--border-card);
   > * {
     &:not(:first-child) {
       margin-top: 1rem;

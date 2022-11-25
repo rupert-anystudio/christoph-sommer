@@ -3,27 +3,13 @@ import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { usePagePropsContext } from './PagePropsContext'
 import { PortableText } from '@portabletext/react'
 import { Body } from './Primitives'
+import CircleButton from './CircleButton'
 
 const Wrap = styled.div`
   position: absolute;
   top: 77%;
   left: 102%;
   transform: translate3d(-50%, -50%, 0);
-  --circle-size: calc(var(--height-header) * 0.2);
-`
-
-const Circle = styled.button`
-  width: var(--circle-size);
-  height: var(--circle-size);
-  border-radius: 50%;
-  background-color: var(--color-txt);
-  color: var(--color-bg);
-  line-height: var(--circle-size);
-  font-size: calc(var(--circle-size) * 0.7);
-  text-align: center;
-  appearance: none;
-  border: none;
-  cursor: pointer;
 `
 
 const Root = PopoverPrimitive.Root
@@ -36,13 +22,14 @@ const Close = styled(PopoverPrimitive.Close)`
   border: none;
   background: none;
   font-size: var(--fs-big);
+  color: var(--color-element-txt);
   cursor: pointer;
 `
 const Arrow = styled(PopoverPrimitive.Arrow).attrs({
   width: 30,
   height: 40,
 })`
-  fill: var(--color-txt);
+  fill: var(--color-element-bg);
 `
 const Content = styled(PopoverPrimitive.Content)`
   border-radius: 2rem;
@@ -51,8 +38,8 @@ const Content = styled(PopoverPrimitive.Content)`
   flex-direction: column;
   align-items: flex-start;
   z-index: 200;
-  background: var(--color-txt);
-  color: var(--color-bg);
+  background-color: var(--color-element-bg);
+  color: var(--color-element-txt);
   width: calc(100vw - 4rem);
   max-width: 60rem;
 `
@@ -97,7 +84,7 @@ const Annoucements = () => {
     <Wrap>
       <Root>
         <Trigger asChild>
-          <Circle>{annoucements.length}</Circle>
+          <CircleButton>{annoucements.length}</CircleButton>
         </Trigger>
         <Portal>
           <PopoverContent title={title} content={content} />

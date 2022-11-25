@@ -10,11 +10,17 @@ const Wrap = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
+  @media (min-width: 40rem) {
+    /* flex-direction: column; */
+  }
 `
 const Label = styled(Input).attrs({ as: 'label' })`
   cursor: pointer;
   margin-right: 2rem;
   user-select: none;
+  @media (min-width: 40rem) {
+    margin-bottom: 2rem;
+  }
 `
 const Root = RadioGroupPrimitive.Root
 const Entry = styled.div`
@@ -49,7 +55,7 @@ const Item = styled(RadioGroupPrimitive.Item)`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: var(--width-border-bold) solid var(--color-txt);
+    border: var(--border-input);
   }
 `
 const Indicator = styled(RadioGroupPrimitive.Indicator)`

@@ -17,13 +17,13 @@ const CardGrid = ({
   renderContent = renderContent_,
 }) => {
   return (
-    <Grid>
+    <>
       {entries.map((entry) => {
         const key = getKey(entry)
         if (!key) return null
         return <React.Fragment key={key}>{renderContent(entry)}</React.Fragment>
       })}
-    </Grid>
+    </>
   )
 }
 

@@ -16,6 +16,9 @@ const ScrollViewport = styled(ScrollArea.Viewport)`
   position: relative;
   width: 100%;
   height: 100%;
+  > div {
+    height: 100%;
+  }
 `
 const Scrollbar = styled(ScrollArea.Scrollbar)``
 const Thumb = styled(ScrollArea.Thumb)``
@@ -45,45 +48,65 @@ const slideUp = keyframes`
 const Wrap = styled.div`
   width: 100%;
   height: auto;
-  /* @media (min-width: 1024px) {
+  /* @media (min-width: 920px) {
     height: 100%;
     overflow-y: scroll;
   } */
 `
 const Root = styled(Accordion.Root)`
+  position: relative;
   width: 100%;
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
 `
-const Item = styled(Accordion.Item)`
+const Item = styled(Accordion.Item)``
+const Element = styled.div`
   position: relative;
-  color: currentColor;
-  border-bottom: var(--border);
-  align-self: stretch;
-  &:first-child {
-    margin-top: 0;
-    /* border-top: none; */
-  }
   &:focus-within {
     position: relative;
     z-index: 1;
+    /* --color-bg: var(--color-white); */
+  }
+  background-color: var(--color-bg);
+  position: relative;
+  color: currentColor;
+  border-bottom: var(--border-less);
+  border-color: var(--color-border);
+  &:last-child {
+    border-bottom: none;
   }
   &[data-state='closed'] {
     overflow: hidden;
-    padding-bottom: 6rem;
+    flex: 0 0 auto;
+    min-height: 12rem;
+    /* padding-bottom: 6rem; */
+    &:after {
+      position: absolute;
+      display: block;
+      content: '';
+      width: 100%;
+      top: 6rem;
+      bottom: 0;
+      left: 0;
+      left: right;
+      background-image: linear-gradient(transparent 0%, var(--color-bg) 100%);
+      pointer-events: none;
+    }
   }
   &[data-state='open'] {
-    overflow: hidden;
     min-height: 0;
+    flex: 0 0 auto;
+    /* flex: 1 1 100%; */
   }
 `
 
 const InfoAccordion = () => {
   const pageProps = usePagePropsContext()
   const { about } = pageProps
+
   const blocks = [
     {
       value: 'missionStatement',
@@ -95,56 +118,52 @@ const InfoAccordion = () => {
       label: 'Über Mich',
       content: about?.aboutText,
     },
-    // {
-    //   value: 'anderes',
-    //   label: 'Anderes',
-    //   content: about?.aboutText,
-    // },
-    // {
-    //   value: 'nochMehr',
-    //   label: 'Nochmehr',
-    //   content: about?.aboutText,
-    // },
-  ].filter((block) => block.content.length > 0)
+    {
+      value: 'nochMehr',
+      label: 'Nochmehr',
+      content: about?.aboutText,
+    },
+  ]
+  const firstBlockValue = blocks[0].value
+  const defaultValue = ''
+  const type = 'single'
 
-  const [evenLayout, setEvenLayout] = useState(false)
-
+  const [allClosed, setAllClosed] = useState(false)
   const handleValueChange = useCallback(
     (value) => {
-      console.log({ value })
-      if (evenLayout && value === '') {
-        setEvenLayout(false)
+      const val = value
+      if (type === 'multiple') {
+        val = val.join('')
+      }
+      if (allClosed && val !== '') {
+        setAllClosed(true)
         return
       }
-      if (!evenLayout && value !== '') {
-        setEvenLayout(true)
+      if (!allClosed && val === '') {
+        setAllClosed(true)
       }
     },
-    [evenLayout]
+    [allClosed]
   )
   return (
     <ScrollFrame>
       <ScrollViewport>
         <Root
-          type="multiple"
           // type="single"
-          // defaultValue={blocks[0].value}
-          // onValueChange={handleValueChange}
-          // collapsible
+          type={type}
+          defaultValue={defaultValue}
+          onValueChange={handleValueChange}
+          collapsible
         >
           {blocks.map((block) => {
             return (
-              <Item
-                value={block.value}
-                key={block.value}
-                style={{
-                  flex: '1 0 auto',
-                }}
-              >
-                <AccordionTrigger>{block.label}</AccordionTrigger>
-                <AccordionContent>
-                  <PortableText value={block.content} />
-                </AccordionContent>
+              <Item asChild value={block.value} key={block.value}>
+                <Element>
+                  <AccordionTrigger>{block.label}</AccordionTrigger>
+                  <AccordionContent>
+                    <PortableText value={block.content} />
+                  </AccordionContent>
+                </Element>
               </Item>
             )
           })}
@@ -167,6 +186,8 @@ const Header = styled(Accordion.Header)`
     top: 0;
     z-index: 1;
     background-color: var(--color-bg);
+    /* box-shadow: 1px 3px 16px -12px black; */
+    /* backdrop-filter: blur(400px); */
     /* border-color: var(--color-blue); */
   }
 `
@@ -178,9 +199,10 @@ const Trigger = styled(Accordion.Trigger)`
   align-items: center;
   justify-content: space-between;
   padding: var(--padding-page);
+  margin-bottom: calc(-1 * var(--padding-page));
   cursor: pointer;
 `
-const TriggerText = styled(CardTitle)`
+const TriggerText = styled(Small)`
   display: block;
   position: relative;
 `
@@ -204,19 +226,11 @@ const AccordionTrigger = React.forwardRef(
 )
 AccordionTrigger.displayName = 'AccordionTrigger'
 
-const CoveringTrigger = styled(Accordion.Trigger)`
-  display: block;
-  position: relative;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-`
-
 const Content = styled(Accordion.Content)`
   overflow: hidden;
   &[data-state='open'] {
+    --color-speech-txt: #e4cceb;
+    --color-speech-bg: #571c66;
     /* animation: ${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1); */
     position: relative;
   }
@@ -227,7 +241,8 @@ const Content = styled(Accordion.Content)`
 `
 const ContentText = styled(Body).attrs({ as: 'div' })`
   position: relative;
-  padding: 0 var(--padding-page) var(--padding-page) var(--padding-page);
+  padding: var(--padding-page);
+  padding-top: calc(var(--padding-page) / 2);
 `
 
 const AccordionContent = React.forwardRef(

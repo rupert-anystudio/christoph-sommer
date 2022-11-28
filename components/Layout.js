@@ -40,8 +40,8 @@ const Container = styled.div`
     'Header'
     'Infos'
     'Scrollables';
-  @media (min-width: 1024px) {
-    grid-template-columns: 1fr 1fr;
+  @media (min-width: 920px) {
+    grid-template-columns: 4fr 5fr;
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
       'Header Scrollables'
@@ -67,7 +67,7 @@ const Header = styled(Element)`
   display: flex;
   justify-content: center;
   align-items: center;
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     position: sticky;
     top: 0;
     border-right: var(--border);
@@ -81,7 +81,7 @@ const Infos = styled(Area)`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     grid-template-rows: calc(100vh - var(--height-header));
     border-right: var(--border);
   }
@@ -89,7 +89,7 @@ const Infos = styled(Area)`
 const InfosBlock = styled(Area)`
   position: sticky;
   top: 0;
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     position: sticky;
     top: var(--height-header);
   }
@@ -111,7 +111,7 @@ const Scrollables = styled(Area)`
 const Main = styled(Element)`
   @media (min-width: 1440px) {
     grid-area: Main;
-    border-right: var(--border);
+    /* border-right: var(--border); */
     min-height: calc(100vh + 2px);
   }
 `
@@ -126,6 +126,7 @@ const Actions = styled(Element)`
   align-items: baseline;
   @media (min-width: 1440px) {
     grid-area: Sidebar;
+    border-bottom: none;
   }
 `
 const Footer = styled(Element)`
@@ -135,6 +136,7 @@ const Footer = styled(Element)`
     z-index: 10;
     position: sticky;
     bottom: 0;
+    border-top: 0;
   }
 `
 

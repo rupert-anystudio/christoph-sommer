@@ -32,7 +32,7 @@ const Container = styled.div`
     'Header'
     'Collapsibles'
     'Scrollables';
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     grid-template-columns: 1fr minmax(auto, 56rem);
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
@@ -55,7 +55,7 @@ const Element = styled.div`
 const Header = styled(Element)`
   grid-area: Header;
   z-index: 100;
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     position: sticky;
     top: 0;
   }
@@ -65,7 +65,7 @@ const Collapsibles = styled(Area)`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     grid-template-rows: calc(100vh - var(--height-header));
   }
 `
@@ -79,7 +79,7 @@ const Blocks = styled(Area)`
   > div:not(:last-child) {
     border-bottom: var(--border);
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 920px) {
     position: sticky;
     top: var(--height-header);
   }

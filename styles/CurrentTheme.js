@@ -1,4 +1,4 @@
-import { useThemeContext } from '../components/ThemeContext'
+import useThemeContext from '../hooks/useThemeContext'
 import ThemeDark from './ThemeDark'
 import ThemeLight from './ThemeLight'
 

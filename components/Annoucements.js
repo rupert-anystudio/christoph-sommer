@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
-import { usePagePropsContext } from './PagePropsContext'
+import usePagePropsContext from '../hooks/usePagePropsContext'
 import { PortableText } from '@portabletext/react'
 import { Body } from './Primitives'
 import CircleButton from './CircleButton'

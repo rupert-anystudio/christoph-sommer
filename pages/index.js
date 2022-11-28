@@ -6,7 +6,7 @@ import PortableText from '../components/PortableText'
 import Section from '../components/Section'
 import FilterSelect from '../components/FilterSelect'
 import FilterSection from '../components/FilterSection'
-import { useFilterContext } from '../components/FilterContext'
+import useFilterContext from '../hooks/useFilterContext'
 import {
   MainFirst,
   MainFirstContent,

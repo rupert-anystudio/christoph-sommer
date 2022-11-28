@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext } from 'react'
 
 export const PagePropsContext = createContext()
 
@@ -18,5 +18,3 @@ export const PagePropsContextProvider = ({ value, children }) => {
     </PagePropsContext.Provider>
   )
 }
-
-export const usePagePropsContext = () => useContext(PagePropsContext)

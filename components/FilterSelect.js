@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { entryLabels, entryTypes } from '../lib/entryHelpers'
-import { useFilterContext } from './FilterContext'
+import useFilterContext from '../hooks/useFilterContext'
 import { Input } from './Primitives'
 
 const Wrap = styled.div`

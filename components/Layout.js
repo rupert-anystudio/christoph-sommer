@@ -4,7 +4,7 @@ import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
 import InfoAccordion from './InfoAccordionContainer'
 import Logo from './Logo'
-import { usePagePropsContext } from './PagePropsContext'
+import usePagePropsContext from '../hooks/usePagePropsContext'
 import { Small } from './Primitives'
 import ThemeToggle from './ThemeToggle'
 
@@ -141,7 +141,7 @@ const Footer = styled(Element)`
 
 const Layout = ({ children }) => {
   const pageProps = usePagePropsContext()
-  const { about, docs, page, layout } = pageProps
+  const { layout } = pageProps
   return (
     <Container>
       <Header>

@@ -2,10 +2,9 @@ import styled, { css } from 'styled-components'
 import Annoucements from './Annoucements'
 import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
-import InfoAccordion from './InfoAccordion'
+import InfoAccordion from './InfoAccordionContainer'
 import Logo from './Logo'
 import { usePagePropsContext } from './PagePropsContext'
-import PortableText from './PortableText'
 import { Small } from './Primitives'
 import ThemeToggle from './ThemeToggle'
 
@@ -156,7 +155,7 @@ const Layout = ({ children }) => {
       </Infos>
       <Scrollables>
         <Actions>
-          {/* {layout === 'landing' && <FilterSelect />} */}
+          {layout === 'landing' && <FilterSelect />}
           <div />
           <ThemeToggle />
         </Actions>

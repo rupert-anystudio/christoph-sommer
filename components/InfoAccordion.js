@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
-import styled, { css, keyframes } from 'styled-components'
-import { Body, CardTitle, Small } from './Primitives'
-import { usePagePropsContext } from './PagePropsContext'
+import styled, { keyframes } from 'styled-components'
+import { Body, Small } from './Primitives'
 import PortableText from './PortableText'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 
@@ -45,14 +44,6 @@ const slideUp = keyframes`
   }
 `
 
-const Wrap = styled.div`
-  width: 100%;
-  height: auto;
-  /* @media (min-width: 920px) {
-    height: 100%;
-    overflow-y: scroll;
-  } */
-`
 const Root = styled(Accordion.Root)`
   position: relative;
   width: 100%;
@@ -103,79 +94,6 @@ const Element = styled.div`
   }
 `
 
-const InfoAccordion = () => {
-  const pageProps = usePagePropsContext()
-  const { about } = pageProps
-
-  const blocks = [
-    {
-      value: 'missionStatement',
-      label: 'Mission',
-      content: about?.missionStatement,
-    },
-    {
-      value: 'aboutText',
-      label: 'Über Mich',
-      content: about?.aboutText,
-    },
-    {
-      value: 'nochMehr',
-      label: 'Nochmehr',
-      content: about?.aboutText,
-    },
-  ]
-  const firstBlockValue = blocks[0].value
-  const defaultValue = ''
-  const type = 'single'
-
-  const [allClosed, setAllClosed] = useState(false)
-  const handleValueChange = useCallback(
-    (value) => {
-      const val = value
-      if (type === 'multiple') {
-        val = val.join('')
-      }
-      if (allClosed && val !== '') {
-        setAllClosed(true)
-        return
-      }
-      if (!allClosed && val === '') {
-        setAllClosed(true)
-      }
-    },
-    [allClosed]
-  )
-  return (
-    <ScrollFrame>
-      <ScrollViewport>
-        <Root
-          // type="single"
-          type={type}
-          defaultValue={defaultValue}
-          onValueChange={handleValueChange}
-          collapsible
-        >
-          {blocks.map((block) => {
-            return (
-              <Item asChild value={block.value} key={block.value}>
-                <Element>
-                  <AccordionTrigger>{block.label}</AccordionTrigger>
-                  <AccordionContent>
-                    <PortableText value={block.content} />
-                  </AccordionContent>
-                </Element>
-              </Item>
-            )
-          })}
-        </Root>
-      </ScrollViewport>
-      <Scrollbar orientation="vertical">
-        <Thumb />
-      </Scrollbar>
-    </ScrollFrame>
-  )
-}
-
 const Header = styled(Accordion.Header)`
   all: unset;
   display: flex;
@@ -214,18 +132,6 @@ const ChevronDown = styled(ChevronDownIcon)`
   }
 `
 
-const AccordionTrigger = React.forwardRef(
-  ({ children, ...props }, forwardedRef) => (
-    <Header>
-      <Trigger {...props} ref={forwardedRef}>
-        <TriggerText>{children}</TriggerText>
-        <ChevronDown aria-hidden />
-      </Trigger>
-    </Header>
-  )
-)
-AccordionTrigger.displayName = 'AccordionTrigger'
-
 const Content = styled(Accordion.Content)`
   overflow: hidden;
   &[data-state='open'] {
@@ -245,14 +151,38 @@ const ContentText = styled(Body).attrs({ as: 'div' })`
   padding-top: calc(var(--padding-page) / 2);
 `
 
-const AccordionContent = React.forwardRef(
-  ({ children, ...props }, forwardedRef) => (
-    <Content {...props} ref={forwardedRef} forceMount>
-      <ContentText>{children}</ContentText>
-      {/* {props['data-state'] === 'closed' && <CoveringTrigger />} */}
-    </Content>
+const InfoAccordion = ({ blocks, rootProps }) => {
+  return (
+    <ScrollFrame>
+      <ScrollViewport>
+        <Root {...rootProps}>
+          {blocks.map((block) => {
+            return (
+              <Item asChild value={block.value} key={block.value}>
+                <Element>
+                  <Header>
+                    <Trigger>
+                      <TriggerText>{block.label}</TriggerText>
+                      <ChevronDown aria-hidden />
+                    </Trigger>
+                  </Header>
+                  <Content forceMount>
+                    <ContentText>
+                      <PortableText value={block.content} />
+                    </ContentText>
+                    {/* {props['data-state'] === 'closed' && <CoveringTrigger />} */}
+                  </Content>
+                </Element>
+              </Item>
+            )
+          })}
+        </Root>
+      </ScrollViewport>
+      <Scrollbar orientation="vertical">
+        <Thumb />
+      </Scrollbar>
+    </ScrollFrame>
   )
-)
-AccordionContent.displayName = 'AccordionContent'
+}
 
 export default InfoAccordion

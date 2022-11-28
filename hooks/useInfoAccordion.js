@@ -1,8 +1,8 @@
+import { useCallback, useState } from 'react'
 import usePagePropsContext from './usePagePropsContext'
 
-const useInfoAccordion = () => {
-  const { about } = usePagePropsContext()
-  const blocks = [
+function returnBlocks(about) {
+  return [
     {
       value: 'missionStatement',
       label: 'Mission',
@@ -19,12 +19,24 @@ const useInfoAccordion = () => {
       content: about?.aboutText,
     },
   ]
+}
+
+const useInfoAccordion = (options = {}) => {
+  const { type = 'single', collapsible = true } = options
+  const { about } = usePagePropsContext()
+  const blocks = returnBlocks(about)
+  const [value, setValue] = useState(blocks[0].value)
+  const onValueChange = useCallback((value) => {
+    setValue(value)
+  }, [])
   return {
     blocks,
     rootProps: {
-      type: 'single',
+      type,
+      collapsible,
       defaultValue: blocks[0].value,
-      collapsible: true,
+      onValueChange,
+      value,
     },
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { gsap } from 'gsap'
 import { CSSPlugin } from 'gsap/CSSPlugin'
+import { Flip } from 'gsap/Flip'
 import { ThemeContextProvider } from '../components/ThemeContext'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
 import { FilterContextProvider } from '../components/FilterContext'
@@ -14,6 +15,7 @@ import Layout from '../components/Layout'
 import 'normalize.css'
 
 gsap.registerPlugin(CSSPlugin)
+gsap.registerPlugin(Flip)
 
 function MyApp({ Component, pageProps }) {
   return (

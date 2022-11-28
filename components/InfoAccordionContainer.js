@@ -1,9 +1,9 @@
 import InfoAccordion from './InfoAccordion'
-import useInfoAccordion from '../hooks/useInfoAccordion'
+import useAnimatedInfoAccordion from '../hooks/useAnimatedInfoAccordion'
 
 const InfoAccordionContainer = () => {
-  const { blocks, rootProps } = useInfoAccordion()
-  return <InfoAccordion blocks={blocks} rootProps={rootProps} />
+  const props = useAnimatedInfoAccordion()
+  return <InfoAccordion {...props} />
 }
 
 export default InfoAccordionContainer

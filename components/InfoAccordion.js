@@ -18,10 +18,18 @@ const ScrollViewport = styled(ScrollArea.Viewport)`
   > div {
     height: 100%;
   }
+  @media (max-width: 919px) {
+    overflow: visible !important;
+  }
 `
 const Scrollbar = styled(ScrollArea.Scrollbar)``
 const Thumb = styled(ScrollArea.Thumb)``
 const Corner = styled(ScrollArea.Corner)``
+const RootWrap = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`
 const Root = styled(Accordion.Root)`
   position: relative;
   width: 100%;
@@ -34,23 +42,24 @@ const Root = styled(Accordion.Root)`
 const Item = styled(Accordion.Item)``
 const ItemWrap = styled.div`
   position: relative;
-  &:focus-within {
-    position: relative;
-    z-index: 1;
-  }
-  background-color: var(--color-bg);
-  position: relative;
   color: currentColor;
+  background-color: var(--color-bg);
   border-bottom: var(--border-less);
   border-color: var(--color-border);
+  &:focus-within {
+    z-index: 1;
+  }
   &:last-child {
     border-bottom: none;
   }
+  flex: 0 0 auto;
+  &[data-state='open'] {
+    /* max-height: none; */
+  }
   &[data-state='closed'] {
-    overflow: hidden;
-    flex: 0 0 auto;
-    min-height: 12rem;
-    &:after {
+    /* overflow: hidden;
+    max-height: 12rem; */
+    /* &:after {
       position: absolute;
       display: block;
       content: '';
@@ -61,11 +70,7 @@ const ItemWrap = styled.div`
       left: right;
       background-image: linear-gradient(transparent 0%, var(--color-bg) 100%);
       pointer-events: none;
-    }
-  }
-  &[data-state='open'] {
-    min-height: 0;
-    flex: 0 0 auto;
+    } */
   }
 `
 const ItemHeader = styled(Accordion.Header)`
@@ -78,6 +83,10 @@ const ItemHeader = styled(Accordion.Header)`
     z-index: 1;
     background-color: var(--color-bg);
   }
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--color-bg);
 `
 const Trigger = styled(Accordion.Trigger)`
   all: unset;
@@ -104,8 +113,11 @@ const ChevronDown = styled(ChevronDownIcon)`
 const Content = styled(Accordion.Content)`
   overflow: hidden;
   position: relative;
+  &[data-state='open'] {
+    max-height: none;
+  }
   &[data-state='closed'] {
-    position: absolute;
+    max-height: 12rem;
   }
 `
 const ContentText = styled(Body).attrs({ as: 'div' })`
@@ -114,32 +126,37 @@ const ContentText = styled(Body).attrs({ as: 'div' })`
   padding-top: calc(var(--padding-page) / 2);
 `
 
-const InfoAccordion = ({ blocks, rootProps }) => {
+const InfoAccordion = ({ blocks, setBlockRef, rootProps, rootRef }) => {
   return (
     <ScrollFrame>
       <ScrollViewport>
-        <Root {...rootProps}>
-          {blocks.map((block) => {
-            return (
-              <Item asChild value={block.value} key={block.value}>
-                <ItemWrap>
-                  <ItemHeader>
-                    <Trigger>
-                      <TriggerText>{block.label}</TriggerText>
-                      <ChevronDown aria-hidden />
-                    </Trigger>
-                  </ItemHeader>
-                  <Content forceMount>
-                    <ContentText>
-                      <PortableText value={block.content} />
-                    </ContentText>
-                    {/* {props['data-state'] === 'closed' && <CoveringTrigger />} */}
-                  </Content>
-                </ItemWrap>
-              </Item>
-            )
-          })}
-        </Root>
+        <RootWrap ref={rootRef}>
+          <Root {...rootProps}>
+            {blocks.map((block) => {
+              return (
+                <Item asChild value={block.value} key={block.value}>
+                  <ItemWrap
+                    className="accordion-item"
+                    ref={setBlockRef(block.value)}
+                  >
+                    <ItemHeader>
+                      <Trigger>
+                        <TriggerText>{block.label}</TriggerText>
+                        <ChevronDown aria-hidden />
+                      </Trigger>
+                    </ItemHeader>
+                    <Content forceMount className="accordion-item-content">
+                      <ContentText>
+                        <PortableText value={block.content} />
+                      </ContentText>
+                      {/* {props['data-state'] === 'closed' && <CoveringTrigger />} */}
+                    </Content>
+                  </ItemWrap>
+                </Item>
+              )
+            })}
+          </Root>
+        </RootWrap>
       </ScrollViewport>
       <Scrollbar orientation="vertical">
         <Thumb />

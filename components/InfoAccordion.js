@@ -22,28 +22,6 @@ const ScrollViewport = styled(ScrollArea.Viewport)`
 const Scrollbar = styled(ScrollArea.Scrollbar)``
 const Thumb = styled(ScrollArea.Thumb)``
 const Corner = styled(ScrollArea.Corner)``
-
-const minHeight = 10
-const maxHeight = 80
-
-const slideDown = keyframes`
-  from {
-    height: ${minHeight}rem;
-  }
-  to {
-    height: var(--radix-accordion-content-height);
-  }
-`
-
-const slideUp = keyframes`
-  from {
-    height: var(--radix-accordion-content-height);
-  }
-  to {
-    height: ${minHeight}rem;
-  }
-`
-
 const Root = styled(Accordion.Root)`
   position: relative;
   width: 100%;
@@ -54,12 +32,11 @@ const Root = styled(Accordion.Root)`
   height: 100%;
 `
 const Item = styled(Accordion.Item)``
-const Element = styled.div`
+const ItemWrap = styled.div`
   position: relative;
   &:focus-within {
     position: relative;
     z-index: 1;
-    /* --color-bg: var(--color-white); */
   }
   background-color: var(--color-bg);
   position: relative;
@@ -73,7 +50,6 @@ const Element = styled.div`
     overflow: hidden;
     flex: 0 0 auto;
     min-height: 12rem;
-    /* padding-bottom: 6rem; */
     &:after {
       position: absolute;
       display: block;
@@ -90,23 +66,17 @@ const Element = styled.div`
   &[data-state='open'] {
     min-height: 0;
     flex: 0 0 auto;
-    /* flex: 1 1 100%; */
   }
 `
-
-const Header = styled(Accordion.Header)`
+const ItemHeader = styled(Accordion.Header)`
   all: unset;
   display: flex;
   flex: 0 0 auto;
-  /* border-bottom: 1px solid var(--color-bg); */
   &[data-state='open'] {
     position: sticky;
     top: 0;
     z-index: 1;
     background-color: var(--color-bg);
-    /* box-shadow: 1px 3px 16px -12px black; */
-    /* backdrop-filter: blur(400px); */
-    /* border-color: var(--color-blue); */
   }
 `
 const Trigger = styled(Accordion.Trigger)`
@@ -131,17 +101,10 @@ const ChevronDown = styled(ChevronDownIcon)`
     transform: rotate(180deg);
   }
 `
-
 const Content = styled(Accordion.Content)`
   overflow: hidden;
-  &[data-state='open'] {
-    --color-speech-txt: #e4cceb;
-    --color-speech-bg: #571c66;
-    /* animation: ${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1); */
-    position: relative;
-  }
+  position: relative;
   &[data-state='closed'] {
-    /* animation: ${slideUp} 300ms cubic-bezier(0.87, 0, 0.13, 1); */
     position: absolute;
   }
 `
@@ -159,20 +122,20 @@ const InfoAccordion = ({ blocks, rootProps }) => {
           {blocks.map((block) => {
             return (
               <Item asChild value={block.value} key={block.value}>
-                <Element>
-                  <Header>
+                <ItemWrap>
+                  <ItemHeader>
                     <Trigger>
                       <TriggerText>{block.label}</TriggerText>
                       <ChevronDown aria-hidden />
                     </Trigger>
-                  </Header>
+                  </ItemHeader>
                   <Content forceMount>
                     <ContentText>
                       <PortableText value={block.content} />
                     </ContentText>
                     {/* {props['data-state'] === 'closed' && <CoveringTrigger />} */}
                   </Content>
-                </Element>
+                </ItemWrap>
               </Item>
             )
           })}

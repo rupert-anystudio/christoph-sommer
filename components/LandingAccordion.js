@@ -4,6 +4,7 @@ import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { gsap } from 'gsap'
 import { Flip } from 'gsap/Flip'
 import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import useResizeObserver from '../hooks/useResizeObserver'
 
 const itemContents = gsap.utils.wrap([
   'Lorem ipsum dolor sit amet consectetur adipiscing elit at aliquet habitant nibh, lacus dapibus elementum diam nulla mus massa euismod mauris rhoncus. Leo justo nisi molestie tempor mattis ornare feugiat tempus aptent proin ac duis lacinia, neque eleifend turpis praesent netus condimentum accumsan felis magna purus viverra. Congue erat malesuada vestibulum gravida rutrum ridiculus nostra sociis orci egestas cursus suspendisse aliquam bibendum tristique volutpat in, vehicula sed parturient ligula libero metus fringilla senectus pretium penatibus habitasse enim aenean conubia cubilia. Dictumst iaculis quisque lectus tellus ultrices dictum sem himenaeos, torquent blandit fermentum porttitor class curae lobortis donec etiam, platea morbi sagittis hendrerit urna auctor eget. Mi placerat facilisi integer pharetra interdum posuere litora luctus, ad sapien varius pulvinar nam ultricies venenatis risus consequat, vulputate a commodo primis cum nullam vitae. Facilisis odio et imperdiet potenti arcu id quam per nunc fames magnis sociosqu inceptos maecenas, ante dis taciti ut dignissim sodales dui eu tortor velit nascetur est. Faucibus phasellus quis natoque non suscipit eros, nisl ullamcorper pellentesque convallis cras. Sollicitudin scelerisque montes mollis tincidunt laoreet vivamus vel augue nec fusce, porta hac curabitur semper torquent eleifend dictumst semper habitasse viverra ante, platea egestas inceptos sociosqu facilisi tincidunt porta scelerisque aliquet.',
@@ -22,7 +23,6 @@ const items = ['One', 'Two', 'Three'].map((key, i) => ({
 
 const Content = styled.div`
   position: relative;
-  border: 5px solid teal;
 `
 
 const Item = styled.div`
@@ -56,9 +56,6 @@ const ScrollRoot = styled(ScrollArea.Root)`
   transform: translate3d(0px, 0px, 0px);
 `
 const ScrollViewport = styled(ScrollArea.Viewport)`
-  /* height: auto;
-  max-height: 100%; */
-
   height: 100%;
   @media (max-width: 919px) {
     overflow: visible !important;
@@ -84,6 +81,7 @@ const useGsapAccordion = () => {
   const viewportRef = useRef()
 
   const [layout, setLayout] = useState({
+    sate: null,
     value: '',
   })
 
@@ -99,22 +97,23 @@ const useGsapAccordion = () => {
           overwrite: 'all',
           targets,
           ease: 'power1.inOut',
-          duration: 4,
+          duration: 0.32,
           simple: true,
           nested: true,
+          // scale: true,
         })
       })
-      self.add('scrollToItem', (key) => {
-        const target =
-          !key || key === '' ? '.accordion-items' : `.accordion-item-${key}`
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: {
-            y: target,
-            // autoKill: true
-          },
-        })
-      })
+      // self.add('scrollToItem', (key) => {
+      //   const target =
+      //     !key || key === '' ? '.accordion-items' : `.accordion-item-${key}`
+      //   gsap.to(window, {
+      //     duration: 1,
+      //     scrollTo: {
+      //       y: target,
+      //       // autoKill: true
+      //     },
+      //   })
+      // })
     }, rootRef)
   )
 
@@ -134,11 +133,11 @@ const useGsapAccordion = () => {
 
   useIsomorphicLayoutEffect(() => {
     ctx.flipFromState(layout.state)
+    return () => {
+      ctx.kill()
+      ctx.revert()
+    }
   }, [ctx, layout])
-
-  // useEffect(() => {
-  //   ctx.scrollToItem(layout.value)
-  // }, [ctx, layout])
 
   return {
     rootRef,
@@ -168,9 +167,9 @@ const LandingAccordion = () => {
           return (
             <Item
               key={key}
-              style={{ '--color-bg': color }}
               onClick={onItemClick(key)}
               className={`accordion-item-${key}`}
+              style={{ '--color-bg': color }}
             >
               {/* <Sticky> */}
               <ItemHeader
@@ -185,7 +184,7 @@ const LandingAccordion = () => {
                 className="accordion-item-content"
                 style={{ maxHeight: isOpen ? 'none' : 96 }}
               >
-                {content}
+                <div>{content}</div>
               </ItemContent>
             </Item>
           )

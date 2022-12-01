@@ -2,11 +2,11 @@ import styled, { css } from 'styled-components'
 import Annoucements from './Annoucements'
 import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
-import InfoAccordion from './InfoAccordionContainer'
 import Logo from './Logo'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 import { Small } from './Primitives'
 import ThemeToggle from './ThemeToggle'
+import LandingAccordion from './LandingAccordion'
 
 const AreaLabel = styled.div`
   position: relative;
@@ -71,26 +71,29 @@ const Header = styled(Element)`
     top: 0;
     border-right: var(--border);
   }
-`
-const HeaderLogo = styled.div`
-  position: relative;
+  > div {
+    position: relative;
+  }
 `
 const Infos = styled(Area)`
   grid-area: Infos;
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;
+  @media (max-width: 919px) {
+    border-bottom: var(--border);
+  }
   @media (min-width: 920px) {
     grid-template-rows: calc(100vh - var(--height-header));
     border-right: var(--border);
   }
-`
-const InfosBlock = styled(Area)`
-  position: sticky;
-  top: 0;
-  @media (min-width: 920px) {
-    position: sticky;
-    top: var(--height-header);
+  > div {
+    position: relative;
+    /* border: 2px solid red; */
+    @media (min-width: 920px) {
+      position: sticky;
+      top: var(--height-header);
+    }
   }
 `
 const Scrollables = styled(Area)`
@@ -145,13 +148,13 @@ const Layout = ({ children }) => {
   return (
     <Container>
       <Header>
-        <HeaderLogo>
+        <div>
           <Logo />
           <Annoucements />
-        </HeaderLogo>
+        </div>
       </Header>
       <Infos>
-        <InfosBlock>{layout === 'landing' && <InfoAccordion />}</InfosBlock>
+        <div>{layout === 'landing' && <LandingAccordion />}</div>
       </Infos>
       <Scrollables>
         <Actions>

@@ -1,11 +1,9 @@
-import * as ScrollArea from '@radix-ui/react-scroll-area'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { gsap } from 'gsap'
-import { useCallback, useState, useRef, useMemo, useEffect } from 'react'
 import { Flip } from 'gsap/Flip'
 import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
-import useResizeObserver from '../hooks/useResizeObserver'
-import { useDeferredValue } from 'react'
 
 const itemContents = gsap.utils.wrap([
   'Lorem ipsum dolor sit amet consectetur adipiscing elit at aliquet habitant nibh, lacus dapibus elementum diam nulla mus massa euismod mauris rhoncus. Leo justo nisi molestie tempor mattis ornare feugiat tempus aptent proin ac duis lacinia, neque eleifend turpis praesent netus condimentum accumsan felis magna purus viverra. Congue erat malesuada vestibulum gravida rutrum ridiculus nostra sociis orci egestas cursus suspendisse aliquam bibendum tristique volutpat in, vehicula sed parturient ligula libero metus fringilla senectus pretium penatibus habitasse enim aenean conubia cubilia. Dictumst iaculis quisque lectus tellus ultrices dictum sem himenaeos, torquent blandit fermentum porttitor class curae lobortis donec etiam, platea morbi sagittis hendrerit urna auctor eget. Mi placerat facilisi integer pharetra interdum posuere litora luctus, ad sapien varius pulvinar nam ultricies venenatis risus consequat, vulputate a commodo primis cum nullam vitae. Facilisis odio et imperdiet potenti arcu id quam per nunc fames magnis sociosqu inceptos maecenas, ante dis taciti ut dignissim sodales dui eu tortor velit nascetur est. Faucibus phasellus quis natoque non suscipit eros, nisl ullamcorper pellentesque convallis cras. Sollicitudin scelerisque montes mollis tincidunt laoreet vivamus vel augue nec fusce, porta hac curabitur semper torquent eleifend dictumst semper habitasse viverra ante, platea egestas inceptos sociosqu facilisi tincidunt porta scelerisque aliquet.',
@@ -33,23 +31,11 @@ const Item = styled.div`
 
 const ItemHeader = styled.div`
   position: relative;
-  transform: translate3d(0px, 0px, 0px);
-  will-change: transform;
-  > div {
-    transform: translate3d(0px, 0px, 0px);
-    will-change: transform;
-  }
 `
 
 const ItemContent = styled.div`
   position: relative;
   overflow: hidden;
-  transform: translate3d(0px, 0px, 0px);
-  will-change: transform;
-  > div {
-    transform: translate3d(0px, 0px, 0px);
-    will-change: transform;
-  }
 `
 
 const Sticky = styled.div`
@@ -93,37 +79,77 @@ const Scroll = ({ children, rootRef, viewportRef }) => (
   </ScrollRoot>
 )
 
-const targets = ['accordion-item-header-div', 'accordion-item-content']
-  .map((c) => `.${c}`)
-  .join(', ')
-
 const useGsapAccordion = () => {
   const rootRef = useRef()
-  const tl = useRef(null)
+  const viewportRef = useRef()
 
-  const q = useMemo(() => {
-    return gsap.utils.selector(rootRef)
-  }, [])
-
-  const { width: rootWidth, height: rootHeight } = useResizeObserver({
-    ref: rootRef,
-    box: 'content-box',
+  const [layout, setLayout] = useState({
+    value: '',
   })
 
-  const contentRef = useRef()
-  const { width: contentWidth, height: contentHeight } = useResizeObserver({
-    ref: contentRef,
-    box: 'content-box',
-  })
+  const [ctx] = useState(() =>
+    gsap.context((self) => {
+      const targets = '.accordion-item-header, .accordion-item-content'
+      self.add('returnFlipState', () => {
+        return Flip.getState(targets)
+      })
+      self.add('flipFromState', (state) => {
+        if (!state) return
+        Flip.from(state, {
+          overwrite: 'all',
+          targets,
+          ease: 'power1.inOut',
+          duration: 4,
+          simple: true,
+          nested: true,
+        })
+      })
+      self.add('scrollToItem', (key) => {
+        const target =
+          !key || key === '' ? '.accordion-items' : `.accordion-item-${key}`
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: {
+            y: target,
+            // autoKill: true
+          },
+        })
+      })
+    }, rootRef)
+  )
 
-  const [value, setValue] = useState('')
+  useEffect(() => {
+    return () => ctx.revert()
+  }, [ctx])
 
-  const onValueChange = useCallback((key) => {
-    setValue((prevKey) => {
-      if (prevKey === key) return ''
-      return key
-    })
-  }, [])
+  const onValueChange = useCallback(
+    (key) => {
+      setLayout((prev) => ({
+        state: ctx.returnFlipState(),
+        value: prev.value === key ? '' : key,
+      }))
+    },
+    [ctx]
+  )
+
+  useIsomorphicLayoutEffect(() => {
+    ctx.flipFromState(layout.state)
+  }, [ctx, layout])
+
+  // useEffect(() => {
+  //   ctx.scrollToItem(layout.value)
+  // }, [ctx, layout])
+
+  return {
+    rootRef,
+    viewportRef,
+    value: layout.value,
+    onValueChange,
+  }
+}
+
+const LandingAccordion = () => {
+  const { value, rootRef, viewportRef, onValueChange } = useGsapAccordion()
 
   const onItemClick = useCallback(
     (key) => (e) => {
@@ -133,88 +159,33 @@ const useGsapAccordion = () => {
     [onValueChange]
   )
 
-  const [layout, setLayout] = useState({
-    items,
-  })
-
-  useEffect(() => {
-    setLayout({
-      state: Flip.getState(q(targets)),
-      items: items.map((i) => ({ ...i, isOpen: value === i.value })),
-    })
-  }, [value, q])
-
-  const deferredLayout = useDeferredValue(layout)
-
-  useIsomorphicLayoutEffect(() => {
-    if (! .state) return
-    tl.current = Flip.from(deferredLayout.state, {
-      overwrite: 'all',
-      targets: q(targets),
-      ease: 'power1.inOut',
-      duration: 0.4,
-      simple: true,
-      nested: true,
-    })
-    return () => {
-      if (!tl.current) return
-      tl.current.kill()
-      tl.current.clear()
-      tl.current = null
-    }
-  }, [deferredLayout, q])
-
-  return {
-    rootRef,
-    contentRef,
-    items: deferredLayout.items,
-    onItemClick,
-  }
-}
-
-const LandingAccordion = () => {
-  const {
-    items: rendedItems,
-    rootRef,
-    contentRef,
-    onItemClick,
-  } = useGsapAccordion()
-
   return (
-    <Scroll rootRef={rootRef}>
-      <Content ref={contentRef}>
-        {rendedItems.map((item) => {
-          const { key, isOpen, label, color, content } = item
+    <Scroll rootRef={rootRef} viewportRef={viewportRef}>
+      <Content className="accordion-items">
+        {items.map((item) => {
+          const { key, label, color, content } = item
+          const isOpen = key === value
           return (
             <Item
               key={key}
               style={{ '--color-bg': color }}
               onClick={onItemClick(key)}
+              className={`accordion-item-${key}`}
             >
-              <Sticky>
-                <ItemHeader
-                  data-flip-id={`header-${key}`}
-                  className="accordion-item-header"
-                >
-                  <div
-                    data-flip-id={`header-div-${key}`}
-                    className="accordion-item-header-div"
-                  >
-                    <Bar>{label}</Bar>
-                  </div>
-                </ItemHeader>
-              </Sticky>
+              {/* <Sticky> */}
+              <ItemHeader
+                data-flip-id={`header-${key}`}
+                className="accordion-item-header"
+              >
+                <Bar>{label}</Bar>
+              </ItemHeader>
+              {/* </Sticky> */}
               <ItemContent
                 data-flip-id={`content-${key}`}
                 className="accordion-item-content"
                 style={{ maxHeight: isOpen ? 'none' : 96 }}
               >
-                <div
-                  data-flip-id={`content-div-${key}`}
-                  className="accordion-item-content-div"
-                >
-                  {content}
-                </div>
+                {content}
               </ItemContent>
             </Item>
           )

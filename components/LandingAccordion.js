@@ -1,10 +1,8 @@
-import { useCallback, useState, useRef, useEffect, useMemo } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
-import { gsap } from 'gsap'
-import { Flip } from 'gsap/Flip'
-import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import useAboutAccordionItems from '../hooks/useAboutAccordionItems'
+import useGsapAccordion from '../hooks/useGsapAccordion'
 import Scroll from './Scroll'
-import usePagePropsContext from '../hooks/usePagePropsContext'
 import PortableText from './PortableText'
 import { Small } from './Primitives'
 
@@ -44,104 +42,9 @@ const Sticky = styled.div`
   z-index: 1;
 `
 
-const useGsapAccordion = () => {
-  const rootRef = useRef()
-  const viewportRef = useRef()
-
-  const [layout, setLayout] = useState({
-    sate: null,
-    value: '',
-  })
-
-  const [ctx] = useState(() =>
-    gsap.context((self) => {
-      const targets = '.accordion-item-header, .accordion-item-content'
-      self.add('returnFlipState', () => {
-        return Flip.getState(targets)
-      })
-      self.add('flipFromState', (state) => {
-        if (!state) return
-        Flip.from(state, {
-          overwrite: 'all',
-          targets,
-          ease: 'power1.inOut',
-          duration: 0.32,
-          simple: true,
-          nested: true,
-          // scale: true,
-        })
-      })
-      // self.add('scrollToItem', (key) => {
-      //   const target =
-      //     !key || key === '' ? '.accordion-items' : `.accordion-item-${key}`
-      //   gsap.to(window, {
-      //     duration: 1,
-      //     scrollTo: {
-      //       y: target,
-      //       // autoKill: true
-      //     },
-      //   })
-      // })
-    }, rootRef)
-  )
-
-  useEffect(() => {
-    return () => ctx.revert()
-  }, [ctx])
-
-  const onValueChange = useCallback(
-    (key) => {
-      setLayout((prev) => ({
-        state: ctx.returnFlipState(),
-        value: prev.value === key ? '' : key,
-      }))
-    },
-    [ctx]
-  )
-
-  useIsomorphicLayoutEffect(() => {
-    ctx.flipFromState(layout.state)
-    return () => {
-      ctx.revert()
-      ctx.kill()
-    }
-  }, [ctx, layout])
-
-  return {
-    rootRef,
-    viewportRef,
-    value: layout.value,
-    onValueChange,
-  }
-}
-
-const useAboutAccordionItems = () => {
-  const { about } = usePagePropsContext()
-  const items = useMemo(() => {
-    return [
-      {
-        key: 'missionStatement',
-        label: 'Mission',
-        content: about?.missionStatement,
-      },
-      {
-        key: 'aboutText',
-        label: 'Über Mich',
-        content: about?.aboutText,
-      },
-      {
-        key: 'nochMehr',
-        label: 'Nochmehr',
-        content: about?.aboutText,
-      },
-    ]
-  }, [about])
-  return items
-}
-
 const LandingAccordion = () => {
   const items = useAboutAccordionItems()
-  const { value, rootRef, viewportRef, onValueChange } = useGsapAccordion()
+  const { value, rootRef, onValueChange } = useGsapAccordion()
 
   const onItemClick = useCallback(
     (key) => (e) => {
@@ -152,7 +55,7 @@ const LandingAccordion = () => {
   )
 
   return (
-    <Scroll rootRef={rootRef} viewportRef={viewportRef}>
+    <Scroll rootRef={rootRef}>
       <Content className="accordion-items">
         {items.map((item) => {
           const { key, label, content } = item

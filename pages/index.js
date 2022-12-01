@@ -1,49 +1,13 @@
 import { getClient } from '../lib/sanity.server'
 import CardGridPortfolio from '../components/CardGridPortfolio'
 import { entryQuery } from '../lib/entryHelpers'
-import ExpandableSection from '../components/ExpandableSection'
-import PortableText from '../components/PortableText'
-import Section from '../components/Section'
-import FilterSelect from '../components/FilterSelect'
-import FilterSection from '../components/FilterSection'
 import useFilterContext from '../hooks/useFilterContext'
-import {
-  MainFirst,
-  MainFirstContent,
-  MainMiddle,
-  MainLast,
-} from '../components/Main'
 
 export default function Home({ docs = [], about = {}, annoucements = [] }) {
-  // return null
   const { filter } = useFilterContext()
   const filteredDocs =
     filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
   return <CardGridPortfolio portfolio={filteredDocs} />
-  // return (
-  //   <>
-  //     <MainFirst>
-  //       <MainFirstContent>
-  //         <ExpandableSection>
-  //           <PortableText value={about?.missionStatement} />
-  //         </ExpandableSection>
-  //         <ExpandableSection title="About">
-  //           <PortableText value={about?.aboutText} />
-  //         </ExpandableSection>
-  //       </MainFirstContent>
-  //     </MainFirst>
-  //     <MainLast>
-  //       <FilterSection>
-  //         <FilterSelect />
-  //       </FilterSection>
-  //     </MainLast>
-  //     <MainMiddle>
-  //       <Section>
-  //         <CardGridPortfolio portfolio={filteredDocs} />
-  //       </Section>
-  //     </MainMiddle>
-  //   </>
-  // )
 }
 
 export async function getStaticProps({ preview = false }) {

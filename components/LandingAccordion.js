@@ -24,6 +24,18 @@ const ItemContent = styled.div`
   position: relative;
   overflow: hidden;
   padding: 0 var(--padding-page) var(--padding-page) var(--padding-page);
+  max-height: ${(p) => (p.isOpen ? 'none' : '96px')};
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 96px;
+    background-image: linear-gradient(transparent, var(--color-bg));
+    transition: transform 0.34s ease-in-out;
+    transform: translate3d(0, ${(p) => (p.isOpen ? '100%' : '0%')}, 0);
+  }
 `
 const Sticky = styled.div`
   position: relative;
@@ -162,7 +174,7 @@ const LandingAccordion = () => {
               <ItemContent
                 data-flip-id={`content-${key}`}
                 className="accordion-item-content"
-                style={{ maxHeight: isOpen ? 'none' : 96 }}
+                isOpen={isOpen}
               >
                 <PortableText value={content} />
               </ItemContent>

@@ -5,6 +5,7 @@ import { useCallback, useState, useRef, useMemo, useEffect } from 'react'
 import { Flip } from 'gsap/Flip'
 import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
 import useResizeObserver from '../hooks/useResizeObserver'
+import { useDeferredValue } from 'react'
 
 const itemContents = gsap.utils.wrap([
   'Lorem ipsum dolor sit amet consectetur adipiscing elit at aliquet habitant nibh, lacus dapibus elementum diam nulla mus massa euismod mauris rhoncus. Leo justo nisi molestie tempor mattis ornare feugiat tempus aptent proin ac duis lacinia, neque eleifend turpis praesent netus condimentum accumsan felis magna purus viverra. Congue erat malesuada vestibulum gravida rutrum ridiculus nostra sociis orci egestas cursus suspendisse aliquam bibendum tristique volutpat in, vehicula sed parturient ligula libero metus fringilla senectus pretium penatibus habitasse enim aenean conubia cubilia. Dictumst iaculis quisque lectus tellus ultrices dictum sem himenaeos, torquent blandit fermentum porttitor class curae lobortis donec etiam, platea morbi sagittis hendrerit urna auctor eget. Mi placerat facilisi integer pharetra interdum posuere litora luctus, ad sapien varius pulvinar nam ultricies venenatis risus consequat, vulputate a commodo primis cum nullam vitae. Facilisis odio et imperdiet potenti arcu id quam per nunc fames magnis sociosqu inceptos maecenas, ante dis taciti ut dignissim sodales dui eu tortor velit nascetur est. Faucibus phasellus quis natoque non suscipit eros, nisl ullamcorper pellentesque convallis cras. Sollicitudin scelerisque montes mollis tincidunt laoreet vivamus vel augue nec fusce, porta hac curabitur semper torquent eleifend dictumst semper habitasse viverra ante, platea egestas inceptos sociosqu facilisi tincidunt porta scelerisque aliquet.',
@@ -98,6 +99,7 @@ const targets = ['accordion-item-header-div', 'accordion-item-content']
 
 const useGsapAccordion = () => {
   const rootRef = useRef()
+  const tl = useRef(null)
 
   const q = useMemo(() => {
     return gsap.utils.selector(rootRef)
@@ -136,17 +138,17 @@ const useGsapAccordion = () => {
   })
 
   useEffect(() => {
-    const state = Flip.getState(q(targets))
     setLayout({
-      state,
+      state: Flip.getState(q(targets)),
       items: items.map((i) => ({ ...i, isOpen: value === i.value })),
     })
   }, [value, q])
 
-  const tl = useRef(null)
+  const deferredLayout = useDeferredValue(layout)
+
   useIsomorphicLayoutEffect(() => {
-    if (!layout.state) return
-    tl.current = Flip.from(layout.state, {
+    if (! .state) return
+    tl.current = Flip.from(deferredLayout.state, {
       overwrite: 'all',
       targets: q(targets),
       ease: 'power1.inOut',
@@ -155,15 +157,17 @@ const useGsapAccordion = () => {
       nested: true,
     })
     return () => {
+      if (!tl.current) return
       tl.current.kill()
       tl.current.clear()
+      tl.current = null
     }
-  }, [layout, q])
+  }, [deferredLayout, q])
 
   return {
     rootRef,
     contentRef,
-    items: layout.items,
+    items: deferredLayout.items,
     onItemClick,
   }
 }

@@ -8,17 +8,21 @@ const Wrap = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  height: 23rem;
-  background: linear-gradient(
-    transparent 0%,
-    var(--color-bg) 85%,
-    var(--color-bg) 100%
-  );
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  overflow: hidden;
+  /* overflow: hidden; */
+  &:before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -100px;
+    right: -100px;
+    height: 200px;
+    background: var(--color-bg);
+    box-shadow: 0px 0px 48px 48px var(--color-bg);
+  }
 `
 
 const Content = styled.div`

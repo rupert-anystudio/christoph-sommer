@@ -26,13 +26,14 @@ const ItemContent = styled.div`
   &:after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 96px;
-    background-image: linear-gradient(transparent, var(--color-bg));
+    top: 100%;
+    left: -100px;
+    right: -100px;
+    height: 200px;
+    background: var(--color-bg);
     transition: transform 0.34s ease-in-out;
     transform: translate3d(0, ${(p) => (p.isOpen ? '100%' : '0%')}, 0);
+    box-shadow: 0px 0px 48px 48px var(--color-bg);
   }
 `
 const Sticky = styled.div`

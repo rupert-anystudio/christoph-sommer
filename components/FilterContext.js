@@ -15,5 +15,3 @@ export const FilterContextProvider = ({ children }) => {
     <FilterContext.Provider value={state}>{children}</FilterContext.Provider>
   )
 }
-
-export const useFilterContext = () => useContext(FilterContext)

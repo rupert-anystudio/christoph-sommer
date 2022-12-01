@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { entryLabels, entryTypes } from '../lib/entryHelpers'
-import { useFilterContext } from './FilterContext'
+import useFilterContext from '../hooks/useFilterContext'
 import { Input } from './Primitives'
 
 const Wrap = styled.div`
@@ -25,12 +25,6 @@ const Entry = styled.div`
   &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
-  /* &[data-checked='unchecked'] {
-    display: none;
-    ${Wrap}:focus-within & {
-      display: flex;
-    }
-  } */
 `
 const Item = styled(RadioGroupPrimitive.Item)`
   all: unset;
@@ -49,7 +43,12 @@ const Item = styled(RadioGroupPrimitive.Item)`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 0.2rem solid var(--color-txt);
+    border: 2px solid currentColor;
+  }
+  &[data-state='checked'] {
+    &:after {
+      border-color: var(--color-element-bg);
+    }
   }
 `
 const Indicator = styled(RadioGroupPrimitive.Indicator)`
@@ -59,10 +58,13 @@ const Indicator = styled(RadioGroupPrimitive.Indicator)`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: var(--color-txt);
+  background: var(--color-element-bg);
 `
 const EntryLabel = styled(Input).attrs({ as: 'label' })`
   cursor: pointer;
+  ${Item}[data-state='checked'] ~ & {
+    color: var(--color-element-bg);
+  }
 `
 
 const FilterSelect = () => {

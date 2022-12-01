@@ -1,10 +1,10 @@
-import { createContext, useContext, useState } from 'react'
-import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect'
+import { createContext, useState } from 'react'
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
 
 export const ThemeContext = createContext()
 
 export const ThemeContextProvider = ({ children }) => {
-  const [theme, setTheme] = useState('Light')
+  const [theme, setTheme] = useState('Dark')
   const onThemeToggle = () => {
     setTheme((prev) => {
       const nextTheme = prev === 'Light' ? 'Dark' : 'Light'
@@ -24,5 +24,3 @@ export const ThemeContextProvider = ({ children }) => {
   }
   return <ThemeContext.Provider value={state}>{children}</ThemeContext.Provider>
 }
-
-export const useThemeContext = () => useContext(ThemeContext)

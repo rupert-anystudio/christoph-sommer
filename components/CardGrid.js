@@ -3,8 +3,9 @@ import styled from 'styled-components'
 
 const Grid = styled.div`
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(42rem, 1fr));
+  grid-gap: var(--padding-page);
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
 `
 
 const getKey_ = (entry) => entry?._id ?? null

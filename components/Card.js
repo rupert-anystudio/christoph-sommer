@@ -49,9 +49,9 @@ const Card = styled.div`
   align-items: flex-start;
   background: var(--color-bg);
   color: var(--color-txt);
-  height: 60rem;
+  height: 69rem;
   overflow: hidden;
-  /* border-image: var(--color-bg); */
+  border: var(--border-card);
   > * {
     &:not(:first-child) {
       margin-top: 1rem;

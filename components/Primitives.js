@@ -14,8 +14,8 @@ export const Body = styled(Text)`
 `
 
 export const Input = styled(Text)`
-  font-size: var(--fs-root);
-  line-height: var(--lh-root);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
   font-style: var(--fx-inter);
@@ -46,8 +46,8 @@ export const SmallPill = styled(Small)`
 `
 
 export const SmallPillButton = styled(SmallPill).attrs({ as: 'button' })`
-  background: var(--color-txt);
-  color: var(--color-bg-root);
+  background: var(--color-element-txt);
+  color: var(--color-element-bg);
   appearance: none;
   border: none;
   @media (hover: hover) {

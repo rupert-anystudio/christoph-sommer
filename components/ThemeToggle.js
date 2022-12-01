@@ -1,12 +1,12 @@
-import { useThemeContext } from './ThemeContext'
-import { SmallPillButton } from './Primitives'
+import useThemeContext from '../hooks/useThemeContext'
+import CircleButton from './CircleButton'
 
 const ThemeToggle = () => {
   const { theme, onThemeToggle } = useThemeContext()
   return (
-    <SmallPillButton
-      onClick={onThemeToggle}
-    >{`${theme} Theme`}</SmallPillButton>
+    <CircleButton onClick={onThemeToggle}>
+      {theme === 'Dark' ? '☼' : '☾'}
+    </CircleButton>
   )
 }
 

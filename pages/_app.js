@@ -1,40 +1,43 @@
-import 'normalize.css'
+import React from 'react'
 import { gsap } from 'gsap'
 import { CSSPlugin } from 'gsap/CSSPlugin'
-import Annoucements from '../components/Annoucements'
+import { Flip } from 'gsap/Flip'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ThemeContextProvider } from '../components/ThemeContext'
-import { FilterContextProvider } from '../components/FilterContext'
-import Footer from '../components/Footer'
-import FooterNav from '../components/FooterNav'
-import GlobalStyles from '../components/GlobalStyles'
-import Header from '../components/Header'
-import Logo from '../components/Logo'
-import Main from '../components/Main'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
-import ThemeToggle from '../components/ThemeToggle'
+import { FilterContextProvider } from '../components/FilterContext'
+import Colors from '../styles/Colors'
+import FontStyles from '../styles/FontStyles'
+import FontSizes from '../styles/FontSizes'
+import Sizings from '../styles/Sizings'
+import CurrentTheme from '../styles/CurrentTheme'
+import GlobalStyles from '../styles/GlobalStyles'
+import Layout from '../components/Layout'
+import 'normalize.css'
 
 gsap.registerPlugin(CSSPlugin)
+gsap.registerPlugin(Flip)
+gsap.registerPlugin(ScrollToPlugin)
 
 function MyApp({ Component, pageProps }) {
   return (
-    <PagePropsContextProvider pageProps={pageProps}>
-      <ThemeContextProvider>
-        <FilterContextProvider>
-          <GlobalStyles />
-          <Header>
-            <Logo />
-            <ThemeToggle />
-            <Annoucements />
-          </Header>
-          <Main>
-            <Component {...pageProps} />
-          </Main>
-          <Footer>
-            <FooterNav />
-          </Footer>
-        </FilterContextProvider>
-      </ThemeContextProvider>
-    </PagePropsContextProvider>
+    <ThemeContextProvider>
+      <Colors />
+      <FontStyles />
+      <FontSizes />
+      <Sizings />
+      <CurrentTheme />
+      <GlobalStyles />
+      <React.StrictMode>
+        <PagePropsContextProvider value={pageProps}>
+          <FilterContextProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </FilterContextProvider>
+        </PagePropsContextProvider>
+      </React.StrictMode>
+    </ThemeContextProvider>
   )
 }
 

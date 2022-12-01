@@ -15,11 +15,6 @@ const useAboutAccordionItems = () => {
         label: 'Über Mich',
         content: about?.aboutText,
       },
-      {
-        key: 'nochMehr',
-        label: 'Nochmehr',
-        content: about?.aboutText,
-      },
     ]
   }, [about])
   return items

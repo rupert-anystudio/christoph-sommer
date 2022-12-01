@@ -11,7 +11,9 @@ const Content = styled.div`
 `
 const Item = styled.div`
   position: relative;
-  border-bottom: var(--border);
+  &:not(:last-child) {
+    border-bottom: var(--border);
+  }
 `
 const ItemHeader = styled.div`
   position: relative;
@@ -21,7 +23,8 @@ const ItemHeader = styled.div`
 const ItemContent = styled.div`
   position: relative;
   overflow: hidden;
-  padding: 0 var(--padding-page) var(--padding-page) var(--padding-page);
+  padding: 0 var(--padding-page);
+  padding-bottom: calc(var(--padding-page) * 2);
   max-height: ${(p) => (p.isOpen ? 'none' : '96px')};
   &:after {
     content: '';

@@ -7,6 +7,7 @@ import externalLink from './externalLink'
 import links from './links'
 import people from './people'
 import publicationNewspaper from './publicationNewspaper'
+import publishedAt from './publishedAt'
 import timeframe from './timeframe'
 
 export default [
@@ -20,4 +21,5 @@ export default [
   categories,
   timeframe,
   publicationNewspaper,
+  publishedAt,
 ]

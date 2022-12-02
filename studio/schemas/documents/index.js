@@ -14,6 +14,7 @@ import aboutPage from './aboutPage'
 import siteSettings from './siteSettings'
 import imprintPage from './imprintPage'
 import privacyPage from './privacyPage'
+import portfolioSettings from './portfolioSettings'
 
 export default [
   publisher,
@@ -32,4 +33,5 @@ export default [
   siteSettings,
   imprintPage,
   privacyPage,
+  portfolioSettings,
 ]

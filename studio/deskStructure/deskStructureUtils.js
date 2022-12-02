@@ -33,3 +33,38 @@ export const getDocTypeListItem = ({
 
 export const getListItemItems = ({ title, items = [], icon }) =>
   S.listItem().title(title).icon(icon).child(S.list().title(title).items(items))
+
+export const getDocTypesListItem = ({
+  types,
+  title: listTitle,
+  icon,
+  orderings = [],
+}) => {
+  const title = listTitle || 'No Title'
+  const menuItems = orderings.reduce((acc, curr) => {
+    const { field, title: fieldTitle } = curr
+    if (!field) return acc
+    const title = fieldTitle || field
+    return [
+      ...acc,
+      S.orderingMenuItem({
+        title: [title, 'ascending'].join(', '),
+        by: [{ field, direction: 'asc' }],
+      }),
+      S.orderingMenuItem({
+        title: [title, 'descending'].join(', '),
+        by: [{ field, direction: 'desc' }],
+      }),
+    ]
+  }, [])
+  return S.listItem()
+    .title(title)
+    .icon(icon)
+    .child(
+      S.documentList()
+        .title(title)
+        .filter('_type in $types')
+        .params({ types })
+        .menuItems(menuItems)
+    )
+}

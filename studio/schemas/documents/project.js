@@ -14,6 +14,10 @@ export default {
       description: 'The name of this project.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'categories',
       name: 'categories',
       description: 'A list of categories this project is related to.',

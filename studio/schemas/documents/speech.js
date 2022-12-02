@@ -14,6 +14,10 @@ export default {
       description: 'The name of this speech.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'text',
       name: 'context',
       title: 'Context / Info',

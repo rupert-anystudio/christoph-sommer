@@ -14,6 +14,10 @@ export default {
       description: 'The title of this text.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'categories',
       name: 'categories',
       description: 'A list of categories this text is related to.',

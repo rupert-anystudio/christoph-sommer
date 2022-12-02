@@ -16,6 +16,10 @@ export const defaultItems = [
         title: 'General',
       }),
       getDocTypeListItem({
+        type: 'portfolioSettings',
+        title: 'Portfolio',
+      }),
+      getDocTypeListItem({
         type: 'aboutPage',
         title: 'About',
       }),

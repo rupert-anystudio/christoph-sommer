@@ -8,6 +8,7 @@ import { Small } from './Primitives'
 
 const Content = styled.div`
   position: relative;
+  --accordion-item-minheight: 128px;
 `
 const Item = styled.div`
   position: relative;
@@ -25,7 +26,7 @@ const ItemContent = styled.div`
   overflow: hidden;
   padding: 0 var(--padding-page);
   padding-bottom: calc(var(--padding-page) * 2);
-  max-height: ${(p) => (p.isOpen ? 'none' : '96px')};
+  max-height: ${(p) => (p.isOpen ? 'none' : 'var(--accordion-item-minheight)')};
   &:after {
     content: '';
     position: absolute;
@@ -36,7 +37,8 @@ const ItemContent = styled.div`
     background: var(--color-bg);
     transition: transform 0.34s ease-in-out;
     transform: translate3d(0, ${(p) => (p.isOpen ? '100%' : '0%')}, 0);
-    box-shadow: 0px 0px 48px 48px var(--color-bg);
+    box-shadow: 0px 0px calc(var(--accordion-item-minheight) / 2)
+      calc(var(--accordion-item-minheight) / 2) var(--color-bg);
   }
 `
 const Sticky = styled.div`
@@ -49,25 +51,18 @@ const Sticky = styled.div`
 const LandingAccordion = () => {
   const items = useAboutAccordionItems()
   const { value, rootRef, onValueChange } = useGsapAccordion()
-
-  const onItemClick = useCallback(
-    (key) => (e) => {
-      e.preventDefault()
-      onValueChange(key)
-    },
-    [onValueChange]
-  )
-
   return (
-    <Scroll rootRef={rootRef}>
-      <Content className="accordion-items">
+    <Scroll>
+      <Content className="accordion-items" ref={rootRef}>
         {items.map((item) => {
           const { key, label, content } = item
           const isOpen = key === value
           return (
             <Item
               key={key}
-              onClick={onItemClick(key)}
+              onClick={() => {
+                onValueChange(key)
+              }}
               className={`accordion-item-${key}`}
             >
               {/* <Sticky> */}

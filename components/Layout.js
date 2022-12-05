@@ -66,6 +66,9 @@ const Header = styled(Element)`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* position: sticky;
+  top: 0; */
+  /* border-right: var(--border); */
   @media (min-width: 920px) {
     position: sticky;
     top: 0;
@@ -111,6 +114,7 @@ const Scrollables = styled(Area)`
   }
 `
 const Main = styled(Element)`
+  padding: 0;
   @media (min-width: 1440px) {
     grid-area: Main;
     /* border-right: var(--border); */

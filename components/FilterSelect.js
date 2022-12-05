@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
-import { entryLabels, entryTypes } from '../lib/entryHelpers'
+import { getEntryTypeLabel, entryTypes } from '../lib/entryHelpers'
 import useFilterContext from '../hooks/useFilterContext'
 import { Input } from './Primitives'
 
@@ -101,7 +101,9 @@ const FilterSelect = () => {
               >
                 <Indicator />
               </Item>
-              <EntryLabel htmlFor={id}>{entryLabels[type]}</EntryLabel>
+              <EntryLabel htmlFor={id}>
+                {getEntryTypeLabel(type, 'plural')}
+              </EntryLabel>
             </Entry>
           )
         })}

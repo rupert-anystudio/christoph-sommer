@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import useAboutAccordionItems from '../hooks/useAboutAccordionItems'
-import useGsapAccordion from '../hooks/useGsapAccordion'
 import Scroll from './Scroll'
 import PortableText from './PortableText'
 import { Small } from './Primitives'
+import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
 
 const Content = styled.div`
   position: relative;
@@ -48,41 +48,50 @@ const Sticky = styled.div`
   z-index: 1;
 `
 
+const classes = {
+  entries: 'accordion-items',
+  entry: 'accordion-item',
+  entryChild: 'accordion-item-content',
+}
+
 const LandingAccordion = () => {
   const items = useAboutAccordionItems()
-  const { value, rootRef, onValueChange } = useGsapAccordion()
+  const { value, rootRef, onValueChange } = useAnimatedAccordion({
+    classes,
+  })
+
+  const onEntryClick = useCallback(
+    (val) => (e) => {
+      e.preventDefault()
+      onValueChange(val)
+    },
+    [onValueChange]
+  )
   return (
     <Scroll>
-      <Content className="accordion-items" ref={rootRef}>
-        {items.map((item) => {
-          const { key, label, content } = item
-          const isOpen = key === value
-          return (
-            <Item
-              key={key}
-              onClick={() => {
-                onValueChange(key)
-              }}
-              className={`accordion-item-${key}`}
-            >
-              {/* <Sticky> */}
-              <ItemHeader
-                data-flip-id={`header-${key}`}
-                className="accordion-item-header"
+      <Content ref={rootRef}>
+        <div className="accordion-items">
+          {items.map((item) => {
+            const { key, label, content } = item
+            const isOpen = key === value
+            return (
+              <Item
+                key={key}
+                onClick={onEntryClick(key)}
+                className={`accordion-item`}
               >
-                <Small>{label}</Small>
-              </ItemHeader>
-              {/* </Sticky> */}
-              <ItemContent
-                data-flip-id={`content-${key}`}
-                className="accordion-item-content"
-                isOpen={isOpen}
-              >
-                <PortableText value={content} />
-              </ItemContent>
-            </Item>
-          )
-        })}
+                {/* <Sticky> */}
+                <ItemHeader className="accordion-item-header">
+                  <Small>{label}</Small>
+                </ItemHeader>
+                {/* </Sticky> */}
+                <ItemContent className="accordion-item-content" isOpen={isOpen}>
+                  <PortableText value={content} />
+                </ItemContent>
+              </Item>
+            )
+          })}
+        </div>
       </Content>
     </Scroll>
   )

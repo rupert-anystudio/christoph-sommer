@@ -1,20 +1,17 @@
 import { getClient } from '../lib/sanity.server'
-import CardGridPortfolio from '../components/CardGridPortfolio'
 import { entryQuery } from '../lib/entryHelpers'
-import useFilterContext from '../hooks/useFilterContext'
+
+import Portfolio from '../components/Portfolio'
 
 export default function Home({ docs = [], about = {}, annoucements = [] }) {
-  const { filter } = useFilterContext()
-  const filteredDocs =
-    filter !== 'all' ? docs.filter((d) => d._type === filter) : docs
-  return <CardGridPortfolio portfolio={filteredDocs} />
+  return <Portfolio />
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
   const layout = 'landing'
   // fetch all docs for cards
-  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(_createdAt desc)|order(timeframe.start desc)${entryQuery}`
+  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]${entryQuery}`
   const docs = await client.fetch(docsQuery)
   // fetch about content
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`

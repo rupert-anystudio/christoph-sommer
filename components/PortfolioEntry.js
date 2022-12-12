@@ -7,6 +7,7 @@ import CardTags from './CardTags'
 import Card from './Card'
 import CardSection from './CardSection'
 import Publication from './Publication'
+import { CardLink, CardLinks } from './CardLinks'
 // import CardToggle from './CardToggle'
 
 const PortfolioEntry = ({
@@ -18,11 +19,19 @@ const PortfolioEntry = ({
   publications,
   coAuthors,
   onClick,
+  links,
 }) => {
   const tags = (categories || []).map((c) => ({
     key: c._key,
     label: c.title,
   }))
+  const entryLinks = (links || []).map((l) => ({
+    key: l._key,
+    href: l.url,
+    type: l._type,
+    label: l.title || l.url,
+  }))
+  console.log({ entryLinks })
   return (
     <Card data-cardtype={_type} onClick={onClick}>
       <div>
@@ -65,6 +74,15 @@ const PortfolioEntry = ({
         </CardSection>
       )}
       {/* <CardToggle /> */}
+      {entryLinks.length > 0 && (
+        <CardLinks>
+          {entryLinks.map((link) => (
+            <CardLink key={link.key} href={link.href} type={link.type}>
+              {link.label}
+            </CardLink>
+          ))}
+        </CardLinks>
+      )}
     </Card>
   )
 }

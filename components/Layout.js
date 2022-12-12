@@ -161,11 +161,11 @@ const Layout = ({ children }) => {
         <div>{layout === 'landing' && <LandingAccordion />}</div>
       </Infos>
       <Scrollables>
-        {/* <Actions>
+        <Actions>
           {layout === 'landing' && <FilterSelect />}
           <div />
-          <ThemeToggle />
-        </Actions> */}
+          {/* <ThemeToggle /> */}
+        </Actions>
         <Main>{children}</Main>
         <Footer>
           <FooterNav />

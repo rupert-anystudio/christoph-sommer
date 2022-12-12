@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import usePortfolioEntries from '../hooks/usePortfolioEntries'
 import PortfolioEntry from './PortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
-import { SmallPillButton } from './Primitives'
+// import { SmallPillButton } from './Primitives'
 import { EntryToggle } from './EntryToggle'
 
 const returnScrollTargetId = (key) => `entry-${key}`
@@ -138,13 +138,13 @@ const Portfolio = () => {
               id={returnScrollTargetId(key)}
               type={entry._type}
               isSelected={isSelected}
-              isHidden={entry.isHidden}
+              // isHidden={entry.isHidden}
             >
               <EntryChild
                 className={classes.entryChild}
                 isSelected={isSelected}
                 // onClick={onEntryClick(key)}
-                isHidden={entry.isHidden}
+                // isHidden={entry.isHidden}
                 // style={{
                 //   height: 'auto',
                 //   minHeight: !isSelected ? 'var(--item-minheight)' : '100vh',

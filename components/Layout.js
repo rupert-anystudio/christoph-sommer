@@ -122,6 +122,7 @@ const Main = styled(Element)`
   }
 `
 const Actions = styled(Element)`
+  position: relative;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -148,7 +149,7 @@ const Footer = styled(Element)`
 
 const Layout = ({ children }) => {
   const pageProps = usePagePropsContext()
-  const { layout } = pageProps
+  const { layout, info } = pageProps
   return (
     <Container>
       <Header>
@@ -158,14 +159,18 @@ const Layout = ({ children }) => {
         </div>
       </Header>
       <Infos>
-        <div>{layout === 'landing' && <LandingAccordion />}</div>
+        <div>
+          <LandingAccordion />
+        </div>
       </Infos>
       <Scrollables>
-        <Actions>
-          {layout === 'landing' && <FilterSelect />}
-          <div />
-          {/* <ThemeToggle /> */}
-        </Actions>
+        {layout === 'landing' && (
+          <Actions>
+            <FilterSelect />
+            <div />
+            {/* <ThemeToggle /> */}
+          </Actions>
+        )}
         <Main>{children}</Main>
         <Footer>
           <FooterNav />

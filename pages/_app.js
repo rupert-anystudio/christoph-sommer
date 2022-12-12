@@ -14,6 +14,7 @@ import CurrentTheme from '../styles/CurrentTheme'
 import GlobalStyles from '../styles/GlobalStyles'
 import Layout from '../components/Layout'
 import 'normalize.css'
+import '../styles/fontfaces.css'
 
 gsap.registerPlugin(CSSPlugin)
 gsap.registerPlugin(Flip)

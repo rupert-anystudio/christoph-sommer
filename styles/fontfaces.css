@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'Suisse Works';
+  src: local('Suisse Works'),
+    url('/fonts/suisseworks/SuisseWorks-Regular-WebS.woff2') format('woff2'),
+    url('/fonts/suisseworks/SuisseWorks-Regular-WebS.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}

@@ -28,8 +28,7 @@ const PortfolioEntry = ({
   const entryLinks = (links || []).map((l) => ({
     key: l._key,
     href: l.url,
-    type: l._type,
-    label: l.title || l.url,
+    label: l.title || (l._type === 'doiLink' ? 'DOI Eintrag' : l.url),
   }))
   return (
     <Card data-cardtype={_type} onClick={onClick}>

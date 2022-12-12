@@ -3,6 +3,7 @@ import { createContext } from 'react'
 export const PagePropsContext = createContext()
 
 const footerNav = [
+  // { key: 'imprint', href: '/impressum', label: 'Impressum & Datenschutz' },
   { key: 'imprint', href: '/impressum', label: 'Impressum' },
   { key: 'privacy', href: '/datenschutz', label: 'Datenschutz' },
 ]

@@ -1,8 +1,8 @@
-import PortableText from '../components/PortableText'
+import StaticPage from '../components/StaticPage'
 import { getClient } from '../lib/sanity.server'
 
 export default function Impressum({ page }) {
-  return <PortableText value={page?.content} />
+  return <StaticPage {...page} />
 }
 
 export async function getStaticProps({ preview = false }) {

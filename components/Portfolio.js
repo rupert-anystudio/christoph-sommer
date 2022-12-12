@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components'
 import usePortfolioEntries from '../hooks/usePortfolioEntries'
 import PortfolioEntry from './PortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
+import { SmallPillButton } from './Primitives'
+import { EntryToggle } from './EntryToggle'
 
 const returnScrollTargetId = (key) => `entry-${key}`
 
@@ -42,7 +44,6 @@ const Entry = styled.div`
   position: relative;
   height: ${(p) => (!p.isSelected ? 'var(--item-minheight)' : 'auto')};
   padding: 0 var(--padding-page);
-  /* padding: ${(p) => (!p.isSelected ? '0 var(--padding-page)' : '0')}; */
   position: relative;
   margin-top: var(--padding-page);
   &:not(:first-child) {
@@ -88,19 +89,6 @@ const EntryChild = styled.div`
   max-height: 100%;
   background: var(--color-bg);
   color: var(--color-txt);
-  &:after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: -100px;
-    right: -100px;
-    height: 200px;
-    background: var(--color-bg);
-    transition: transform 0.34s ease-in-out;
-    transform: translate3d(0, ${(p) => (p.isSelected ? '100%' : '0%')}, 0);
-    box-shadow: 0px 0px calc(var(--item-gradientheight) / 2)
-      calc(var(--item-gradientheight) / 2) var(--color-bg);
-  }
 `
 
 // const BottomActions = styled.div`
@@ -155,7 +143,7 @@ const Portfolio = () => {
               <EntryChild
                 className={classes.entryChild}
                 isSelected={isSelected}
-                onClick={onEntryClick(key)}
+                // onClick={onEntryClick(key)}
                 isHidden={entry.isHidden}
                 // style={{
                 //   height: 'auto',
@@ -163,6 +151,10 @@ const Portfolio = () => {
                 // }}
               >
                 <PortfolioEntry {...entry} />
+                <EntryToggle
+                  isSelected={isSelected}
+                  onClick={onEntryClick(key)}
+                />
               </EntryChild>
               {/* <BottomActions>
                 <button>{'...'}</button>

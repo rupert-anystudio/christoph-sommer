@@ -31,7 +31,6 @@ const PortfolioEntry = ({
     type: l._type,
     label: l.title || l.url,
   }))
-  console.log({ entryLinks })
   return (
     <Card data-cardtype={_type} onClick={onClick}>
       <div>

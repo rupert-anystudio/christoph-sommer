@@ -3,6 +3,7 @@ import styled from 'styled-components'
 const Card = styled.div`
   position: relative;
   padding: var(--padding-card-v) var(--padding-card-h);
+  padding-bottom: 8rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

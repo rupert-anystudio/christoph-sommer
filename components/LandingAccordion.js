@@ -5,13 +5,16 @@ import Scroll from './Scroll'
 import PortableText from './PortableText'
 import { Small } from './Primitives'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
+import { EntryToggle } from './EntryToggle'
 
 const Content = styled.div`
   position: relative;
-  --accordion-item-minheight: 128px;
+  --accordion-item-minheight: 220px;
+  --item-gradientheight: 200px;
 `
 const Item = styled.div`
   position: relative;
+  overflow: hidden;
   &:not(:last-child) {
     border-bottom: var(--border);
   }
@@ -25,27 +28,8 @@ const ItemContent = styled.div`
   position: relative;
   overflow: hidden;
   padding: 0 var(--padding-page);
-  padding-bottom: calc(var(--padding-page) * 2);
+  padding-bottom: 8rem;
   max-height: ${(p) => (p.isOpen ? 'none' : 'var(--accordion-item-minheight)')};
-  &:after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: -100px;
-    right: -100px;
-    height: 200px;
-    background: var(--color-bg);
-    transition: transform 0.34s ease-in-out;
-    transform: translate3d(0, ${(p) => (p.isOpen ? '100%' : '0%')}, 0);
-    box-shadow: 0px 0px calc(var(--accordion-item-minheight) / 2)
-      calc(var(--accordion-item-minheight) / 2) var(--color-bg);
-  }
-`
-const Sticky = styled.div`
-  position: relative;
-  position: sticky;
-  top: 0;
-  z-index: 1;
 `
 
 const classes = {
@@ -75,11 +59,7 @@ const LandingAccordion = () => {
             const { key, label, content } = item
             const isOpen = key === value
             return (
-              <Item
-                key={key}
-                onClick={onEntryClick(key)}
-                className={`accordion-item`}
-              >
+              <Item key={key} className={`accordion-item`}>
                 {/* <Sticky> */}
                 <ItemHeader className="accordion-item-header">
                   <Small>{label}</Small>
@@ -88,6 +68,7 @@ const LandingAccordion = () => {
                 <ItemContent className="accordion-item-content" isOpen={isOpen}>
                   <PortableText value={content} />
                 </ItemContent>
+                <EntryToggle isSelected={isOpen} onClick={onEntryClick(key)} />
               </Item>
             )
           })}

@@ -60,7 +60,7 @@ const PortfolioEntry = ({
         </CardSection>
       )}
       {publications && (
-        <CardSection title={'Veröffentlichungen'}>
+        <CardSection title={'Veröffentlicht in'}>
           {publications.map((p) => {
             return <Publication key={p._key} {...returnPublicationProps(p)} />
           })}

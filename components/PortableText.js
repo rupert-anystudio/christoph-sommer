@@ -11,6 +11,9 @@ const Wrap = styled.div`
   > *:last-child {
     margin-bottom: 0;
   }
+  a {
+    color: currentColor;
+  }
 `
 
 const PortableText = ({ value = [] }) => {
@@ -34,25 +37,33 @@ const PortableText = ({ value = [] }) => {
           list: {
             bullet: ({ children }) => <ul>{children}</ul>,
           },
-          // marks: {
-          //   internalLink: ({ value, children }) => {
-          //     const { slug, docType } = value
-          //     const href = getInternalHref({ slug, docType })
-          //     return (
-          //       <Link href={href} passHref>
-          //         <a>{children}</a>
-          //       </Link>
-          //     )
-          //   },
-          //   link: ({ value, children }) => {
-          //     const { href } = value
-          //     return (
-          //       <a href={href} target="_blank" rel="noreferrer">
-          //         {children}
-          //       </a>
-          //     )
-          //   },
-          // },
+          marks: {
+            externalInlineLink: ({ value, children }) => {
+              const { url } = value
+              return (
+                <a href={url} target="_blank" rel="noreferrer">
+                  {children}
+                </a>
+              )
+            },
+            // internalLink: ({ value, children }) => {
+            //   const { slug, docType } = value
+            //   const href = getInternalHref({ slug, docType })
+            //   return (
+            //     <Link href={href} passHref>
+            //       <a>{children}</a>
+            //     </Link>
+            //   )
+            // },
+            // link: ({ value, children }) => {
+            //   const { href } = value
+            //   return (
+            //     <a href={href} target="_blank" rel="noreferrer">
+            //       {children}
+            //     </a>
+            //   )
+            // },
+          },
         }}
       />
     </Wrap>

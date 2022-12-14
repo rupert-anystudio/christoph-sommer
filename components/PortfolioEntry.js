@@ -43,7 +43,7 @@ const PortfolioEntry = ({
           ))}
         </CardTags>
       )}
-      {coAuthors && (
+      {coAuthors && coAuthors.length > 0 && (
         <CardSection title={'Mit'}>
           {coAuthors.map((a) => {
             return (

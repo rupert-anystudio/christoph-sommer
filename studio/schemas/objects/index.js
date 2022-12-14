@@ -2,6 +2,7 @@ import categories from './categories'
 import contentFull from './contentFull'
 import contentSimple from './contentSimple'
 import doiLink from './doiLink.js'
+import externalInlineLink from './externalInlineLink'
 import externalLink from './externalLink'
 import links from './links'
 import people from './people'
@@ -10,6 +11,7 @@ import timeframe from './timeframe'
 
 export default [
   externalLink,
+  externalInlineLink,
   people,
   contentFull,
   contentSimple,

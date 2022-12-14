@@ -17,8 +17,8 @@ export default {
         ],
         annotations: [
           {
-            type: 'externalLink',
-            name: 'externalLink',
+            type: 'externalInlineLink',
+            name: 'externalInlineLink',
             title: 'External Link',
             blockEditor: {
               icon: () => <div>🌍</div>,

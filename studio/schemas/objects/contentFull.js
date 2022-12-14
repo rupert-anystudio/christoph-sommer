@@ -36,8 +36,8 @@ export default {
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
           {
-            type: 'externalLink',
-            name: 'externalLink',
+            type: 'externalInlineLink',
+            name: 'externalInlineLink',
             title: 'External Link',
             blockEditor: {
               icon: () => <div>🌍</div>,

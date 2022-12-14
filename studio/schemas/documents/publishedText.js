@@ -90,6 +90,13 @@ export default {
   preview: {
     select: {
       title: 'title',
+      publishedAt: 'publishedAt',
+    },
+    prepare: ({ title, publishedAt }) => {
+      return {
+        title,
+        subtitle: ['Text', publishedAt].join(' - '),
+      }
     },
   },
 }

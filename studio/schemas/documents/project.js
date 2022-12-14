@@ -74,7 +74,15 @@ export default {
   preview: {
     select: {
       title: 'title',
-      media: 'image.asset',
+      publishedAt: 'publishedAt',
+      imageAsset: 'image.asset',
+    },
+    prepare: ({ title, publishedAt, imageAsset }) => {
+      return {
+        title,
+        subtitle: ['Project', publishedAt].join(' - '),
+        media: imageAsset,
+      }
     },
   },
 }

@@ -51,17 +51,7 @@ export default {
   ],
   orderings: [
     {
-      title: 'Published at, ascending',
-      name: 'publishedAtAsc',
-      by: [
-        {
-          field: 'publishedAt',
-          direction: 'asc',
-        },
-      ],
-    },
-    {
-      title: 'Published at, descending',
+      title: 'Published At',
       name: 'publishedAtDesc',
       by: [
         {
@@ -74,15 +64,6 @@ export default {
   preview: {
     select: {
       title: 'title',
-      publishedAt: 'publishedAt',
-      imageAsset: 'image.asset',
-    },
-    prepare: ({ title, publishedAt, imageAsset }) => {
-      return {
-        title,
-        subtitle: ['Project', publishedAt].join(' - '),
-        media: imageAsset,
-      }
     },
   },
 }

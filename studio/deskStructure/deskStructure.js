@@ -41,8 +41,10 @@ export const defaultItems = [
         types: ['project', 'publishedText', 'statement', 'speech'],
         title: 'All',
         orderings: [
-          { field: 'publishedAt', title: 'Published At' },
-          { field: '_createdAt', title: 'Creation Date' },
+          { field: 'publishedAt', title: 'Published At', direction: 'desc' },
+          { field: '_updatedAt', title: 'Last edited', direction: 'desc' },
+          { field: '_createdAt', title: 'Created', direction: 'desc' },
+          // { field: '_createdAt', title: 'Creation Date' },
         ],
       }),
       getDocTypeListItem({

@@ -67,17 +67,7 @@ export default {
   ],
   orderings: [
     {
-      title: 'Published at, ascending',
-      name: 'publishedAtAsc',
-      by: [
-        {
-          field: 'publishedAt',
-          direction: 'asc',
-        },
-      ],
-    },
-    {
-      title: 'Published at, descending',
+      title: 'Published At',
       name: 'publishedAtDesc',
       by: [
         {
@@ -90,13 +80,6 @@ export default {
   preview: {
     select: {
       title: 'title',
-      publishedAt: 'publishedAt',
-    },
-    prepare: ({ title, publishedAt }) => {
-      return {
-        title,
-        subtitle: ['Text', publishedAt].join(' - '),
-      }
     },
   },
 }

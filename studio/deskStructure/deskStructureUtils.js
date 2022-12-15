@@ -4,19 +4,25 @@ import docTypeObject from '../schemas/docTypeObject'
 
 const returnMenuItemsFromOderings = (orderings = []) =>
   orderings.reduce((acc, curr) => {
-    const { field, title: fieldTitle } = curr
+    const { field, title: fieldTitle, direction } = curr
     if (!field) return acc
+    if (!direction) return acc
     const title = fieldTitle || field
+    if (!title) return acc
     return [
       ...acc,
       S.orderingMenuItem({
-        title: [title, 'ascending'].join(', '),
-        by: [{ field, direction: 'asc' }],
+        title,
+        by: [{ field, direction }],
       }),
-      S.orderingMenuItem({
-        title: [title, 'descending'].join(', '),
-        by: [{ field, direction: 'desc' }],
-      }),
+      // S.orderingMenuItem({
+      //   title: [title, 'ascending'].join(', '),
+      //   by: [{ field, direction: 'asc' }],
+      // }),
+      // S.orderingMenuItem({
+      //   title: [title, 'descending'].join(', '),
+      //   by: [{ field, direction: 'desc' }],
+      // }),
     ]
   }, [])
 

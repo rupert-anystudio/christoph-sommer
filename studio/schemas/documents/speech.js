@@ -54,23 +54,6 @@ export default {
       description:
         'A short version of this speech for more digestible previews.',
     },
-    // {
-    //   name: 'video',
-    //   title: 'Video',
-    //   type: 'array',
-    //   of: [
-    //     {
-    //       type: 'file',
-    //       name: 'videoFile',
-    //       title: 'Video File',
-    //     },
-    //     {
-    //       type: 'url',
-    //       name: 'videoUrl',
-    //       title: 'Video URL',
-    //     },
-    //   ],
-    // },
   ],
   orderings: [
     {

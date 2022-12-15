@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Card = styled.div`
+const Card = styled.article`
   position: relative;
   padding: var(--padding-card-v) var(--padding-card-h);
   padding-bottom: 8rem;
@@ -11,11 +11,11 @@ const Card = styled.div`
   height: auto;
   overflow: hidden;
   border: var(--border-card);
-  > * {
+  /* > * {
     &:not(:first-child) {
       margin-top: 1rem;
     }
-  }
+  } */
   @media (hover: hover) {
     /* cursor: pointer; */
   }

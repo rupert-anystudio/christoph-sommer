@@ -8,11 +8,13 @@ const Wrap = styled.div`
   justify-content: flex-start;
   width: 100%;
   border-top: var(--border-less);
-  padding: var(--padding-card-h) 0;
+  padding: var(--padding-card-h) 0 0 0;
+  margin: var(--padding-card-h) 0 0 0;
 `
 
-const Title = styled(Small)`
-  margin-bottom: var(--padding-card-h);
+const Title = styled(Small).attrs({ as: 'h2' })`
+  /* margin-bottom: var(--padding-card-h); */
+  margin-bottom: 0.8rem;
 `
 
 const CardSection = ({ children, title }) => {

@@ -1,5 +1,17 @@
 import React from 'react'
 
+const TitleBlock = (props) => (
+  <p
+    style={{
+      fontFamily: 'Garamond',
+      fontSize: '1.8em',
+      margin: '0.2em 0',
+    }}
+  >
+    {props.children}
+  </p>
+)
+
 export default {
   title: 'Content',
   name: 'contentSimple',
@@ -8,7 +20,10 @@ export default {
     {
       title: 'Block',
       type: 'block',
-      styles: [{ title: 'Normal', value: 'normal' }],
+      styles: [
+        { title: 'Normal', value: 'normal' },
+        { title: 'Title', value: 'title', blockEditor: { render: TitleBlock } },
+      ],
       lists: [{ title: 'Bullet', value: 'bullet' }],
       marks: {
         decorators: [

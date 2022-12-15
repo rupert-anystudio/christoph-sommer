@@ -1,5 +1,6 @@
 import { PortableText as PortableTextReact } from '@portabletext/react'
 import styled from 'styled-components'
+import { CardTitle } from './Primitives'
 
 const Wrap = styled.div`
   position: relative;
@@ -15,6 +16,8 @@ const Wrap = styled.div`
     color: currentColor;
   }
 `
+
+const Title = styled(CardTitle).attrs({ as: 'p' })``
 
 const PortableText = ({ value = [] }) => {
   if (!value || value.length < 1) return null
@@ -32,7 +35,10 @@ const PortableText = ({ value = [] }) => {
             h2: ({ children }) => <h2>{children}</h2>,
             h3: ({ children }) => <h3>{children}</h3>,
             h4: ({ children }) => <h4>{children}</h4>,
+            h5: ({ children }) => <h5>{children}</h5>,
             blockquote: ({ children }) => <block>{children}</block>,
+            // custom blocks
+            title: ({ children }) => <Title>{children}</Title>,
           },
           list: {
             bullet: ({ children }) => <ul>{children}</ul>,

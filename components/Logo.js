@@ -25,7 +25,7 @@ const ChristophSommer = styled.a`
   span {
     display: block;
     &:first-child {
-      text-indent: -0.45em;
+      text-indent: -3.9em;
     }
   }
 `
@@ -34,7 +34,7 @@ const Logo = () => {
   return (
     <Link passHref href="/">
       <ChristophSommer>
-        <span>Über</span>
+        <span>über</span>
         <span>Tourismus</span>
       </ChristophSommer>
     </Link>

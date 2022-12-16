@@ -7,6 +7,7 @@ import usePagePropsContext from '../hooks/usePagePropsContext'
 import { Small } from './Primitives'
 import ThemeToggle from './ThemeToggle'
 import LandingAccordion from './LandingAccordion'
+import Head from 'next/head'
 
 const AreaLabel = styled.div`
   position: relative;
@@ -153,9 +154,12 @@ const Footer = styled(Element)`
 
 const Layout = ({ children }) => {
   const pageProps = usePagePropsContext()
-  const { layout, info } = pageProps
+  const { layout, title } = pageProps
   return (
     <Container>
+      <Head>
+        <title>{['Über Tourismus', title].filter(Boolean).join(' - ')}</title>
+      </Head>
       <Header>
         <div>
           <Logo />

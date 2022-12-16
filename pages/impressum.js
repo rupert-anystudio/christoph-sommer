@@ -25,6 +25,7 @@ export async function getStaticProps({ preview = false }) {
       page,
       about,
       annoucements,
+      title: 'Impressum',
     },
   }
 }

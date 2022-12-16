@@ -12,7 +12,7 @@ const Sizings = createGlobalStyle`
     --section-gaps: 2rem;
     --height-header: 14.3rem;
     --item-minheight: 65vh;
-    --item-gradientheight: 300px;
+    --item-gradientheight: 220px;
     @media (min-width: 360px) {
     --padding-page: 2rem;
       --padding-portfolio: 1rem;

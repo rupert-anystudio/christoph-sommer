@@ -168,13 +168,13 @@ const Layout = ({ children }) => {
         </div>
       </Infos>
       <Scrollables>
-        {layout === 'landing' && (
+        {/* {layout === 'landing' && (
           <Actions>
             <FilterSelect />
             <div />
-            {/* <ThemeToggle /> */}
+            <ThemeToggle /> 
           </Actions>
-        )}
+        )} */}
         <Main>{children}</Main>
         <Footer>
           <FooterNav />

@@ -53,11 +53,6 @@ const PortfolioEntry = ({
           ))}
         </CardTags>
       )}
-      {linkEntries.length > 0 && (
-        <CardSection>
-          <LinkList entries={linkEntries} isDisabled={isDisabled} />
-        </CardSection>
-      )}
       {publicationEntries.length > 0 && (
         <CardSection title={'Veröffentlicht in'}>
           <PublicationList
@@ -79,6 +74,11 @@ const PortfolioEntry = ({
       {excerpt && (
         <CardSection>
           <PortableText value={excerpt} isDisabled={isDisabled} />
+        </CardSection>
+      )}
+      {linkEntries.length > 0 && (
+        <CardSection>
+          <LinkList entries={linkEntries} isDisabled={isDisabled} />
         </CardSection>
       )}
     </Card>

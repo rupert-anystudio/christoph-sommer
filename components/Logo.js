@@ -27,12 +27,6 @@ const ChristophSommer = styled.a`
     &:first-child {
       text-indent: -0.45em;
     }
-    &:last-child {
-      /* text-indent: 0.2em; */
-    }
-  }
-  @media (min-width: 400px) {
-    /* font-size: calc(var(--height-header) * 0.4); */
   }
 `
 

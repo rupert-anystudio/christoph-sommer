@@ -9,8 +9,9 @@ const Card = styled.article`
   justify-content: flex-start;
   align-items: flex-start;
   height: auto;
-  overflow: hidden;
   border: var(--border-card);
+  pointer-events: ${(p) => (p.isDisabled ? 'none' : 'auto')};
+  /* pointer-events: none; */
   /* > * {
     &:not(:first-child) {
       margin-top: 1rem;

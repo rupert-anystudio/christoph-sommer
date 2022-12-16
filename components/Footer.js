@@ -16,7 +16,7 @@ const Footer = styled.footer`
       margin-right: 1rem;
     }
   }
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     position: fixed;
     bottom: 0;
     right: 0;

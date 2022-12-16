@@ -22,6 +22,7 @@ const ThemeDark = createGlobalStyle`
     --color-element-txt: var(--color-black);
     --color-header-bg: var(--color-txt);
     --color-header-txt: var(--color-bg);
+    --color-focus: var(--color-blue);
     /* STYLES */
     --tag-opacity: 0.3;
     --shadow-card: 0px 0px 1.8rem 0px rgb(0 0 0 / 8%), 0.1rem 0.2rem 0.8rem rgb(0 0 0 / 22%);

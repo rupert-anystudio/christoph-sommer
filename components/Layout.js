@@ -33,14 +33,15 @@ const Container = styled.div`
   display: grid;
   width: 100%;
   min-height: 100vh;
+  max-width: 100vw;
   grid-template-columns: 1fr;
   grid-template-rows: var(--height-header) auto 1fr;
   grid-template-areas:
     'Header'
     'Infos'
     'Scrollables';
-  @media (min-width: 920px) {
-    grid-template-columns: 4fr 5fr;
+  @media (min-width: 800px) {
+    grid-template-columns: 5fr 5fr;
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
       'Header Scrollables'
@@ -69,7 +70,7 @@ const Header = styled(Element)`
   /* position: sticky;
   top: 0; */
   /* border-right: var(--border); */
-  @media (min-width: 920px) {
+  @media (min-width: 800px) {
     position: sticky;
     top: 0;
     border-right: var(--border);
@@ -86,14 +87,14 @@ const Infos = styled(Area)`
   @media (max-width: 919px) {
     border-bottom: var(--border);
   }
-  @media (min-width: 920px) {
+  @media (min-width: 800px) {
     grid-template-rows: calc(100vh - var(--height-header));
     border-right: var(--border);
   }
   > div {
     position: relative;
     /* border: 2px solid red; */
-    @media (min-width: 920px) {
+    @media (min-width: 800px) {
       position: sticky;
       top: var(--height-header);
     }
@@ -105,12 +106,15 @@ const Scrollables = styled(Area)`
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
   @media (min-width: 1440px) {
-    grid-template-columns: minmax(auto, 56rem) 1fr;
+    grid-template-columns: minmax(auto, 590px) 1fr;
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'Main Sidebar'
       'Main xxxxxx'
       'Main Footer';
+  }
+  @media (min-width: 1680px) {
+    grid-template-columns: minmax(auto, 680px) 1fr;
   }
 `
 const Main = styled(Element)`
@@ -155,7 +159,7 @@ const Layout = ({ children }) => {
       <Header>
         <div>
           <Logo />
-          <Annoucements />
+          {/* <Annoucements /> */}
         </div>
       </Header>
       <Infos>

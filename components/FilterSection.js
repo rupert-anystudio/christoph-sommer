@@ -7,7 +7,7 @@ const FilterSection = styled(Section)`
   z-index: 99;
   background: var(--color-bg);
   width: 100%;
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     top: 0;
   }
 `

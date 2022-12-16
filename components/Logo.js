@@ -16,13 +16,19 @@ const ChristophSommer = styled.a`
   color: currentColor;
   white-space: pre;
   text-align: center;
+  outline: none;
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
   span {
     display: block;
     &:last-child {
       text-indent: 0.2em;
     }
   }
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     /* font-size: calc(var(--height-header) * 0.4); */
   }
 `

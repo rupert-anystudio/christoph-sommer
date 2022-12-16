@@ -6,11 +6,12 @@ import PortableText from './PortableText'
 import { Small } from './Primitives'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
 import { EntryToggle } from './EntryToggle'
+import EntryGradient from './EntryGradient'
 
 const Content = styled.div`
   position: relative;
   --accordion-item-minheight: 220px;
-  --item-gradientheight: 200px;
+  --item-gradientheight: 120px;
 `
 const Item = styled.div`
   position: relative;
@@ -68,6 +69,7 @@ const LandingAccordion = () => {
                 <ItemContent className="accordion-item-content" isOpen={isOpen}>
                   <PortableText value={content} />
                 </ItemContent>
+                <EntryGradient isSelected={isOpen} />
                 <EntryToggle isSelected={isOpen} onClick={onEntryClick(key)} />
               </Item>
             )

@@ -4,6 +4,7 @@ import usePagePropsContext from '../hooks/usePagePropsContext'
 import { Small } from './Primitives'
 
 const NavLink = styled(Small).attrs({ as: 'a' })`
+  display: inline-block;
   text-decoration: none;
   color: var(--color-txt);
   margin-right: var(--padding-page);

@@ -6,9 +6,10 @@ import { Body, CardTitle } from './Primitives'
 import CardTags from './CardTags'
 import Card from './Card'
 import CardSection from './CardSection'
-import Publication from './Publication'
+// import Publication from './Publication'
 import CardLabel from './CardLabel'
 import LinkList from './LinkList'
+import PublicationList from './PublicationList'
 // import CardToggle from './CardToggle'
 
 const PortfolioEntry = ({
@@ -19,25 +20,30 @@ const PortfolioEntry = ({
   context,
   publications,
   coAuthors,
-  onClick,
   links,
+  isDisabled,
 }) => {
-  const categoryEntries = (categories || []).map((c) => ({
-    key: c._key,
-    label: c.title,
+  const categoryEntries = (categories || []).map((category) => ({
+    key: category._key,
+    label: category.title,
   }))
-  const linkEntries = (links || []).map((l) => ({
-    key: l._key,
-    label: l.title || (l._type === 'doiLink' ? 'DOI Eintrag' : l.url),
-    href: l.url,
+  const linkEntries = (links || []).map((link) => ({
+    key: link._key,
+    label: link.title || (link._type === 'doiLink' ? 'DOI Eintrag' : link.url),
+    href: link.url,
   }))
-  const coAuthorEntries = (coAuthors || []).map((a) => ({
-    key: a._key,
-    label: [a.name, a.surname].filter(Boolean).join(' '),
-    href: a?.website?.url,
+  const coAuthorEntries = (coAuthors || []).map((author) => ({
+    key: author._key,
+    label: [author.name, author.surname].filter(Boolean).join(' '),
+    href: author?.website?.url,
+  }))
+  const publicationEntries = (publications || []).map((publication) => ({
+    ...returnPublicationProps(publication),
+    type: publication._type,
+    key: publication._key,
   }))
   return (
-    <Card data-cardtype={_type} onClick={onClick}>
+    <Card data-cardtype={_type} isDisabled={isDisabled}>
       <CardLabel>{getEntryTypeLabel(_type)}</CardLabel>
       <CardTitle as="h1">{title}</CardTitle>
       {categoryEntries.length > 0 && (
@@ -47,9 +53,22 @@ const PortfolioEntry = ({
           ))}
         </CardTags>
       )}
+      {linkEntries.length > 0 && (
+        <CardSection>
+          <LinkList entries={linkEntries} isDisabled={isDisabled} />
+        </CardSection>
+      )}
+      {publicationEntries.length > 0 && (
+        <CardSection title={'Veröffentlicht in'}>
+          <PublicationList
+            entries={publicationEntries}
+            isDisabled={isDisabled}
+          />
+        </CardSection>
+      )}
       {coAuthorEntries.length > 0 && (
         <CardSection title={'Mit'}>
-          <LinkList entries={coAuthorEntries} />
+          <LinkList entries={coAuthorEntries} isDisabled={isDisabled} />
         </CardSection>
       )}
       {context && (
@@ -57,22 +76,9 @@ const PortfolioEntry = ({
           <Body>{context}</Body>
         </CardSection>
       )}
-      {publications && (
-        <CardSection title={'Veröffentlicht in'}>
-          {publications.map((p) => {
-            return <Publication key={p._key} {...returnPublicationProps(p)} />
-          })}
-        </CardSection>
-      )}
       {excerpt && (
         <CardSection>
-          <PortableText value={excerpt} />
-        </CardSection>
-      )}
-      {/* <CardToggle /> */}
-      {linkEntries.length > 0 && (
-        <CardSection>
-          <LinkList entries={linkEntries} />
+          <PortableText value={excerpt} isDisabled={isDisabled} />
         </CardSection>
       )}
     </Card>

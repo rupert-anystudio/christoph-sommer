@@ -6,23 +6,31 @@ export const Text = styled.span`
 `
 
 export const Body = styled(Text)`
-  font-size: var(--fs-root);
-  line-height: var(--lh-root);
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  @media (min-width: 400px) {
+    font-size: var(--fs-root);
+    line-height: var(--lh-root);
+  }
 `
 
 export const Link = styled(Text)`
-  font-size: var(--fs-root);
-  line-height: var(--lh-root);
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
   font-style: var(--fx-inter);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  @media (min-width: 400px) {
+    font-size: var(--fs-root);
+    line-height: var(--lh-root);
+  }
 `
 
 export const Input = styled(Text)`
-  font-size: var(--fs-small);
+  font-size: var(--fs-smaller);
   line-height: var(--lh-small);
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
@@ -30,7 +38,7 @@ export const Input = styled(Text)`
 `
 
 export const Small = styled(Text)`
-  font-size: var(--fs-small);
+  font-size: var(--fs-smaller);
   line-height: var(--lh-small);
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
@@ -38,11 +46,23 @@ export const Small = styled(Text)`
 `
 
 export const CardTitle = styled(Text)`
-  font-size: var(--fs-big);
-  line-height: var(--lh-big);
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
+  font-size: var(--fs-large);
+  line-height: var(--lh-large);
+  @media (min-width: 400px) {
+    font-size: var(--fs-larger);
+    line-height: var(--lh-larger);
+  }
+  @media (min-width: 1024px) {
+    font-size: var(--fs-big);
+    line-height: var(--lh-big);
+  }
+  @media (min-width: 1680px) {
+    font-size: var(--fs-bigger);
+    line-height: var(--lh-bigger);
+  }
 `
 
 export const SmallPill = styled(Small)`

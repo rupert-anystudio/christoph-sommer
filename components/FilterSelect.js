@@ -4,6 +4,8 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { getEntryTypeLabel, entryTypes } from '../lib/entryHelpers'
 import useFilterContext from '../hooks/useFilterContext'
 import { Input } from './Primitives'
+import usePagePropsContext from '../hooks/usePagePropsContext'
+import usePortfolioEntries from '../hooks/usePortfolioEntries'
 
 const Wrap = styled.div`
   display: flex;
@@ -69,6 +71,7 @@ const EntryLabel = styled(Input).attrs({ as: 'label' })`
 
 const FilterSelect = () => {
   const { filter, onFilterChange } = useFilterContext()
+  const { docs = [] } = usePagePropsContext()
   // const [isOpen, setIsOpen] = useState(false)
   const handleValueChange = useCallback(
     (val) => {
@@ -78,6 +81,16 @@ const FilterSelect = () => {
     },
     [onFilterChange]
   )
+
+  const amounts = entryTypes.reduce((acc, entryType) => {
+    if (entryType === 'all') {
+      acc.all = docs.length
+      return acc
+    }
+    const matches = docs.filter((d) => d._type === entryType)
+    acc[entryType] = matches.length
+    return acc
+  }, {})
   // const handleFocusCapture = () => {
   //   setIsOpen(true)
   // }
@@ -102,7 +115,7 @@ const FilterSelect = () => {
                 <Indicator />
               </Item>
               <EntryLabel htmlFor={id}>
-                {getEntryTypeLabel(type, 'plural')}
+                {`${getEntryTypeLabel(type, 'plural')} (${amounts[type]})`}
               </EntryLabel>
             </Entry>
           )

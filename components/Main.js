@@ -12,7 +12,7 @@ const Main = styled.main`
     'first'
     'middle'
     'last';
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     grid-template-columns: var(--width-col-0) var(--width-col-1) 1fr;
     grid-template-areas: 'first middle last';
   }
@@ -21,14 +21,14 @@ const Main = styled.main`
 export const MainFirst = styled.div`
   position: relative;
   border-bottom: var(--border);
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     grid-area: first;
     border-bottom: none;
   }
 `
 export const MainFirstContent = styled.div`
   position: relative;
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     position: sticky;
     top: var(--height-header);
     top: 0;
@@ -39,7 +39,7 @@ export const MainFirstContent = styled.div`
 export const MainMiddle = styled.div`
   position: relative;
   border-bottom: var(--border);
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     grid-area: middle;
     border-right: var(--border);
     border-left: var(--border);
@@ -48,7 +48,7 @@ export const MainMiddle = styled.div`
 export const MainLast = styled.div`
   position: relative;
   border-bottom: var(--border);
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     grid-area: last;
   }
 `

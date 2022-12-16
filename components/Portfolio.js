@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components'
 import usePortfolioEntries from '../hooks/usePortfolioEntries'
 import PortfolioEntry from './PortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
-// import { SmallPillButton } from './Primitives'
 import { EntryToggle } from './EntryToggle'
 import EntryGradient from './EntryGradient'
 
@@ -27,7 +26,6 @@ const Outro = styled.div`
   width: 100%;
   height: calc(100vh - var(--item-minheight));
   background: var(--color-bg);
-  /* border-top: var(--border); */
 `
 
 const Wrap = styled.div`
@@ -42,10 +40,6 @@ const Entries = styled.div`
   > *:not(:last-child) {
     margin-bottom: var(--padding-portfolio);
   }
-  /* display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-rows: auto;
-  grid-gap: var(--padding-portfolio); */
 `
 
 const Entry = styled.div`
@@ -109,21 +103,7 @@ const EntryContent = styled.div`
   max-height: 100%;
   background: var(--color-bg);
   color: var(--color-txt);
-  /* pointer-events: none; */
 `
-
-// const BottomActions = styled.div`
-//   position: absolute;
-//   bottom: 0;
-//   right: var(--padding-page);
-//   left: var(--padding-page);
-//   height: auto;
-//   > * {
-//     position: sticky;
-//     bottom: 0;
-//     top: unset;
-//   }
-// `
 
 const classes = {
   entries: 'entries',
@@ -182,9 +162,6 @@ const Portfolio = () => {
                 </EntryContent>
                 <EntryGradient isSelected={isSelected} />
               </EntryChild>
-              {/* <BottomActions>
-                <button>{'...'}</button>
-              </BottomActions> */}
             </Entry>
           )
         })}

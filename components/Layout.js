@@ -127,8 +127,6 @@ const Main = styled(Element)`
 `
 const Actions = styled(Element)`
   position: relative;
-  position: sticky;
-  top: 0;
   z-index: 10;
   border-bottom: var(--border);
   display: flex;
@@ -136,6 +134,8 @@ const Actions = styled(Element)`
   justify-content: space-between;
   align-items: baseline;
   @media (min-width: 1440px) {
+    position: sticky;
+    top: 0;
     grid-area: Sidebar;
     border-bottom: none;
   }
@@ -168,13 +168,13 @@ const Layout = ({ children }) => {
         </div>
       </Infos>
       <Scrollables>
-        {/* {layout === 'landing' && (
+        {layout === 'landing' && (
           <Actions>
             <FilterSelect />
             <div />
-            <ThemeToggle /> 
+            {/* <ThemeToggle />  */}
           </Actions>
-        )} */}
+        )}
         <Main>{children}</Main>
         <Footer>
           <FooterNav />

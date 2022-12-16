@@ -5,6 +5,7 @@ import PortfolioEntry from './PortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
 // import { SmallPillButton } from './Primitives'
 import { EntryToggle } from './EntryToggle'
+import EntryGradient from './EntryGradient'
 
 const returnScrollTargetId = (key) => `entry-${key}`
 
@@ -16,7 +17,7 @@ const dev = (inset = 0) => css`
     left: ${inset * 5}px;
     right: ${inset * 5}px;
     bottom: ${inset * 5}px;
-    border: 5px solid var(--color-dev);
+    border: 5px solid var(--color-focus);
     pointer-events: none;
   }
 `
@@ -31,26 +32,28 @@ const Outro = styled.div`
 
 const Wrap = styled.div`
   position: relative;
-  --item-minheight: 500px;
-  --item-gradientheight: 200px;
+  width: 100%;
 `
 
 const Entries = styled.div`
   position: relative;
+  max-width: 100vw;
+  padding: var(--padding-portfolio);
+  > *:not(:last-child) {
+    margin-bottom: var(--padding-portfolio);
+  }
+  /* display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto;
+  grid-gap: var(--padding-portfolio); */
 `
 
 const Entry = styled.div`
-  --color-dev: teal;
   position: relative;
   height: ${(p) => (!p.isSelected ? 'var(--item-minheight)' : 'auto')};
-  padding: 0 var(--padding-page);
   position: relative;
-  margin-top: var(--padding-page);
-  &:not(:first-child) {
-  }
-  &:nth-child(odd) {
-    --color-dev: purple;
-  }
+  display: flex;
+  overflow: visible;
   ${(p) => {
     if (p.type === 'publishedText')
       return css`
@@ -77,18 +80,36 @@ const Entry = styled.div`
         --tag-opacity: 0.2;
       `
   }};
-  overflow: visible;
+`
+
+const EntryHook = styled.div`
+  position: absolute;
+  top: calc(-1 * var(--padding-portfolio));
+  left: 0px;
+  display: block;
+  width: 100%;
+  height: 10px;
 `
 
 const EntryChild = styled.div`
   position: relative;
   display: block;
+  height: auto;
+  width: 100%;
+`
+const EntryContent = styled.div`
+  position: relative;
+  display: block;
   overflow: hidden;
   height: auto;
-  min-height: ${(p) => (!p.isSelected ? 'var(--item-minheight)' : '100vh')};
+  min-height: ${(p) =>
+    !p.isSelected
+      ? 'var(--item-minheight)'
+      : 'calc(100vh -  var(--padding-portfolio) * 2)'};
   max-height: 100%;
   background: var(--color-bg);
   color: var(--color-txt);
+  /* pointer-events: none; */
 `
 
 // const BottomActions = styled.div`
@@ -125,6 +146,8 @@ const Portfolio = () => {
     [onValueChange]
   )
 
+  // console.log({ entries })
+
   return (
     <Wrap ref={rootRef}>
       <Entries className={classes.entries}>
@@ -135,11 +158,11 @@ const Portfolio = () => {
             <Entry
               key={key}
               className={classes.entry}
-              id={returnScrollTargetId(key)}
               type={entry._type}
               isSelected={isSelected}
               // isHidden={entry.isHidden}
             >
+              <EntryHook id={returnScrollTargetId(key)} />
               <EntryChild
                 className={classes.entryChild}
                 isSelected={isSelected}
@@ -150,11 +173,14 @@ const Portfolio = () => {
                 //   minHeight: !isSelected ? 'var(--item-minheight)' : '100vh',
                 // }}
               >
-                <PortfolioEntry {...entry} />
                 <EntryToggle
                   isSelected={isSelected}
                   onClick={onEntryClick(key)}
                 />
+                <EntryContent isSelected={isSelected}>
+                  <PortfolioEntry {...entry} isDisabled={!isSelected} />
+                </EntryContent>
+                <EntryGradient isSelected={isSelected} />
               </EntryChild>
               {/* <BottomActions>
                 <button>{'...'}</button>

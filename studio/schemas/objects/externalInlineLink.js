@@ -7,7 +7,10 @@ export default {
       type: 'url',
       name: 'url',
       title: 'URL',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().uri({
+          scheme: ['https', 'mailto'],
+        }),
       description: 'The URL this link is pointing to.',
     },
   ],

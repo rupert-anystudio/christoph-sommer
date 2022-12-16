@@ -14,6 +14,10 @@ export default {
       description: 'The name of this project.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'categories',
       name: 'categories',
       description: 'A list of categories this project is related to.',
@@ -45,10 +49,21 @@ export default {
         'A shortended version of the actual content for more digestible previews.',
     },
   ],
+  orderings: [
+    {
+      title: 'Published At',
+      name: 'publishedAtDesc',
+      by: [
+        {
+          field: 'publishedAt',
+          direction: 'desc',
+        },
+      ],
+    },
+  ],
   preview: {
     select: {
       title: 'title',
-      media: 'image.asset',
     },
   },
 }

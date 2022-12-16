@@ -14,6 +14,10 @@ export default {
       description: 'The name of this speech.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'text',
       name: 'context',
       title: 'Context / Info',
@@ -50,28 +54,22 @@ export default {
       description:
         'A short version of this speech for more digestible previews.',
     },
-    // {
-    //   name: 'video',
-    //   title: 'Video',
-    //   type: 'array',
-    //   of: [
-    //     {
-    //       type: 'file',
-    //       name: 'videoFile',
-    //       title: 'Video File',
-    //     },
-    //     {
-    //       type: 'url',
-    //       name: 'videoUrl',
-    //       title: 'Video URL',
-    //     },
-    //   ],
-    // },
+  ],
+  orderings: [
+    {
+      title: 'Published At',
+      name: 'publishedAtDesc',
+      by: [
+        {
+          field: 'publishedAt',
+          direction: 'desc',
+        },
+      ],
+    },
   ],
   preview: {
     select: {
       title: 'title',
-      subtitle: 'context',
     },
   },
 }

@@ -1,6 +1,10 @@
 import S from '@sanity/desk-tool/structure-builder'
 import { BiDesktop, BiLibrary, BiStar } from 'react-icons/bi'
-import { getDocTypeListItem, getListItemItems } from './deskStructureUtils'
+import {
+  getDocTypeListItem,
+  getDocTypesListItem,
+  getListItemItems,
+} from './deskStructureUtils'
 
 export const defaultItems = [
   getListItemItems({
@@ -33,6 +37,16 @@ export const defaultItems = [
     title: 'Portfolio',
     icon: BiStar,
     items: [
+      getDocTypesListItem({
+        types: ['project', 'publishedText', 'statement', 'speech'],
+        title: 'All',
+        orderings: [
+          { field: 'publishedAt', title: 'Published At', direction: 'desc' },
+          { field: '_updatedAt', title: 'Last edited', direction: 'desc' },
+          { field: '_createdAt', title: 'Created', direction: 'desc' },
+          // { field: '_createdAt', title: 'Creation Date' },
+        ],
+      }),
       getDocTypeListItem({
         type: 'project',
         title: 'Projects',

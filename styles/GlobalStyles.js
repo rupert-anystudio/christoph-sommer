@@ -13,7 +13,6 @@ const GlobalStyles = createGlobalStyle`
     font-size: 62.5%;
     padding: 0;
     margin: 0;
-    /* scroll-behavior: smooth; */
   }
   body {
     width: 100%;
@@ -32,11 +31,22 @@ const GlobalStyles = createGlobalStyle`
     position: relative;
     min-height: 100vh;
     width: 100%;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 0 auto; */
+  }
+  button, input, a, select, textarea {
+    &[disabled] {
+      pointer-events: none;
+    }
+    @media (hover: hover) {
+      &:hover {
+      }
+    }
+    &:focus {
+      /* outline-width: 2px;
+      outline-offset: 3px;
+      outline-style: solid;
+      outline-color: var(--color-txt);
+      border-radius: 1px; */
+    }
   }
 `
 

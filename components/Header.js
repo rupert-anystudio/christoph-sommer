@@ -16,7 +16,7 @@ const Header = styled.header`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  @media (min-width: 40rem) {
+  @media (min-width: 400px) {
     position: fixed;
     top: 0;
     left: 0;

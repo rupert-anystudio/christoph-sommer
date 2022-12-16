@@ -14,6 +14,10 @@ export default {
       description: 'The title of this text.',
     },
     {
+      type: 'publishedAt',
+      name: 'publishedAt',
+    },
+    {
       type: 'categories',
       name: 'categories',
       description: 'A list of categories this text is related to.',
@@ -59,6 +63,18 @@ export default {
       title: 'Excerpt',
       description:
         'A shortended version this text for more digestible previews.',
+    },
+  ],
+  orderings: [
+    {
+      title: 'Published At',
+      name: 'publishedAtDesc',
+      by: [
+        {
+          field: 'publishedAt',
+          direction: 'desc',
+        },
+      ],
     },
   ],
   preview: {

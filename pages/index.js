@@ -11,7 +11,7 @@ export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
   const layout = 'landing'
   // fetch all docs for cards
-  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]${entryQuery}`
+  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(publishedAt desc)${entryQuery}`
   const docs = await client.fetch(docsQuery)
   // fetch about content
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`

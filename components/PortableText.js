@@ -1,10 +1,13 @@
 import { PortableText as PortableTextReact } from '@portabletext/react'
 import styled from 'styled-components'
+import ExternalLink from './ExternalLink'
+import { CardTitle } from './Primitives'
 
 const Wrap = styled.div`
   position: relative;
   display: block;
   max-width: 100%;
+  /* pointer-events: ${(p) => (p.isDisabled ? 'none' : 'auto')}; */
   > *:first-child {
     margin-top: 0;
   }
@@ -13,13 +16,19 @@ const Wrap = styled.div`
   }
   a {
     color: currentColor;
+    pointer-events: 'auto';
+  }
+  button {
+    pointer-events: 'auto';
   }
 `
 
-const PortableText = ({ value = [] }) => {
+const Title = styled(CardTitle).attrs({ as: 'p' })``
+
+const PortableText = ({ value = [], isDisabled }) => {
   if (!value || value.length < 1) return null
   return (
-    <Wrap>
+    <Wrap isDisabled={isDisabled}>
       <PortableTextReact
         value={value}
         components={{
@@ -32,7 +41,10 @@ const PortableText = ({ value = [] }) => {
             h2: ({ children }) => <h2>{children}</h2>,
             h3: ({ children }) => <h3>{children}</h3>,
             h4: ({ children }) => <h4>{children}</h4>,
+            h5: ({ children }) => <h5>{children}</h5>,
             blockquote: ({ children }) => <block>{children}</block>,
+            // custom blocks
+            title: ({ children }) => <Title>{children}</Title>,
           },
           list: {
             bullet: ({ children }) => <ul>{children}</ul>,
@@ -41,9 +53,9 @@ const PortableText = ({ value = [] }) => {
             externalInlineLink: ({ value, children }) => {
               const { url } = value
               return (
-                <a href={url} target="_blank" rel="noreferrer">
+                <ExternalLink href={url} isDisabled={isDisabled} activeIcon="↗">
                   {children}
-                </a>
+                </ExternalLink>
               )
             },
             // internalLink: ({ value, children }) => {

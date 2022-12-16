@@ -41,7 +41,6 @@ const SubEntry = styled.li`
 const PublicationList = ({ entries = [], isDisabled }) => {
   if (!entries) return null
   if (entries.length < 1) return null
-  // console.log({ entries })
   return (
     <List>
       {entries.map((entry, index0) => {
@@ -64,7 +63,7 @@ const PublicationList = ({ entries = [], isDisabled }) => {
                           <ExternalLink
                             href={part.href}
                             key={partIndx}
-                            activeIcon={'↗'}
+                            // activeIcon={'↗'}
                             isDisabled={isDisabled}
                           >
                             {part.label}

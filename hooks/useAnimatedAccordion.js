@@ -10,21 +10,21 @@ const useAnimatedAccordion = ({ returnScrollTargetId, classes = {} }) => {
   useEffect(() => {
     let q = gsap.utils.selector(rootRef)
     ctx.current = gsap.context((self) => {
-      console.log('is setting up')
+      // console.log('is setting up')
       self.add('q', (selector) => {
-        console.log('q', selector)
+        // console.log('q', selector)
         return q(selector)
       })
       self.add('snapFlipState', () => {
-        console.log('snapFlipState')
+        // console.log('snapFlipState')
         const allClasses = Object.values(classes)
           .map((c) => `.${c}`)
           .join(', ')
-        console.log({ allClasses })
+        // console.log({ allClasses })
         flipState.current = Flip.getState(q(allClasses))
       })
       self.add('doAFlip', () => {
-        console.log('doAFlip')
+        // console.log('doAFlip')
         const state = flipState.current
         if (!state) return
         // Flip.from(state, {
@@ -65,7 +65,7 @@ const useAnimatedAccordion = ({ returnScrollTargetId, classes = {} }) => {
       self.add('scrollToEntry', (key, offsetY = 0) => {
         if (!key || typeof returnScrollTargetId !== 'function') return
         const id = `#${returnScrollTargetId(key)}`
-        console.log('scrollToEntry', id)
+        // console.log('scrollToEntry', id)
         gsap.to(window, {
           overwrite: 'all',
           ease: 'power1.inOut',
@@ -78,7 +78,7 @@ const useAnimatedAccordion = ({ returnScrollTargetId, classes = {} }) => {
         })
       })
       return () => {
-        console.log('is reverting')
+        // console.log('is reverting')
       }
     }, rootRef)
     return () => {
@@ -90,7 +90,7 @@ const useAnimatedAccordion = ({ returnScrollTargetId, classes = {} }) => {
   const [value, setValue] = useState('')
   const lastValue = useRef(value)
   const onValueChange = useCallback((val) => {
-    console.log('onValueChange', val)
+    // console.log('onValueChange', val)
     ctx.current.snapFlipState()
     setValue((prev) => {
       if (prev === val) return ''

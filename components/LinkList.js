@@ -25,7 +25,7 @@ const LinkList = ({ entries = [], isDisabled }) => {
           <Entry key={key}>
             <ExternalLink
               href={href}
-              staticIcon={'·'}
+              // staticIcon={'·'}
               activeIcon={'↗'}
               isDisabled={isDisabled}
             >

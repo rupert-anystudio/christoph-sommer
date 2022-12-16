@@ -126,8 +126,6 @@ const Portfolio = () => {
     [onValueChange]
   )
 
-  // console.log({ entries })
-
   return (
     <Wrap ref={rootRef}>
       <Entries className={classes.entries}>

@@ -5,7 +5,6 @@ import { getEntryTypeLabel, entryTypes } from '../lib/entryHelpers'
 import useFilterContext from '../hooks/useFilterContext'
 import { Input } from './Primitives'
 import usePagePropsContext from '../hooks/usePagePropsContext'
-import usePortfolioEntries from '../hooks/usePortfolioEntries'
 
 const Wrap = styled.div`
   display: flex;
@@ -72,12 +71,9 @@ const EntryLabel = styled(Input).attrs({ as: 'label' })`
 const FilterSelect = () => {
   const { filter, onFilterChange } = useFilterContext()
   const { docs = [] } = usePagePropsContext()
-  // const [isOpen, setIsOpen] = useState(false)
   const handleValueChange = useCallback(
     (val) => {
-      // console.log({ val })
       onFilterChange(val)
-      // setIsOpen(false)
     },
     [onFilterChange]
   )
@@ -91,9 +87,7 @@ const FilterSelect = () => {
     acc[entryType] = matches.length
     return acc
   }, {})
-  // const handleFocusCapture = () => {
-  //   setIsOpen(true)
-  // }
+
   return (
     <Wrap>
       <Label>{'Filter:'}</Label>
@@ -104,14 +98,9 @@ const FilterSelect = () => {
       >
         {entryTypes.map((type) => {
           const id = `filter-option-${type}`
-          // if (!isOpen && type !== filter) return null
           return (
             <Entry key={type}>
-              <Item
-                value={type}
-                id={id}
-                // onFocusCapture={handleFocusCapture}
-              >
+              <Item value={type} id={id}>
                 <Indicator />
               </Item>
               <EntryLabel htmlFor={id}>

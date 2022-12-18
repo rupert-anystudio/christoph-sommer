@@ -1,16 +1,10 @@
 import React from 'react'
 import { getEntryTypeLabel, returnPublicationProps } from '../lib/entryHelpers'
-import Tag from './Tag'
 import PortableText from './PortableText'
-import { Body, CardTitle } from './Primitives'
-import CardTags from './CardTags'
-import Card from './Card'
-import CardSection from './CardSection'
-// import Publication from './Publication'
-import CardLabel from './CardLabel'
+import { Body, Title } from './Primitives'
+import Card, { CardLabel, CardSection, CardTag, CardTags } from './Card'
 import LinkList from './LinkList'
 import PublicationList from './PublicationList'
-// import CardToggle from './CardToggle'
 
 const PortfolioEntry = ({
   _type,
@@ -45,11 +39,11 @@ const PortfolioEntry = ({
   return (
     <Card data-cardtype={_type} isDisabled={isDisabled}>
       <CardLabel>{getEntryTypeLabel(_type)}</CardLabel>
-      <CardTitle as="h1">{title}</CardTitle>
+      <Title as="h1">{title}</Title>
       {categoryEntries.length > 0 && (
         <CardTags>
           {categoryEntries.map((category) => (
-            <Tag key={category.key}>{category.label}</Tag>
+            <CardTag key={category.key}>{category.label}</CardTag>
           ))}
         </CardTags>
       )}

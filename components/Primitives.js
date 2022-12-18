@@ -45,7 +45,7 @@ export const Small = styled(Text)`
   font-style: var(--fx-inter);
 `
 
-export const CardTitle = styled(Text)`
+export const Title = styled(Text)`
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
@@ -81,4 +81,20 @@ export const SmallPillButton = styled(SmallPill).attrs({ as: 'button' })`
   @media (hover: hover) {
     cursor: pointer;
   }
+`
+
+export const CircleButton = styled.button`
+  width: var(--circle-size);
+  height: var(--circle-size);
+  border-radius: 50%;
+  background-color: var(--color-element-bg);
+  color: var(--color-element-txt);
+  line-height: var(--circle-size);
+  font-size: calc(var(--circle-size) * 0.7);
+  text-align: center;
+  appearance: none;
+  border: unset;
+  cursor: pointer;
+  padding: 0;
+  outline: unset;
 `

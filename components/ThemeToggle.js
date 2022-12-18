@@ -1,5 +1,5 @@
 import useThemeContext from '../hooks/useThemeContext'
-import CircleButton from './CircleButton'
+import { CircleButton } from './Primitives'
 
 const ThemeToggle = () => {
   const { theme, onThemeToggle } = useThemeContext()

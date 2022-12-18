@@ -6,7 +6,7 @@ export const LogoWrap = styled.div`
   margin: 0 auto;
 `
 
-const ChristophSommer = styled.a`
+const LogoText = styled.a`
   font-size: calc(var(--height-header) * 0.4);
   line-height: 0.8334;
   font-family: var(--ff-suisse);
@@ -33,10 +33,10 @@ const ChristophSommer = styled.a`
 const Logo = () => {
   return (
     <Link passHref href="/">
-      <ChristophSommer>
+      <LogoText>
         <span>über</span>
         <span>Tourismus</span>
-      </ChristophSommer>
+      </LogoText>
     </Link>
   )
 }

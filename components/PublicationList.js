@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ExternalLink from './ExternalLink'
-import { Body, Link, Small } from './Primitives'
+import { Body, Small } from './Primitives'
 
 const List = styled.ul`
   list-style: none;

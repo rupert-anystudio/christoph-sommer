@@ -5,28 +5,9 @@ import FooterNav from './FooterNav'
 import Logo from './Logo'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 import { Small } from './Primitives'
-import ThemeToggle from './ThemeToggle'
 import LandingAccordion from './LandingAccordion'
 import Head from 'next/head'
-
-const AreaLabel = styled.div`
-  position: relative;
-  top: unset;
-  width: 100%;
-  padding: var(--padding-page);
-`
-
-const Lorem = styled(Small)`
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-  padding: 0 var(--padding-page);
-  margin-bottom: var(--padding-page);
-  &:before {
-    content: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
-  }
-`
+// import ThemeToggle from './ThemeToggle'
 
 const Container = styled.div`
   --height-footer: 80px;
@@ -165,7 +146,7 @@ const Layout = ({ children }) => {
       <Header>
         <div>
           <Logo />
-          {/* <Annoucements /> */}
+          <Annoucements />
         </div>
       </Header>
       <Infos>

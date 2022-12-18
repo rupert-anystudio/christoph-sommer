@@ -27,6 +27,10 @@ export const defaultItems = [
         type: 'privacyPage',
         title: 'Data Privacy',
       }),
+      getDocTypeListItem({
+        type: 'notFoundPage',
+        title: '404 Page',
+      }),
     ],
   }),
   getDocTypeListItem({

@@ -154,11 +154,13 @@ const Footer = styled(Element)`
 
 const Layout = ({ children }) => {
   const pageProps = usePagePropsContext()
-  const { layout, title } = pageProps
+  const { layout, page } = pageProps
   return (
     <Container>
       <Head>
-        <title>{['Über Tourismus', title].filter(Boolean).join(' - ')}</title>
+        <title>
+          {['Über Tourismus', page?.title].filter(Boolean).join(' - ')}
+        </title>
       </Head>
       <Header>
         <div>

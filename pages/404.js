@@ -1,17 +1,16 @@
+import StaticPage from '../components/StaticPage'
 import { getClient } from '../lib/sanity.server'
-import { entryQuery } from '../lib/entryHelpers'
-import Portfolio from '../components/Portfolio'
 
-export default function Home() {
-  return <Portfolio />
+export default function NotFound({ page }) {
+  return <StaticPage {...page} />
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
-  const layout = 'landing'
-  // fetch all docs for cards
-  const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(publishedAt desc)${entryQuery}`
-  const docs = await client.fetch(docsQuery)
+  const layout = 'static'
+  // fetch page content
+  const pageQuery = `*[_type == "notFoundPage"][0]{ title, content }`
+  const page = await client.fetch(pageQuery)
   // fetch about content
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`
   const about = await client.fetch(aboutQuery)
@@ -23,7 +22,7 @@ export async function getStaticProps({ preview = false }) {
     props: {
       preview,
       layout,
-      docs,
+      page,
       about,
       annoucements,
     },

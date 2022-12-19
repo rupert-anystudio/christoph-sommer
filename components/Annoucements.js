@@ -6,9 +6,11 @@ import { Body, CircleButton } from './Primitives'
 
 const Wrap = styled.div`
   position: absolute;
-  top: 77%;
-  left: 102%;
   transform: translate3d(-50%, -50%, 0);
+  /* top: 77%;
+  left: 102%; */
+  top: 28.9%;
+  left: 77.6%;
 `
 
 const Root = PopoverPrimitive.Root

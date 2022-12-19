@@ -24,8 +24,13 @@ const LogoText = styled.a`
   }
   span {
     display: block;
-    &:first-child {
+    /* &:first-child {
       text-indent: -3.9em;
+    } */
+    &:first-child {
+      text-indent: -3em;
+      font-size: 0.64em;
+      line-height: 0.78;
     }
   }
 `

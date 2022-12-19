@@ -1,4 +1,5 @@
 import { BiMessageAltDetail } from 'react-icons/bi'
+import { portfolioDocumentPreview } from '../../lib/schemaHelpers'
 
 export default {
   title: 'Statement',
@@ -67,9 +68,5 @@ export default {
       ],
     },
   ],
-  preview: {
-    select: {
-      title: 'title',
-    },
-  },
+  preview: portfolioDocumentPreview,
 }

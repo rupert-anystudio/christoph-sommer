@@ -1,4 +1,5 @@
 import { BiFlag } from 'react-icons/bi'
+import { portfolioDocumentPreview } from '../../lib/schemaHelpers'
 
 export default {
   title: 'Project',
@@ -61,9 +62,5 @@ export default {
       ],
     },
   ],
-  preview: {
-    select: {
-      title: 'title',
-    },
-  },
+  preview: portfolioDocumentPreview,
 }

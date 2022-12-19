@@ -1,4 +1,5 @@
 import { BiUserVoice } from 'react-icons/bi'
+import { portfolioDocumentPreview } from '../../lib/schemaHelpers'
 
 export default {
   title: 'Speech',
@@ -67,9 +68,5 @@ export default {
       ],
     },
   ],
-  preview: {
-    select: {
-      title: 'title',
-    },
-  },
+  preview: portfolioDocumentPreview,
 }

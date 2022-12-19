@@ -1,4 +1,5 @@
 import { BiText } from 'react-icons/bi'
+import { portfolioDocumentPreview } from '../../lib/schemaHelpers'
 
 export default {
   title: 'Text',
@@ -77,9 +78,5 @@ export default {
       ],
     },
   ],
-  preview: {
-    select: {
-      title: 'title',
-    },
-  },
+  preview: portfolioDocumentPreview,
 }

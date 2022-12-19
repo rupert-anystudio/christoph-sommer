@@ -23,6 +23,7 @@ const Item = styled.div`
 const ItemHeader = styled.div`
   position: relative;
   padding: var(--padding-page);
+  padding-bottom: 0.8rem;
   background-color: var(--color-bg);
 `
 const ItemContent = styled.div`

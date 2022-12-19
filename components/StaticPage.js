@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import usePagePropsContext from '../hooks/usePagePropsContext'
 import PortableText from './PortableText'
 import { Title } from './Primitives'
 
@@ -11,7 +12,9 @@ const PageTitle = styled(Title).attrs({ as: 'h1' })`
   margin-bottom: 2rem;
 `
 
-const StaticPage = ({ title, content }) => {
+const StaticPage = () => {
+  const { page = {} } = usePagePropsContext()
+  const { title, content } = page
   return (
     <Wrap>
       {title && <PageTitle>{title}</PageTitle>}

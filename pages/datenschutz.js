@@ -1,8 +1,7 @@
-import StaticPage from '../components/StaticPage'
 import { getClient } from '../lib/sanity.server'
 
-export default function Datenschutz({ page }) {
-  return <StaticPage {...page} />
+export default function Datenschutz() {
+  return null
 }
 
 export async function getStaticProps({ preview = false }) {

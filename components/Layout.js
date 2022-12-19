@@ -1,16 +1,16 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+import usePagePropsContext from '../hooks/usePagePropsContext'
+import Head from './Head'
 import Annoucements from './Annoucements'
 import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
-import Logo from './Logo'
-import usePagePropsContext from '../hooks/usePagePropsContext'
-import { Small } from './Primitives'
 import LandingAccordion from './LandingAccordion'
-import Head from 'next/head'
-// import ThemeToggle from './ThemeToggle'
+import Logo from './Logo'
+import StaticPage from './StaticPage'
+import Portfolio from './Portfolio'
+import PortfolioPage from './PortfolioPage'
 
 const Container = styled.div`
-  --height-footer: 80px;
   position: relative;
   display: grid;
   width: 100%;
@@ -49,9 +49,6 @@ const Header = styled(Element)`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* position: sticky;
-  top: 0; */
-  /* border-right: var(--border); */
   @media (min-width: 800px) {
     position: sticky;
     top: 0;
@@ -75,7 +72,6 @@ const Infos = styled(Area)`
   }
   > div {
     position: relative;
-    /* border: 2px solid red; */
     @media (min-width: 800px) {
       position: sticky;
       top: var(--height-header);
@@ -103,7 +99,6 @@ const Main = styled(Element)`
   padding: 0;
   @media (min-width: 1440px) {
     grid-area: Main;
-    /* border-right: var(--border); */
     min-height: calc(100vh + 2px);
   }
 `
@@ -133,16 +128,11 @@ const Footer = styled(Element)`
   }
 `
 
-const Layout = ({ children }) => {
-  const pageProps = usePagePropsContext()
-  const { layout, page } = pageProps
+const Layout = () => {
+  const { layout } = usePagePropsContext()
   return (
     <Container>
-      <Head>
-        <title>
-          {['Über Tourismus', page?.title].filter(Boolean).join(' - ')}
-        </title>
-      </Head>
+      <Head />
       <Header>
         <div>
           <Logo />
@@ -155,14 +145,17 @@ const Layout = ({ children }) => {
         </div>
       </Infos>
       <Scrollables>
-        {layout === 'landing' && (
+        {layout === 'portfolio' && (
           <Actions>
             <FilterSelect />
             <div />
-            {/* <ThemeToggle />  */}
           </Actions>
         )}
-        <Main>{children}</Main>
+        <Main>
+          {layout === 'static' && <StaticPage />}
+          {/* {layout === 'portfolio' && <PortfolioPage />} */}
+          {layout === 'portfolio' && <Portfolio />}
+        </Main>
         <Footer>
           <FooterNav />
         </Footer>

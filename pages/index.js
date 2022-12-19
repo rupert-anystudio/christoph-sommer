@@ -1,14 +1,13 @@
 import { getClient } from '../lib/sanity.server'
 import { entryQuery } from '../lib/entryHelpers'
-import Portfolio from '../components/Portfolio'
 
 export default function Home() {
-  return <Portfolio />
+  return null
 }
 
 export async function getStaticProps({ preview = false }) {
   const client = getClient(preview)
-  const layout = 'landing'
+  const layout = 'portfolio'
   // fetch all docs for cards
   const docsQuery = `*[_type in ["publishedText", "project", "statement", "speech"]]|order(publishedAt desc)${entryQuery}`
   const docs = await client.fetch(docsQuery)

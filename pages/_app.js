@@ -1,3 +1,5 @@
+import 'normalize.css'
+import '../styles/fontfaces.css'
 import React from 'react'
 import { gsap } from 'gsap'
 import { CSSPlugin } from 'gsap/CSSPlugin'
@@ -13,14 +15,12 @@ import Sizings from '../styles/Sizings'
 import CurrentTheme from '../styles/CurrentTheme'
 import GlobalStyles from '../styles/GlobalStyles'
 import Layout from '../components/Layout'
-import 'normalize.css'
-import '../styles/fontfaces.css'
 
 gsap.registerPlugin(CSSPlugin)
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrollToPlugin)
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ pageProps }) {
   return (
     <ThemeContextProvider>
       <Colors />
@@ -32,9 +32,7 @@ function MyApp({ Component, pageProps }) {
       <React.StrictMode>
         <PagePropsContextProvider value={pageProps}>
           <FilterContextProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <Layout />
           </FilterContextProvider>
         </PagePropsContextProvider>
       </React.StrictMode>

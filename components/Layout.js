@@ -8,6 +8,7 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import PortfolioEntries from './PortfolioEntries'
+import PortfolioViewSelect from './PortfolioViewSelect'
 
 const Container = styled.div`
   position: relative;
@@ -147,6 +148,7 @@ const Layout = () => {
         {layout === 'portfolio' && (
           <Actions>
             <FilterSelect />
+            <PortfolioViewSelect />
             <div />
           </Actions>
         )}

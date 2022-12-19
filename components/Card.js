@@ -31,15 +31,18 @@ const Card = styled.article`
   position: relative;
   padding: var(--padding-card);
   padding-bottom: calc(var(--padding-card) * 2);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  display: block;
   height: auto;
+  width: 100%;
   border: var(--border-card);
-  pointer-events: ${(p) => (p.isDisabled ? 'none' : 'auto')};
   background: var(--color-bg);
   color: var(--color-txt);
+`
+
+export const CardAnchor = styled.div`
+  position: absolute;
+  top: calc(var(--padding-portfolio) * -1);
+  left: 0;
 `
 
 export const CardLabel = styled(Small).attrs({ as: 'p' })`
@@ -75,6 +78,15 @@ export const CardTitle = ({ href, children }) => {
     </CardTitleWrap>
   )
 }
+
+export const CardSections = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: auto;
+  width: 100%;
+`
 
 const Section = styled.div`
   display: flex;

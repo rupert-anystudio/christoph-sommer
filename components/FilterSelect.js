@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { getEntryTypeLabel, entryTypes } from '../lib/entryHelpers'
-import useFilterContext from '../hooks/useFilterContext'
+import usePortfolioContext from '../hooks/usePortfolioContext'
 import { Input } from './Primitives'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 
@@ -69,7 +69,7 @@ const EntryLabel = styled(Input).attrs({ as: 'label' })`
 `
 
 const FilterSelect = () => {
-  const { filter, onFilterChange } = useFilterContext()
+  const { filter, onFilterChange } = usePortfolioContext()
   const { docs = [] } = usePagePropsContext()
   const handleValueChange = useCallback(
     (val) => {

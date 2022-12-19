@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react'
 
-export const FilterContext = createContext()
+export const PortfolioContext = createContext()
 
-export const FilterContextProvider = ({ children }) => {
+export const PortfolioContextProvider = ({ children }) => {
   const [filter, setFilter] = useState('all')
   const onFilterChange = (newFilter) => {
     setFilter(newFilter)
@@ -12,6 +12,8 @@ export const FilterContextProvider = ({ children }) => {
     onFilterChange,
   }
   return (
-    <FilterContext.Provider value={state}>{children}</FilterContext.Provider>
+    <PortfolioContext.Provider value={state}>
+      {children}
+    </PortfolioContext.Provider>
   )
 }

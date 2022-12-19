@@ -7,7 +7,7 @@ import { Flip } from 'gsap/Flip'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ThemeContextProvider } from '../components/ThemeContext'
 import { PagePropsContextProvider } from '../components/PagePropsContext'
-import { FilterContextProvider } from '../components/FilterContext'
+import { PortfolioContextProvider } from '../components/PortfolioContext'
 import Colors from '../styles/Colors'
 import FontStyles from '../styles/FontStyles'
 import FontSizes from '../styles/FontSizes'
@@ -31,9 +31,9 @@ function MyApp({ pageProps }) {
       <GlobalStyles />
       <React.StrictMode>
         <PagePropsContextProvider value={pageProps}>
-          <FilterContextProvider>
+          <PortfolioContextProvider>
             <Layout />
-          </FilterContextProvider>
+          </PortfolioContextProvider>
         </PagePropsContextProvider>
       </React.StrictMode>
     </ThemeContextProvider>

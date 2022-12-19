@@ -1,5 +1,5 @@
 import slugify from 'slugify'
-import useFilterContext from './useFilterContext'
+import usePortfolioContext from './usePortfolioContext'
 import usePagePropsContext from './usePagePropsContext'
 import { getEntryTypeLabel, returnPublicationProps } from '../lib/entryHelpers'
 
@@ -49,7 +49,7 @@ const returnPreparedPortfolioEntry = ({
 
 const useFilteredPortfolioEntries = () => {
   const { docs } = usePagePropsContext()
-  const { filter } = useFilterContext()
+  const { filter } = usePortfolioContext()
   const allEntries = (docs || []).map((doc) =>
     returnPreparedPortfolioEntry(doc)
   )

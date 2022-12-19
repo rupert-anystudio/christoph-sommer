@@ -12,7 +12,14 @@ const returnPreparedPortfolioEntry = ({
   ...doc
 }) => {
   const typeLabel = getEntryTypeLabel(type)
-  const slug = slugify(title)
+  const slug = slugify(title, {
+    replacement: '-',
+    remove: undefined,
+    lower: true,
+    strict: true,
+    locale: 'de',
+    trim: true,
+  })
   const categories = (doc?.categories || []).map((category) => ({
     key: category._key,
     label: category.title,

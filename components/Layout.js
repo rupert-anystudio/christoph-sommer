@@ -9,6 +9,8 @@ import Logo from './Logo'
 import StaticPage from './StaticPage'
 import PortfolioEntries from './PortfolioEntries'
 import PortfolioViewSelect from './PortfolioViewSelect'
+import usePortfolioContext from '../hooks/usePortfolioContext'
+import useScrollToElemAfterValueChange from '../hooks/useScrollToElemAfterValueChange'
 
 const Container = styled.div`
   position: relative;
@@ -130,6 +132,10 @@ const Footer = styled(Element)`
 
 const Layout = () => {
   const { layout } = usePagePropsContext()
+  const { view, filter } = usePortfolioContext()
+  const scrollablesRef = useScrollToElemAfterValueChange(
+    [view, filter].filter(Boolean).join('-')
+  )
   return (
     <Container>
       <Head />
@@ -144,7 +150,7 @@ const Layout = () => {
           <LandingAccordion />
         </div>
       </Infos>
-      <Scrollables>
+      <Scrollables ref={scrollablesRef}>
         {layout === 'portfolio' && (
           <Actions>
             <FilterSelect />

@@ -25,6 +25,7 @@
     "normalize.css": "^8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "slugify": "^1.6.5",
     "styled-components": "^5.3.5",
     "use-resize-observer": "^9.1.0"
   },

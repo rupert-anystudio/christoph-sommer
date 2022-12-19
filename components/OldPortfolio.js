@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import usePortfolioEntries from '../hooks/usePortfolioEntries'
-import PortfolioEntry from './PortfolioEntry'
+import OldPortfolioEntry from './OldPortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
 import { EntryToggle } from './EntryToggle'
 import EntryGradient from './EntryGradient'
@@ -111,7 +111,7 @@ const classes = {
   entryChild: 'entry-child',
 }
 
-const Portfolio = () => {
+const OldPortfolio = () => {
   const entries = usePortfolioEntries()
   const { rootRef, value, onValueChange } = useAnimatedAccordion({
     returnScrollTargetId,
@@ -156,7 +156,7 @@ const Portfolio = () => {
                   onClick={onEntryClick(key)}
                 />
                 <EntryContent isSelected={isSelected}>
-                  <PortfolioEntry {...entry} isDisabled={!isSelected} />
+                  <OldPortfolioEntry {...entry} isDisabled={!isSelected} />
                 </EntryContent>
                 <EntryGradient isSelected={isSelected} />
               </EntryChild>
@@ -169,4 +169,4 @@ const Portfolio = () => {
   )
 }
 
-export default Portfolio
+export default OldPortfolio

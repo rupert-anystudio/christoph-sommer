@@ -5,8 +5,7 @@ const Sizings = createGlobalStyle`
     /* DIMENSIONS */
     --padding-page: 1rem;
     --padding-portfolio: 0;
-    --padding-card-h: 1rem;
-    --padding-card-v: 2rem;
+    --padding-card: 2rem;
     --width-col-0: 70rem;
     --width-col-1: 70rem;
     --section-gaps: 2rem;
@@ -14,11 +13,10 @@ const Sizings = createGlobalStyle`
     --item-minheight: 65vh;
     --item-gradientheight: 220px;
     @media (min-width: 360px) {
-    --padding-page: 2rem;
+      --padding-page: 2rem;
       --padding-portfolio: 1rem;
     }
     @media (min-width: 400px) {
-      --padding-card-h: 2rem;
     }
     @media (min-width: 800px) {
     }

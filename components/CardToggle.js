@@ -25,7 +25,7 @@ const Wrap = styled.div`
 `
 
 const Content = styled.div`
-  padding: var(--padding-card-v) var(--padding-card-h);
+  padding: var(--padding-card);
   @media (hover: hover) {
     transform: translate3d(0, 100%, 0);
     transition: transform 0.3s ease-in-out;

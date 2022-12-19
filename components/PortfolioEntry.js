@@ -47,6 +47,16 @@ const PortfolioEntry = ({
           ))}
         </CardTags>
       )}
+      {context && (
+        <CardSection title={'Kontext'}>
+          <Body>{context}</Body>
+        </CardSection>
+      )}
+      {excerpt && (
+        <CardSection>
+          <PortableText value={excerpt} isDisabled={isDisabled} />
+        </CardSection>
+      )}
       {publicationEntries.length > 0 && (
         <CardSection title={'Veröffentlicht in'}>
           <PublicationList
@@ -58,16 +68,6 @@ const PortfolioEntry = ({
       {coAuthorEntries.length > 0 && (
         <CardSection title={'Mit'}>
           <LinkList entries={coAuthorEntries} isDisabled={isDisabled} />
-        </CardSection>
-      )}
-      {context && (
-        <CardSection title={'Kontext'}>
-          <Body>{context}</Body>
-        </CardSection>
-      )}
-      {excerpt && (
-        <CardSection>
-          <PortableText value={excerpt} isDisabled={isDisabled} />
         </CardSection>
       )}
       {linkEntries.length > 0 && (

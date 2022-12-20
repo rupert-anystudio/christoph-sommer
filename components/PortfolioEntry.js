@@ -23,7 +23,6 @@ const PortfolioEntry = ({
   publications,
   coAuthors,
   links,
-  renderFull = false,
 }) => {
   return (
     <Card entryType={type}>
@@ -39,34 +38,30 @@ const PortfolioEntry = ({
             </CardTags>
           )}
         </CardSection>
-        {renderFull && (
-          <>
-            {context && (
-              <CardSection title={'Kontext'}>
-                <Body>{context}</Body>
-              </CardSection>
-            )}
-            {excerpt && (
-              <CardSection>
-                <PortableText value={excerpt} />
-              </CardSection>
-            )}
-            {publications.length > 0 && (
-              <CardSection title={'Veröffentlicht in'}>
-                <PublicationList entries={publications} />
-              </CardSection>
-            )}
-            {coAuthors.length > 0 && (
-              <CardSection title={'Mit'}>
-                <LinkList entries={coAuthors} />
-              </CardSection>
-            )}
-            {links.length > 0 && (
-              <CardSection>
-                <LinkList entries={links} />
-              </CardSection>
-            )}
-          </>
+        {context && (
+          <CardSection title={'Kontext'}>
+            <Body>{context}</Body>
+          </CardSection>
+        )}
+        {excerpt && (
+          <CardSection>
+            <PortableText value={excerpt} />
+          </CardSection>
+        )}
+        {publications.length > 0 && (
+          <CardSection title={'Veröffentlicht in'}>
+            <PublicationList entries={publications} />
+          </CardSection>
+        )}
+        {coAuthors.length > 0 && (
+          <CardSection title={'Mit'}>
+            <LinkList entries={coAuthors} />
+          </CardSection>
+        )}
+        {links.length > 0 && (
+          <CardSection>
+            <LinkList entries={links} />
+          </CardSection>
         )}
       </CardSections>
     </Card>

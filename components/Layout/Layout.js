@@ -1,16 +1,16 @@
 import styled from 'styled-components'
-import usePagePropsContext from '../hooks/usePagePropsContext'
-import Head from './Head'
-import Annoucements from './Annoucements'
-import FilterSelect from './FilterSelect'
-import FooterNav from './FooterNav'
-import LandingAccordion from './LandingAccordion'
-import Logo from './Logo'
-import StaticPage from './StaticPage'
-import PortfolioEntries from './PortfolioEntries'
-import PortfolioViewSelect from './PortfolioViewSelect'
-import usePortfolioContext from '../hooks/usePortfolioContext'
-import useScrollToElemAfterValueChange from '../hooks/useScrollToElemAfterValueChange'
+import usePagePropsContext from '../../hooks/usePagePropsContext'
+import Head from '../Head'
+import Annoucements from '../Annoucements'
+import FilterSelect from '../FilterSelect'
+import FooterNav from '../FooterNav'
+import LandingAccordion from '../LandingAccordion'
+import Logo from '../Logo'
+import StaticPage from '../StaticPage'
+import PortfolioEntries from '../PortfolioEntries'
+import PortfolioViewSelect from '../PortfolioViewSelect'
+import usePortfolioContext from '../../hooks/usePortfolioContext'
+import useScrollToElemAfterValueChange from '../../hooks/useScrollToElemAfterValueChange'
 
 const Container = styled.div`
   position: relative;
@@ -132,10 +132,10 @@ const Footer = styled(Element)`
 
 const Layout = () => {
   const { layout } = usePagePropsContext()
-  const { view, filter } = usePortfolioContext()
-  const scrollablesRef = useScrollToElemAfterValueChange(
-    [view, filter].filter(Boolean).join('-')
-  )
+  // const { view, filter } = usePortfolioContext()
+  // const scrollablesRef = useScrollToElemAfterValueChange(
+  //   [view, filter].filter(Boolean).join('-')
+  // )
   return (
     <Container>
       <Head />
@@ -150,11 +150,12 @@ const Layout = () => {
           <LandingAccordion />
         </div>
       </Infos>
-      <Scrollables ref={scrollablesRef}>
+      <Scrollables
+      // ref={scrollablesRef}
+      >
         {layout === 'portfolio' && (
           <Actions>
             <FilterSelect />
-            <PortfolioViewSelect />
             <div />
           </Actions>
         )}

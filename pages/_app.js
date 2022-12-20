@@ -15,6 +15,8 @@ import Sizings from '../styles/Sizings'
 import CurrentTheme from '../styles/CurrentTheme'
 import GlobalStyles from '../styles/GlobalStyles'
 import Layout from '../components/Layout'
+import { UiContextProvider } from '../components/UiContext'
+import ObservedElementDimensionsProvider from '../components/ObservedElementDimensions/ObservedElementDimensionsProvider'
 
 gsap.registerPlugin(CSSPlugin)
 gsap.registerPlugin(Flip)
@@ -31,9 +33,13 @@ function MyApp({ pageProps }) {
       <GlobalStyles />
       <React.StrictMode>
         <PagePropsContextProvider value={pageProps}>
-          <PortfolioContextProvider>
-            <Layout />
-          </PortfolioContextProvider>
+          <ObservedElementDimensionsProvider>
+            <UiContextProvider>
+              <PortfolioContextProvider>
+                <Layout />
+              </PortfolioContextProvider>
+            </UiContextProvider>
+          </ObservedElementDimensionsProvider>
         </PagePropsContextProvider>
       </React.StrictMode>
     </ThemeContextProvider>

@@ -2,15 +2,13 @@ import styled from 'styled-components'
 import usePagePropsContext from '../../hooks/usePagePropsContext'
 import Head from '../Head'
 import Annoucements from '../Annoucements'
-import FilterSelect from '../FilterSelect'
 import FooterNav from '../FooterNav'
 import LandingAccordion from '../LandingAccordion'
 import Logo from '../Logo'
 import StaticPage from '../StaticPage'
 import PortfolioEntries from '../PortfolioEntries'
-import PortfolioViewSelect from '../PortfolioViewSelect'
-import usePortfolioContext from '../../hooks/usePortfolioContext'
-import useScrollToElemAfterValueChange from '../../hooks/useScrollToElemAfterValueChange'
+import FilterSelect from '../FilterSelect'
+import PortfolioScrollTo from './PortfolioScrollTo'
 
 const Container = styled.div`
   position: relative;
@@ -39,7 +37,6 @@ const Container = styled.div`
       'Infos Scrollables';
   }
 `
-const Area = styled.div``
 const Element = styled.div`
   background: var(--color-bg);
   padding: var(--padding-page);
@@ -60,7 +57,7 @@ const Header = styled(Element)`
     position: relative;
   }
 `
-const Infos = styled(Area)`
+const Infos = styled.div`
   grid-area: Infos;
   display: grid;
   grid-template-columns: 1fr;
@@ -80,7 +77,8 @@ const Infos = styled(Area)`
     }
   }
 `
-const Scrollables = styled(Area)`
+const Scrollables = styled.div`
+  position: relative;
   grid-area: Scrollables;
   display: grid;
   grid-template-columns: 1fr;
@@ -110,7 +108,7 @@ const Actions = styled(Element)`
   border-bottom: var(--border);
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: baseline;
   @media (min-width: 1440px) {
     position: sticky;
@@ -132,10 +130,6 @@ const Footer = styled(Element)`
 
 const Layout = () => {
   const { layout } = usePagePropsContext()
-  // const { view, filter } = usePortfolioContext()
-  // const scrollablesRef = useScrollToElemAfterValueChange(
-  //   [view, filter].filter(Boolean).join('-')
-  // )
   return (
     <Container>
       <Head />
@@ -150,14 +144,14 @@ const Layout = () => {
           <LandingAccordion />
         </div>
       </Infos>
-      <Scrollables
-      // ref={scrollablesRef}
-      >
+      <Scrollables>
         {layout === 'portfolio' && (
-          <Actions>
-            <FilterSelect />
-            <div />
-          </Actions>
+          <>
+            <PortfolioScrollTo />
+            <Actions>
+              <FilterSelect />
+            </Actions>
+          </>
         )}
         <Main>
           {layout === 'static' && <StaticPage />}

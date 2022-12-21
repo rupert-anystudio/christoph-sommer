@@ -2,35 +2,9 @@ import styled, { css } from 'styled-components'
 import { Small, Title } from './Primitives'
 
 const Card = styled.article`
-  ${(p) => {
-    if (p.entryType === 'publishedText')
-      return css`
-        --color-bg: var(--color-text-bg);
-        --color-txt: var(--color-text-txt);
-        --tag-opacity: 0.2;
-      `
-    if (p.entryType === 'project')
-      return css`
-        --color-bg: var(--color-project-bg);
-        --color-txt: var(--color-project-txt);
-        --tag-opacity: 0.2;
-      `
-    if (p.entryType === 'speech')
-      return css`
-        --color-bg: var(--color-speech-bg);
-        --color-txt: var(--color-speech-txt);
-        --tag-opacity: 0.2;
-      `
-    if (p.entryType === 'statement')
-      return css`
-        --color-bg: var(--color-statement-bg);
-        --color-txt: var(--color-statement-txt);
-        --tag-opacity: 0.2;
-      `
-  }};
   position: relative;
   padding: var(--padding-card);
-  padding-bottom: calc(var(--padding-card) * 2);
+  padding-bottom: calc(var(--padding-card) * 4);
   display: block;
   height: auto;
   width: 100%;
@@ -73,7 +47,10 @@ export const CardTitleWrap = styled(Title)`
 
 export const CardTitle = ({ href, children }) => {
   return (
-    <CardTitleWrap href={href} as={href ? 'a' : 'span'}>
+    <CardTitleWrap
+    // href={href}
+    // as={href ? 'a' : 'span'}
+    >
       <h1>{children}</h1>
     </CardTitleWrap>
   )

@@ -5,8 +5,11 @@ const useScrollToElemAfterValueChange = (value) => {
   useEffect(() => {
     if (!wrap.current) return
     wrap.current.scrollIntoView({
-      behavior: 'smooth',
+      // behavior: 'smooth',
+      // block: 'start',
+      behavior: 'auto',
       block: 'start',
+      inline: 'nearest',
     })
   }, [value])
   return wrap

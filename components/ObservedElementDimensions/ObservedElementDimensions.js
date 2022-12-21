@@ -26,7 +26,10 @@ const ObservedElementDimensions = ({
       ref={elRef}
       data-observed-id={observedId}
       data-observed-group={observedGroup}
-      style={style}
+      style={{
+        position: 'relative',
+        ...style,
+      }}
       className={className}
     >
       {children}

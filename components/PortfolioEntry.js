@@ -47,6 +47,11 @@ const Wrap = styled.div`
   }};
 `
 
+const Stage = styled.div`
+  position: relative;
+  overflow: hidden;
+`
+
 const OverlayButton = styled.button`
   position: absolute;
   top: 0;
@@ -66,19 +71,43 @@ const OverlayButton = styled.button`
   pointer-events: ${(p) => (p.isSelected ? 'none' : 'auto')};
   > span {
     position: absolute;
+    display: block;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(calc(-1 * var(--padding-portfolio)));
-    color: var(--color-bg);
-    background: var(--color-txt);
-    padding: 0;
-    width: var(--circle-size);
-    height: var(--circle-size);
-    text-align: center;
-    border-radius: 50%;
-    pointer-events: auto;
-    font-size: calc(var(--circle-size) * 0.5);
-    line-height: calc(var(--circle-size) * 1.01);
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    height: auto;
+    transition: transform 0.25s ease-in;
+    transform: translateY(0%);
+    > span {
+      position: relative;
+      color: var(--color-bg);
+      background: var(--color-txt);
+      width: var(--circle-size);
+      height: var(--circle-size);
+      text-align: center;
+      border-radius: 50%;
+      pointer-events: auto;
+      font-size: calc(var(--circle-size) * 0.5);
+      line-height: calc(var(--circle-size) * 1.01);
+      display: block;
+    }
+  }
+  @media (hover: hover) {
+    > span {
+      transform: translateY(100%);
+      /* transform: translateY(100%); */
+      /* transition-timing-function: ease-in; */
+    }
+    ${Stage}:hover & {
+      > span {
+        transition-timing-function: ease-out;
+        transform: translateY(0%);
+      }
+    }
   }
 `
 
@@ -109,11 +138,19 @@ const OverlayGradient = styled.div`
     position: relative;
     width: 100%;
     height: auto;
-    transition: transform 0.25s ease-in-out;
+    transition: transform 0.25s
+      ${(p) => (p.isSelected ? 'ease-in' : 'ease-out')};
     transform: translateY(${(p) => (p.isSelected ? '100%' : '1px')});
     border: none;
     > rect {
       fill: var(--color-bg);
+    }
+  }
+  @media (hover: hover) {
+    ${Stage}:hover & {
+      svg {
+        /* transform: translateY(100%); */
+      }
     }
   }
 `
@@ -221,7 +258,7 @@ const PortfolioEntry = ({
       <ScrollAnchor ref={anchorTop} />
       <ScrollAnchorClose ref={anchorClose} />
       <ObservedElementDimensions observedId={id} observedGroup="entries">
-        <div
+        <Stage
           style={{
             position: 'relative',
             minHeight: 'var(--item-minheight)',
@@ -280,10 +317,12 @@ const PortfolioEntry = ({
             <Gradient />
           </OverlayGradient>
           <OverlayButton onClick={onSelect} isSelected={isSelected}>
-            <span>{isSelected ? '▲' : '▼'}</span>
+            <span>
+              <span>{isSelected ? '▲' : '▼'}</span>
+            </span>
           </OverlayButton>
           {/* </Animated> */}
-        </div>
+        </Stage>
       </ObservedElementDimensions>
     </Wrap>
   )

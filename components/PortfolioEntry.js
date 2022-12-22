@@ -218,8 +218,10 @@ const PortfolioEntry = ({
       <ObservedElementDimensions observedId={id} observedGroup="entries">
         <div
           style={{
+            position: 'relative',
             minHeight: 'var(--item-minheight)',
-            height: isSelected ? card : 'var(--item-minheight)',
+            height: isSelected ? 'auto' : 'var(--item-minheight)',
+            overflow: 'hidden',
           }}
         >
           {/* <Animated style={{ height: animHeight }}> */}
@@ -269,9 +271,9 @@ const PortfolioEntry = ({
               </CardSections>
             </Card>
           </ObservedElementDimensions>
-          {/* <Gradient style={{ y: gradient }}> */}
-          <OverlayGradient />
-          {/* </Gradient> */}
+          <Gradient>
+            <OverlayGradient />
+          </Gradient>
           <OverlayButton onClick={onSelect} isSelected={isSelected}>
             <span>{isSelected ? '▲' : '▼'}</span>
           </OverlayButton>

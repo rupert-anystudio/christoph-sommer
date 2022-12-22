@@ -71,9 +71,14 @@ const OverlayButton = styled.button`
     transform: translateX(-50%) translateY(calc(-1 * var(--padding-portfolio)));
     color: var(--color-bg);
     background: var(--color-txt);
-    padding: 1rem;
-    border-radius: 12rem;
+    padding: 0;
+    width: var(--circle-size);
+    height: var(--circle-size);
+    text-align: center;
+    border-radius: 50%;
     pointer-events: auto;
+    font-size: calc(var(--circle-size) * 0.5);
+    line-height: calc(var(--circle-size) * 1.01);
   }
 `
 
@@ -92,42 +97,42 @@ const ScrollAnchorClose = styled.span`
   top: calc(-4 * var(--padding-portfolio));
 `
 
-const GradientSvg = styled.svg`
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  height: auto;
-  > rect {
-    fill: var(--color-bg);
-  }
-`
-
-const Gradient = styled(animated.div)`
+const OverlayGradient = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: auto;
   pointer-events: none;
   line-height: 0;
+  svg {
+    position: relative;
+    width: 100%;
+    height: auto;
+    transition: transform 0.25s ease-in-out;
+    transform: translateY(${(p) => (p.isSelected ? '100%' : '1px')});
+    border: none;
+    > rect {
+      fill: var(--color-bg);
+    }
+  }
 `
 
-const OverlayGradient = (props) => {
+const Gradient = (props) => {
   return (
-    <GradientSvg viewBox="0 0 100 100" {...props}>
+    <svg viewBox="0 0 400 100" {...props}>
       <defs>
         <linearGradient id="gradient" gradientTransform="rotate(90)">
           <stop offset="0" stopColor="white" stopOpacity="0" />
-          <stop offset="0.7" stopColor="white" stopOpacity="0" />
           <stop offset="0.99" stopColor="white" stopOpacity="1" />
           <stop offset="1" stopColor="white" stopOpacity="1" />
         </linearGradient>
         <mask id="gradient-mask">
-          <rect x="0" y="0" width="100" height="100" fill="url(#gradient)" />
+          <rect x="0" y="0" width="400" height="100" fill="url(#gradient)" />
         </mask>
       </defs>
-      <rect x={0} y={0} width={100} height={100} mask="url(#gradient-mask)" />
-    </GradientSvg>
+      <rect x={0} y={0} width={400} height={100} mask="url(#gradient-mask)" />
+    </svg>
   )
 }
 
@@ -271,9 +276,9 @@ const PortfolioEntry = ({
               </CardSections>
             </Card>
           </ObservedElementDimensions>
-          <Gradient>
-            <OverlayGradient />
-          </Gradient>
+          <OverlayGradient isSelected={isSelected}>
+            <Gradient />
+          </OverlayGradient>
           <OverlayButton onClick={onSelect} isSelected={isSelected}>
             <span>{isSelected ? '▲' : '▼'}</span>
           </OverlayButton>

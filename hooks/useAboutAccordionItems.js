@@ -7,12 +7,12 @@ const useAboutAccordionItems = () => {
     return [
       {
         key: 'missionStatement',
-        label: 'Mission',
+        label: 'über diese Website',
         content: about?.missionStatement,
       },
       {
         key: 'aboutText',
-        label: 'Über Mich',
+        label: 'über Mich',
         content: about?.aboutText,
       },
     ]

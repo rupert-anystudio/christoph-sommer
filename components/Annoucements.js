@@ -3,6 +3,7 @@ import * as PopoverPrimitive from '@radix-ui/react-popover'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 import { PortableText } from '@portabletext/react'
 import { Body, CircleButton } from './Primitives'
+import AnnoucementBubble from './AnnoucementBubble'
 
 const Wrap = styled.div`
   position: absolute;
@@ -43,9 +44,11 @@ const Content = styled(PopoverPrimitive.Content)`
   color: var(--color-element-txt);
   width: calc(100vw - 4rem);
   max-width: 60rem;
+  border: 2px solid red;
 `
 const RenderedContent = styled.div`
   margin-top: 2rem;
+  border: 2px solid red;
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -66,6 +69,7 @@ const PopoverContent = ({ title, content }) => {
       align="start"
       alignOffset={-40}
     >
+      <AnnoucementBubble />
       <Close aria-label="Schließen">✗</Close>
       <RenderedContent>
         <Title>{title}</Title>

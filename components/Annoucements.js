@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import usePagePropsContext from '../hooks/usePagePropsContext'
@@ -5,6 +6,7 @@ import { PortableText } from '@portabletext/react'
 import { Body, CircleButton } from './Primitives'
 import AnnoucementBubble from './AnnoucementBubble'
 import ObservedElementDimensions from './ObservedElementDimensions/ObservedElementDimensions'
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
 
 const Wrap = styled.div`
   position: absolute;
@@ -60,11 +62,15 @@ const Title = styled(Body).attrs({ as: 'h1' })``
 
 const Annoucements = () => {
   const { annoucements, containerRef } = usePagePropsContext()
+  const [mounted, setMounted] = useState(false)
+  useIsomorphicLayoutEffect(() => {
+    setMounted(true)
+  }, [])
+  if (!mounted) return null
   if (!annoucements || annoucements.length < 1) return null
   const annoucement = annoucements[0]
-  // if (!annoucement) return null
+  if (!annoucement) return null
   const { title, content, _id } = annoucement
-  if (!containerRef.current) return null
   return (
     <Wrap>
       <Root defaultOpen>

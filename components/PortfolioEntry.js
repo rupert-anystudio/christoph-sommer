@@ -5,6 +5,14 @@ import { Body, Title } from './Primitives'
 import Card, { CardLabel, CardSection, CardTag, CardTags } from './Card'
 import LinkList from './LinkList'
 import PublicationList from './PublicationList'
+import { formatProjectTimeframe } from '../lib/dateHelpers'
+
+const returnLabel = (type, timeframe) => {
+  const label = getEntryTypeLabel(type)
+  if (type !== 'project') return label
+  const projectTimeframe = formatProjectTimeframe(timeframe)
+  return [label, projectTimeframe].filter(Boolean).join(' ')
+}
 
 const PortfolioEntry = ({
   _type,
@@ -16,6 +24,7 @@ const PortfolioEntry = ({
   coAuthors,
   links,
   isDisabled,
+  timeframe,
 }) => {
   const categoryEntries = (categories || []).map((category) => ({
     key: category._key,
@@ -38,7 +47,7 @@ const PortfolioEntry = ({
   }))
   return (
     <Card data-cardtype={_type} isDisabled={isDisabled}>
-      <CardLabel>{getEntryTypeLabel(_type)}</CardLabel>
+      <CardLabel>{returnLabel(_type, timeframe)}</CardLabel>
       <Title as="h1">{title}</Title>
       {categoryEntries.length > 0 && (
         <CardTags>

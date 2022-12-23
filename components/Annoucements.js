@@ -4,6 +4,7 @@ import usePagePropsContext from '../hooks/usePagePropsContext'
 import { PortableText } from '@portabletext/react'
 import { Body, CircleButton } from './Primitives'
 import AnnoucementBubble from './AnnoucementBubble'
+import ObservedElementDimensions from './ObservedElementDimensions/ObservedElementDimensions'
 
 const Wrap = styled.div`
   position: absolute;
@@ -28,27 +29,23 @@ const Close = styled(PopoverPrimitive.Close)`
   cursor: pointer;
 `
 const Arrow = styled(PopoverPrimitive.Arrow).attrs({
-  width: 30,
-  height: 40,
+  width: 50,
+  height: 80,
 })`
-  fill: var(--color-element-bg);
+  fill: blue;
 `
 const Content = styled(PopoverPrimitive.Content)`
-  border-radius: 2rem;
-  padding: 2rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   z-index: 200;
-  background-color: var(--color-element-bg);
-  color: var(--color-element-txt);
   width: calc(100vw - 4rem);
   max-width: 60rem;
-  border: 2px solid red;
 `
 const RenderedContent = styled.div`
-  margin-top: 2rem;
-  border: 2px solid red;
+  position: relative;
+  padding: var(--padding-page) 0;
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -61,38 +58,39 @@ const RenderedContent = styled.div`
 `
 const Title = styled(Body).attrs({ as: 'h1' })``
 
-const PopoverContent = ({ title, content }) => {
-  return (
-    <Content
-      sideOffset={10}
-      collisionPadding={20}
-      align="start"
-      alignOffset={-40}
-    >
-      <AnnoucementBubble />
-      <Close aria-label="Schließen">✗</Close>
-      <RenderedContent>
-        <Title>{title}</Title>
-        <PortableText value={content} />
-      </RenderedContent>
-      <Arrow />
-    </Content>
-  )
-}
-
 const Annoucements = () => {
-  const { annoucements } = usePagePropsContext()
+  const { annoucements, containerRef } = usePagePropsContext()
   if (!annoucements || annoucements.length < 1) return null
   const annoucement = annoucements[0]
-  const { title, content } = annoucement
+  // if (!annoucement) return null
+  const { title, content, _id } = annoucement
+  if (!containerRef.current) return null
   return (
     <Wrap>
-      <Root>
+      <Root defaultOpen>
         <Trigger asChild>
           <CircleButton>{annoucements.length}</CircleButton>
         </Trigger>
-        <Portal>
-          <PopoverContent title={title} content={content} />
+        <Portal container={containerRef.current}>
+          <Content
+            // sideOffset={10}
+            collisionPadding={20}
+            alignOffset={-60}
+            align="start"
+          >
+            <Arrow />
+            <ObservedElementDimensions
+              observedId={_id}
+              observedGroup="annoucements"
+            >
+              <AnnoucementBubble id={_id} />
+              <RenderedContent>
+                {/* <Close aria-label="Schließen">✗</Close> */}
+                <Title>{title}</Title>
+                <PortableText value={content} />
+              </RenderedContent>
+            </ObservedElementDimensions>
+          </Content>
         </Portal>
       </Root>
     </Wrap>

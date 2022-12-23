@@ -15,28 +15,35 @@ import Sizings from '../styles/Sizings'
 import CurrentTheme from '../styles/CurrentTheme'
 import GlobalStyles from '../styles/GlobalStyles'
 import Layout from '../components/Layout'
+import ObservedElementDimensionsProvider from '../components/ObservedElementDimensions/ObservedElementDimensionsProvider'
+import { useRef } from 'react'
 
 gsap.registerPlugin(CSSPlugin)
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrollToPlugin)
 
 function MyApp({ pageProps }) {
+  const containerRef = useRef()
   return (
-    <ThemeContextProvider>
-      <Colors />
-      <FontStyles />
-      <FontSizes />
-      <Sizings />
-      <CurrentTheme />
-      <GlobalStyles />
-      <React.StrictMode>
-        <PagePropsContextProvider value={pageProps}>
-          <FilterContextProvider>
-            <Layout />
-          </FilterContextProvider>
-        </PagePropsContextProvider>
-      </React.StrictMode>
-    </ThemeContextProvider>
+    <div ref={containerRef}>
+      <ThemeContextProvider>
+        <Colors />
+        <FontStyles />
+        <FontSizes />
+        <Sizings />
+        <CurrentTheme />
+        <GlobalStyles />
+        <React.StrictMode>
+          <PagePropsContextProvider value={{ ...pageProps, containerRef }}>
+            <ObservedElementDimensionsProvider>
+              <FilterContextProvider>
+                <Layout />
+              </FilterContextProvider>
+            </ObservedElementDimensionsProvider>
+          </PagePropsContextProvider>
+        </React.StrictMode>
+      </ThemeContextProvider>
+    </div>
   )
 }
 

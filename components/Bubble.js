@@ -9,8 +9,6 @@ const Wrap = styled.div`
   align-items: center;
   text-align: center;
   font-size: 2.8vw;
-  --color-bubble-fill: var(--color-bg);
-  --color-bubble-txt: var(--color-txt);
   pointer-events: none;
   svg {
     position: absolute;
@@ -22,13 +20,13 @@ const Wrap = styled.div`
   .children {
     position: relative;
     background: none;
-    color: var(--color-bubble-txt);
+    color: var(--color-txt);
   }
 
   .shape {
-    fill: var(--color-bubble-fill);
+    fill: var(--color-bg);
     stroke-width: 4;
-    stroke: var(--color-bubble-txt);
+    stroke: var(--color-txt);
   }
 
   .helpers {

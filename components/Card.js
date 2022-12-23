@@ -4,7 +4,7 @@ import { Small, Title } from './Primitives'
 const Card = styled.article`
   position: relative;
   padding: var(--padding-card);
-  padding-bottom: calc(var(--padding-card) * 4);
+  padding-bottom: calc(var(--padding-card) * 2);
   display: block;
   height: auto;
   width: 100%;

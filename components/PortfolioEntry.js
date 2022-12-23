@@ -49,7 +49,6 @@ const Wrap = styled.div`
 
 const Stage = styled.div`
   position: relative;
-  overflow: hidden;
 `
 
 const OverlayButton = styled.button`
@@ -69,19 +68,21 @@ const OverlayButton = styled.button`
   margin: 0;
   cursor: pointer;
   pointer-events: ${(p) => (p.isSelected ? 'none' : 'auto')};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   > span {
-    position: absolute;
+    position: relative;
+    flex: 0;
     display: block;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem;
     height: auto;
     transition: transform 0.25s ease-in;
-    transform: translateY(0%);
+    transform: translateY(${(p) => (p.isSelected ? 100 : 0)}%);
     > span {
       position: relative;
       color: var(--color-bg);
@@ -94,19 +95,6 @@ const OverlayButton = styled.button`
       font-size: calc(var(--circle-size) * 0.5);
       line-height: calc(var(--circle-size) * 1.01);
       display: block;
-    }
-  }
-  @media (hover: hover) {
-    > span {
-      transform: translateY(100%);
-      /* transform: translateY(100%); */
-      /* transition-timing-function: ease-in; */
-    }
-    ${Stage}:hover & {
-      > span {
-        transition-timing-function: ease-out;
-        transform: translateY(0%);
-      }
     }
   }
 `
@@ -138,26 +126,21 @@ const OverlayGradient = styled.div`
     position: relative;
     width: 100%;
     height: auto;
-    transition: transform 0.25s
-      ${(p) => (p.isSelected ? 'ease-in' : 'ease-out')};
-    transform: translateY(${(p) => (p.isSelected ? '100%' : '1px')});
     border: none;
+    outline: none;
+    margin: 0;
+    transition: transform 0.25s ease-in-out;
+    transform: translateY(${(p) => (p.isSelected ? 100 : 0)}%);
+    transition-timing-function: ease-in;
     > rect {
       fill: var(--color-bg);
-    }
-  }
-  @media (hover: hover) {
-    ${Stage}:hover & {
-      svg {
-        /* transform: translateY(100%); */
-      }
     }
   }
 `
 
 const Gradient = (props) => {
   return (
-    <svg viewBox="0 0 400 100" {...props}>
+    <svg viewBox="0 0 300 100" {...props}>
       <defs>
         <linearGradient id="gradient" gradientTransform="rotate(90)">
           <stop offset="0" stopColor="white" stopOpacity="0" />
@@ -165,10 +148,10 @@ const Gradient = (props) => {
           <stop offset="1" stopColor="white" stopOpacity="1" />
         </linearGradient>
         <mask id="gradient-mask">
-          <rect x="0" y="0" width="400" height="100" fill="url(#gradient)" />
+          <rect x="0" y="0" width="300" height="100" fill="url(#gradient)" />
         </mask>
       </defs>
-      <rect x={0} y={0} width={400} height={100} mask="url(#gradient-mask)" />
+      <rect x={0} y={0} width={300} height={100} mask="url(#gradient-mask)" />
     </svg>
   )
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 import { PortableText } from '@portabletext/react'
-import { Body, CircleButton } from './Primitives'
+import { Body, CircleButton, Title } from './Primitives'
 import AnnoucementBubble from './AnnoucementBubble'
 import ObservedElementDimensions from './ObservedElementDimensions/ObservedElementDimensions'
 import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import { animated, useSpring } from '@react-spring/web'
 
 const Wrap = styled.div`
   position: absolute;
@@ -36,6 +37,14 @@ const Arrow = styled(PopoverPrimitive.Arrow).attrs({
 })`
   fill: blue;
 `
+const scaleIn = keyframes`
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+`
 const Content = styled(PopoverPrimitive.Content)`
   position: relative;
   display: flex;
@@ -44,10 +53,13 @@ const Content = styled(PopoverPrimitive.Content)`
   z-index: 200;
   width: calc(100vw - 4rem);
   max-width: 60rem;
+  animation: ${scaleIn} 0.2s ease-out;
 `
 const RenderedContent = styled.div`
   position: relative;
-  padding: var(--padding-page) 0;
+  padding: var(--padding-page);
+  background-color: var(--color-bg);
+  /* border: 1px solid var(--color-txt); */
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -58,7 +70,18 @@ const RenderedContent = styled.div`
     }
   }
 `
-const Title = styled(Body).attrs({ as: 'h1' })``
+
+const AnimatedTrigger = ({ children }) => {
+  const style = useSpring({
+    from: {
+      scale: 0.1,
+    },
+    to: {
+      scale: 1,
+    },
+  })
+  return <animated.div style={style}>{children}</animated.div>
+}
 
 const Annoucements = () => {
   const { annoucements, containerRef } = usePagePropsContext()
@@ -73,26 +96,36 @@ const Annoucements = () => {
   const { title, content, _id } = annoucement
   return (
     <Wrap>
-      <Root defaultOpen>
-        <Trigger asChild>
-          <CircleButton>{annoucements.length}</CircleButton>
-        </Trigger>
-        <Portal container={containerRef.current}>
+      <Root
+      // defaultOpen
+      >
+        <AnimatedTrigger>
+          <Trigger asChild>
+            <CircleButton>{annoucements.length}</CircleButton>
+          </Trigger>
+        </AnimatedTrigger>
+        <Portal
+        // container={containerRef.current}
+        // forceMount
+        >
           <Content
-            // sideOffset={10}
-            collisionPadding={20}
+            sideOffset={5}
+            collisionPadding={10}
             alignOffset={-60}
             align="start"
+            style={{
+              transformOrigin: 'var(--radix-popover-content-transform-origin)',
+            }}
           >
-            <Arrow />
             <ObservedElementDimensions
               observedId={_id}
               observedGroup="annoucements"
             >
+              <Arrow />
               <AnnoucementBubble id={_id} />
               <RenderedContent>
                 {/* <Close aria-label="Schließen">✗</Close> */}
-                <Title>{title}</Title>
+                <Title as="h1">{title}</Title>
                 <PortableText value={content} />
               </RenderedContent>
             </ObservedElementDimensions>

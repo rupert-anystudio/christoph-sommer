@@ -8,7 +8,6 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 2.8vw;
   pointer-events: none;
   svg {
     position: absolute;

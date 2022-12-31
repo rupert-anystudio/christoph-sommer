@@ -7,6 +7,7 @@ const Svg = styled.svg.attrs({
   xmlnsXlink: 'http://www.w3.org/1999/xlink',
 })`
   position: absolute;
+  pointer-events: none;
   /* outline: 1px solid grey; */
 `
 
@@ -47,10 +48,9 @@ const returnBaseShapeProps = ({ width, height, padding, borderRadius }) => ({
   ry: borderRadius,
 })
 
-const returnSegmentsFromLength = (totalLength) => {
+const returnSegmentsFromLength = (totalLength, minLength = 80) => {
   if (!totalLength) return []
-  const segmentMinLength = 60
-  const segmentAmount = Math.ceil(totalLength / segmentMinLength)
+  const segmentAmount = Math.ceil(totalLength / minLength)
   const segmentLength = totalLength / segmentAmount
   return Array.from({ length: segmentAmount }, (v, i) => segmentLength)
 }
@@ -108,15 +108,25 @@ const useStoredDeviationGetter = (amount) => {
   return returnDeviation
 }
 
-const AnnoucementBubble = ({ width, height, padding, borderRadius = 80 }) => {
-  const sideDeviation = useStoredDeviationGetter(30)
-  const perpendicularDeviation = useStoredDeviationGetter(8)
+const AnnoucementBubble = ({
+  width,
+  height,
+  padding,
+  borderRadius = 80,
+  segmentMinLength = 80,
+  deviationSide = 30,
+  deviationPerpendicular = 10,
+}) => {
+  const sideDeviation = useStoredDeviationGetter(deviationSide)
+  const perpendicularDeviation = useStoredDeviationGetter(
+    deviationPerpendicular
+  )
 
   const returnLayoutFromElement = (element) => {
     if (!element) return null
     const totalLength = element.getTotalLength()
     const centerPoint = { x: width / 2 + padding, y: height / 2 + padding }
-    const segments = returnSegmentsFromLength(totalLength)
+    const segments = returnSegmentsFromLength(totalLength, segmentMinLength)
     const segmentPoints = segments.map((segmentLength, index) => {
       const baseLength = segmentLength * (index + 1)
       const deviation = sideDeviation(index)

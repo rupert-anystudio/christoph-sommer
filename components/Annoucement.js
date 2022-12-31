@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { PortableText } from '@portabletext/react'
 import { Title } from './Primitives'
 import AnnoucementBubble from './AnnoucementBubble'
 import useObservedElement from './useObservedElement'
+import PortableText from './PortableText'
 
 const Wrap = styled.div`
   position: relative;

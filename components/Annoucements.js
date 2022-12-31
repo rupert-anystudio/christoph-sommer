@@ -27,11 +27,8 @@ const Close = styled(PopoverPrimitive.Close)`
   color: var(--color-element-txt);
   cursor: pointer;
 `
-const Arrow = styled(PopoverPrimitive.Arrow).attrs({
-  width: 50,
-  height: 80,
-})`
-  fill: blue;
+const Arrow = styled(PopoverPrimitive.Arrow)`
+  fill: var(--color-txt);
 `
 const scaleIn = keyframes`
   from {
@@ -47,9 +44,9 @@ const Content = styled(PopoverPrimitive.Content)`
   flex-direction: column;
   align-items: flex-start;
   z-index: 200;
-  width: calc(100vw - 4rem);
-  max-width: 60rem;
-  /* animation: ${scaleIn} 0.2s ease-out; */
+  width: calc(70vw);
+  max-width: 70rem;
+  animation: ${scaleIn} 1.2s ease-out;
   outline: none;
 `
 
@@ -87,14 +84,14 @@ const Annoucements = () => {
         <Portal>
           <Content
             sideOffset={5}
-            collisionPadding={10}
-            alignOffset={-60}
+            collisionPadding={60}
+            alignOffset={-90}
             align="start"
             style={{
               transformOrigin: 'var(--radix-popover-content-transform-origin)',
             }}
           >
-            <Arrow />
+            <Arrow width={50} height={100} />
             <Annoucement title={title} content={content} />
           </Content>
         </Portal>

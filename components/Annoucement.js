@@ -8,6 +8,7 @@ const Wrap = styled.div`
   position: relative;
   width: 100%;
   height: auto;
+  /* outline: 2px solid red; */
 `
 
 const Content = styled.div`

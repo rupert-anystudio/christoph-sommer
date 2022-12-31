@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
-import usePagePropsContext from '../hooks/usePagePropsContext'
-import { PortableText } from '@portabletext/react'
-import { Body, CircleButton, Title } from './Primitives'
-import AnnoucementBubble from './AnnoucementBubble'
-import ObservedElementDimensions from './ObservedElementDimensions/ObservedElementDimensions'
-import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
 import { animated, useSpring } from '@react-spring/web'
+import usePagePropsContext from '../hooks/usePagePropsContext'
+import { CircleButton } from './Primitives'
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import Annoucement from './Annoucement'
 
 const Wrap = styled.div`
   position: absolute;
   transform: translate3d(-50%, -50%, 0);
-  /* top: 77%;
-  left: 102%; */
   top: 28.9%;
   left: 77.6%;
 `
@@ -53,22 +49,8 @@ const Content = styled(PopoverPrimitive.Content)`
   z-index: 200;
   width: calc(100vw - 4rem);
   max-width: 60rem;
-  animation: ${scaleIn} 0.2s ease-out;
-`
-const RenderedContent = styled.div`
-  position: relative;
-  padding: var(--padding-page);
-  background-color: var(--color-bg);
-  /* border: 1px solid var(--color-txt); */
-  > * {
-    margin: 0.5em 0;
-    &:first-child {
-      margin-top: 0;
-    }
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+  /* animation: ${scaleIn} 0.2s ease-out; */
+  outline: none;
 `
 
 const AnimatedTrigger = ({ children }) => {
@@ -84,30 +66,25 @@ const AnimatedTrigger = ({ children }) => {
 }
 
 const Annoucements = () => {
-  const { annoucements, containerRef } = usePagePropsContext()
+  const { annoucements } = usePagePropsContext()
   const [mounted, setMounted] = useState(false)
+
   useIsomorphicLayoutEffect(() => {
     setMounted(true)
   }, [])
-  if (!mounted) return null
-  if (!annoucements || annoucements.length < 1) return null
-  const annoucement = annoucements[0]
-  if (!annoucement) return null
-  const { title, content, _id } = annoucement
+
+  if (!mounted || !annoucements || annoucements.length < 1) return null
+  const { title, content } = annoucements[0]
+
   return (
     <Wrap>
-      <Root
-      // defaultOpen
-      >
+      <Root defaultOpen>
         <AnimatedTrigger>
           <Trigger asChild>
             <CircleButton>{annoucements.length}</CircleButton>
           </Trigger>
         </AnimatedTrigger>
-        <Portal
-        // container={containerRef.current}
-        // forceMount
-        >
+        <Portal>
           <Content
             sideOffset={5}
             collisionPadding={10}
@@ -117,18 +94,8 @@ const Annoucements = () => {
               transformOrigin: 'var(--radix-popover-content-transform-origin)',
             }}
           >
-            <ObservedElementDimensions
-              observedId={_id}
-              observedGroup="annoucements"
-            >
-              <Arrow />
-              <AnnoucementBubble id={_id} />
-              <RenderedContent>
-                {/* <Close aria-label="Schließen">✗</Close> */}
-                <Title as="h1">{title}</Title>
-                <PortableText value={content} />
-              </RenderedContent>
-            </ObservedElementDimensions>
+            <Arrow />
+            <Annoucement title={title} content={content} />
           </Content>
         </Portal>
       </Root>

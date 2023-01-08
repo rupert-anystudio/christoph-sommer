@@ -9,13 +9,13 @@ if (typeof window !== 'undefined') {
 
 const useObservedElement = (cb) => {
   const ref = useRef(null)
-  const [dimensions, setDimensions] = useState()
+  const [dimensions, setDimensions] = useState({ width: -1, height: -1 })
 
   const onObserve = useCallback(
     (entries) => {
       const { contentRect, target } = entries[0]
-      const { width, height, top, left, x, y } = contentRect
-      const newdimensions = { width, height, top, left, x, y }
+      const { width, height } = contentRect
+      const newdimensions = { width, height }
       if (cb) {
         cb(newdimensions, target)
       }

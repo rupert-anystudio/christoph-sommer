@@ -8,7 +8,6 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
-import PortfolioPage from './PortfolioPage'
 
 const Container = styled.div`
   position: relative;

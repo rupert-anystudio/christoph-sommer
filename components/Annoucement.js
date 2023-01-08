@@ -1,47 +1,49 @@
-import styled from 'styled-components'
-import { Title } from './Primitives'
+import styled, { keyframes } from 'styled-components'
 import AnnoucementBubble from './AnnoucementBubble'
 import useObservedElement from './useObservedElement'
-import PortableText from './PortableText'
+import AnnoucementContent from './AnnoucementContent'
+
+const scaleIn = keyframes`
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+`
+
+const ScaleIn = styled.div`
+  transform-origin: var(--radix-popover-content-transform-origin);
+  position: relative;
+  animation: ${scaleIn} 0.2s ease-out;
+`
 
 const Wrap = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-  /* outline: 2px solid red; */
-`
-
-const Content = styled.div`
-  position: relative;
-  padding: var(--padding-page);
-  text-align: center;
-  > * {
-    margin: 0.5em 0;
-    &:first-child {
-      margin-top: 0;
-    }
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+  outline: 1px solid red;
 `
 
 const Annoucement = ({ title, content }) => {
-  const [observedRef, dimensions] = useObservedElement()
+  const [wrapRef, wrapSize] = useObservedElement()
   return (
     <>
-      {dimensions && (
-        <AnnoucementBubble
-          width={dimensions.width}
-          height={dimensions.height}
-          padding={70}
-        />
+      {wrapSize && (
+        <ScaleIn>
+          <AnnoucementBubble width={wrapSize.width} height={wrapSize.height} />
+        </ScaleIn>
       )}
-      <Wrap ref={observedRef}>
-        <Content>
-          <Title as="h1">{title}</Title>
-          <PortableText value={content} />
-        </Content>
+      <Wrap ref={wrapRef}>
+        <ScaleIn>
+          <AnnoucementContent
+            title={title}
+            content={content}
+            style={{
+              visibility: wrapSize ? 'visible' : 'hidden',
+            }}
+          />
+        </ScaleIn>
       </Wrap>
     </>
   )

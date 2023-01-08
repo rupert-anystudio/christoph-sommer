@@ -13,13 +13,13 @@ const useObservedElement = (cb) => {
 
   const onObserve = useCallback(
     (entries) => {
-      const element = entries[0]
-      const width = element?.contentRect?.width
-      const height = element?.contentRect?.height
+      const { contentRect, target } = entries[0]
+      const { width, height, top, left, x, y } = contentRect
+      const newdimensions = { width, height, top, left, x, y }
       if (cb) {
-        cb({ width, height }, element)
+        cb(newdimensions, target)
       }
-      setDimensions({ width, height })
+      setDimensions(newdimensions)
     },
     [setDimensions, cb]
   )
@@ -28,8 +28,9 @@ const useObservedElement = (cb) => {
 
   useEffect(() => {
     const el = ref.current
+    if (!el) return
     const ro = observer.current
-    if (!el || !ro) return
+    // if (!el || !ro) return
     ro.observe(el)
     return () => {
       ro.unobserve(el)

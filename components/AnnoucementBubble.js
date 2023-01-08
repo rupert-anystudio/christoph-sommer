@@ -15,18 +15,24 @@ const Helpers = styled.g`
   fill: none;
   stroke: red;
   stroke-width: 1;
-  display: none;
 `
 
 const BaseShape = styled.rect`
-  fill: var(--color-bg);
+  fill: none;
   stroke: none;
 `
 
-const BubblePath = styled.path`
+const PathBackground = styled.path`
   fill: var(--color-bg);
   stroke: var(--color-txt);
-  stroke-width: 6;
+  stroke-width: 4;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 45;
+`
+const PathForeGround = styled.path`
+  fill: var(--color-bg);
+  stroke: none;
+  stroke-width: 0;
 `
 
 const returnSvgProps = ({ width, height, padding }) => ({
@@ -48,43 +54,43 @@ const returnBaseShapeProps = ({ width, height, padding, borderRadius }) => ({
   ry: borderRadius,
 })
 
-const returnSegmentsFromLength = (totalLength, minLength = 80) => {
+export const returnSegmentsFromLength = (totalLength, minLength = 80) => {
   if (!totalLength) return []
   const segmentAmount = Math.ceil(totalLength / minLength)
   const segmentLength = totalLength / segmentAmount
   return Array.from({ length: segmentAmount }, (v, i) => segmentLength)
 }
 
-const returnCappedLength = (length, totalLength) => {
+export const returnCappedLength = (length, totalLength) => {
   if (length > totalLength) return length % totalLength
   if (length < 0) return totalLength + (length % totalLength)
   return length
 }
 
-const returnPointBetweenPoints = (start, end) => {
+export const returnPointBetweenPoints = (start, end) => {
   const x = (start.x + end.x) / 2
   const y = (start.y + end.y) / 2
   return { x, y }
 }
 
-const returnAngleFromVector = ({ x, y }) => {
+export const returnAngleFromVector = ({ x, y }) => {
   var angle = Math.atan2(y, x)
   var degrees = (180 * angle) / Math.PI
   return (360 + Math.round(degrees)) % 360
 }
 
-const returnVectorFromPoints = (start, end) => ({
+export const returnVectorFromPoints = (start, end) => ({
   x: end.x - start.x,
   y: end.y - start.y,
 })
 
-const returnDistanceBetweenPoints = (start, end) =>
+export const returnDistanceBetweenPoints = (start, end) =>
   Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2))
 
-const returnVectorLength = (vector) =>
+export const returnVectorLength = (vector) =>
   Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2))
 
-const returnNormalizedVector = (vector) => {
+export const returnNormalizedVector = (vector) => {
   const length = returnVectorLength(vector)
   return {
     x: vector.x / length,
@@ -108,13 +114,21 @@ const useStoredDeviationGetter = (amount) => {
   return returnDeviation
 }
 
+const returnArrowPath = ({ x, y, width, height }) => {
+  const bezierH = 20
+  const bezierV = 10
+  const halfWidth = width / 2
+  // prettier-ignore
+  return `M ${x - halfWidth},${y} C ${x - halfWidth + bezierV},${y - 5} ${x - 2},${y - height + bezierH} ${x},${y - height} C ${x + 2},${y - height + bezierH} ${x + halfWidth - bezierV},${y - 5} ${x + halfWidth},${y} Z`
+}
+
 const AnnoucementBubble = ({
   width,
   height,
-  padding,
-  borderRadius = 80,
-  segmentMinLength = 80,
-  deviationSide = 30,
+  padding = 120,
+  borderRadius = 70,
+  segmentMinLength = 90,
+  deviationSide = 5,
   deviationPerpendicular = 10,
 }) => {
   const sideDeviation = useStoredDeviationGetter(deviationSide)
@@ -122,21 +136,34 @@ const AnnoucementBubble = ({
     deviationPerpendicular
   )
 
-  const returnLayoutFromElement = (element) => {
-    if (!element) return null
+  const returnLayoutFromElement = (element, dimensions) => {
+    // const triggerEl = triggerRef.current
+    // const triggerRect = triggerEl.getBoundingClientRect()
+    // const elemRect = element.getBoundingClientRect()
+    // const triggerDiff = {
+    //   x: Math.abs(triggerRect.left - elemRect.x),
+    //   y: Math.abs(triggerRect.bottom - elemRect.y),
+    // }
+    // const arrowPath = returnArrowPath({
+    //   y: padding,
+    //   x: padding + triggerDiff.x + triggerRect.width / 2,
+    //   height: triggerDiff.y - 20,
+    //   width: 80,
+    // })
+
     const totalLength = element.getTotalLength()
     const centerPoint = { x: width / 2 + padding, y: height / 2 + padding }
     const segments = returnSegmentsFromLength(totalLength, segmentMinLength)
-    const segmentPoints = segments.map((segmentLength, index) => {
+    const pointsOnBaseShape = segments.map((segmentLength, index) => {
       const baseLength = segmentLength * (index + 1)
-      const deviation = sideDeviation(index)
+      const deviation = sideDeviation(index) // * 0 // DISABLED
       const pointLength = baseLength + deviation
       // const pointLength = baseLength
       const pointLengthCapped = returnCappedLength(pointLength, totalLength)
       return element.getPointAtLength(pointLengthCapped)
     })
-    const endPoints = segmentPoints.map((point, index) => {
-      const deviation = perpendicularDeviation(index)
+    const transformedPoints = pointsOnBaseShape.map((point, index) => {
+      const deviation = perpendicularDeviation(index) * 0 // DISABLED
       const normalFromCenter = returnNormalizedVector({
         x: point.x - centerPoint.x,
         y: point.y - centerPoint.y,
@@ -146,11 +173,13 @@ const AnnoucementBubble = ({
         y: point.y + normalFromCenter.y * deviation,
       }
     })
-    const points = endPoints.map((end, index) => {
+    const points = transformedPoints.map((end, index) => {
       const start =
-        index === 0 ? endPoints[endPoints.length - 1] : endPoints[index - 1]
+        index === 0
+          ? transformedPoints[transformedPoints.length - 1]
+          : transformedPoints[index - 1]
       const mid = returnPointBetweenPoints(start, end)
-      const normal = returnVectorFromPoints(centerPoint, mid)
+      const normal = returnVectorFromPoints(start, end)
       const distance = returnDistanceBetweenPoints(start, end)
       return {
         start,
@@ -160,15 +189,14 @@ const AnnoucementBubble = ({
         distance,
       }
     })
-    const d = points
+    const bubblePath = points
       .map((p, i) => {
         const rotation = returnAngleFromVector(p.normal)
         let segment = '0,1'
         // segment = i % 2 !== 0 ? '0,1' : '0,0'
-        const dampening = 1.1
-        const radius = (p.distance / 2) * dampening
-        const ra = radius * 1
-        const rb = radius * 1
+        const radius = Math.ceil(p.distance / 2)
+        const ra = radius * 1.1
+        const rb = radius * 1.1
         const end = `${p.end.x},${p.end.y}`
         const arc = `A ${ra},${rb} ${rotation} ${segment} ${end}`
         if (i === 0) return `M ${p.start.x},${p.start.y} ${arc}`
@@ -177,13 +205,17 @@ const AnnoucementBubble = ({
       })
       .filter(Boolean)
       .join(' ')
-    return { totalLength, centerPoint, segmentPoints, endPoints, points, d }
+
+    return {
+      bubblePath,
+      // arrowPath,
+    }
   }
 
   const [layout, setLayout] = useState()
 
   const onBaseShapeResize = (dimensions, element) => {
-    const newLayout = returnLayoutFromElement(element.target)
+    const newLayout = returnLayoutFromElement(element, dimensions)
     setLayout(newLayout)
   }
 
@@ -204,26 +236,13 @@ const AnnoucementBubble = ({
 
   return (
     <Svg {...svgProps}>
-      <BaseShape {...baseShapeProps} ref={observedRef} />
       {layout && (
         <>
-          <BubblePath d={layout.d} />
-          <Helpers>
-            <rect {...baseShapeProps} />
-            {layout.segmentPoints.map((p, index) => (
-              <circle key={index} cx={p.x} cy={p.y} r={10} />
-            ))}
-            {layout.endPoints.map((p, index) => (
-              <circle key={index} cx={p.x} cy={p.y} r={10} />
-            ))}
-            <circle
-              cx={layout.centerPoint.x}
-              cy={layout.centerPoint.y}
-              r={10}
-            />
-          </Helpers>
+          <PathBackground d={layout.bubblePath} />
+          <Helpers></Helpers>
         </>
       )}
+      <BaseShape {...baseShapeProps} ref={observedRef} />
     </Svg>
   )
 }

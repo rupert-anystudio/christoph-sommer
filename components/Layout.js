@@ -56,6 +56,7 @@ const Header = styled(Element)`
   }
   > div {
     position: relative;
+    outline: 1px solid red;
   }
 `
 const Infos = styled(Area)`

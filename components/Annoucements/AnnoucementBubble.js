@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
-import useObservedElement from './useObservedElement'
+import useObservedElement from '../useObservedElement'
 
 const Svg = styled.svg.attrs({
   xmlns: 'http://www.w3.org/2000/svg',

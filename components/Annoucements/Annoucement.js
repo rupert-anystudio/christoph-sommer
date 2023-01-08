@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components'
+import useObservedElement from '../useObservedElement'
 import AnnoucementBubble from './AnnoucementBubble'
-import useObservedElement from './useObservedElement'
 import AnnoucementContent from './AnnoucementContent'
 
 const scaleIn = keyframes`

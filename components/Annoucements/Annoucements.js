@@ -2,11 +2,10 @@ import React, { useState, useRef, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { animated, useSpring } from '@react-spring/web'
-import usePagePropsContext from '../hooks/usePagePropsContext'
-import { CircleButton } from './Primitives'
-import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect'
+import usePagePropsContext from '../../hooks/usePagePropsContext'
+import { CircleButton } from '../Primitives'
 import AnnoucementContent from './AnnoucementContent'
-import useObservedElement from './useObservedElement'
+import useObservedElement from '../useObservedElement'
 import {
   returnCappedLength,
   returnPointBetweenPoints,
@@ -22,9 +21,11 @@ const Wrap = styled.div`
   left: 77.6%;
 `
 
-const Root = PopoverPrimitive.Root
+const Root = styled(PopoverPrimitive.Root)``
 const Trigger = PopoverPrimitive.Trigger
-const Portal = PopoverPrimitive.Portal
+const Portal = styled(PopoverPrimitive.Portal)`
+  z-index: 300;
+`
 const Close = styled(PopoverPrimitive.Close)`
   padding: 0;
   margin: 0;
@@ -208,7 +209,6 @@ const Annoucements = () => {
             align="start"
           >
             <Arrow width={ARROW_WIDTH} height={ARROW_HEIGHT} />
-            {/* <ResizeTrigger /> */}
             <LayoutSvg onResize={handleResize} />
             <AnnoucementContent
               title={annoucement.title}

@@ -16,8 +16,9 @@ import {
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import PortableText from '../PortableText'
+import { returnLayoutFromElement } from './bubbleHelpers'
 
 const ARROW_WIDTH = 40
 const ARROW_HEIGHT = 68
@@ -135,6 +136,7 @@ export const Annoucements = () => {
   const [annoucement, amount] = useAnnoucement()
 
   const arrowRef = useRef(null)
+  const baseRectRef = useRef(null)
   // popover state
   const [open, setOpen] = useState(false)
   // floating ui wiring
@@ -203,6 +205,15 @@ export const Annoucements = () => {
     d: getArrowPath({ x: arrowX, y: arrowY }),
   }
 
+  const [layout, setLayout] = useState(null)
+
+  useEffect(() => {
+    const baseRect = baseRectRef.current
+    if (!baseRect) return
+    const newLayout = returnLayoutFromElement(baseRect)
+    setLayout(newLayout)
+  }, [bubbleProps])
+
   return (
     <>
       <NotificationWrap {...getReferenceProps({ ref: reference })}>
@@ -233,9 +244,14 @@ export const Annoucements = () => {
                   {['outside', 'inside'].map((className) => (
                     <g className={className} key={className}>
                       <path {...arrowPathProps} />
-                      <rect {...bubbleProps.baseRect} />
+                      <rect {...bubbleProps.baseRect} ref={baseRectRef} />
                     </g>
                   ))}
+                  {layout && (
+                    <>
+                      <path d={layout.bubblePath} />
+                    </>
+                  )}
                 </Svg>
               )}
               <ContentWrap>

@@ -11,19 +11,34 @@ import {
   useInteractions,
   FloatingFocusManager,
   arrow,
-  limitShift,
-  FloatingPortal,
   size,
-  autoPlacement,
 } from '@floating-ui/react'
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import PortableText from '../PortableText'
 
-const ARROW_WIDTH = 30
-const ARROW_HEIGHT = 50
+const ARROW_WIDTH = 40
+const ARROW_HEIGHT = 68
+const SVG_PADDING = 90
+
+const getArrowPath = (start) => {
+  const points = [
+    [SVG_PADDING + start.x, SVG_PADDING],
+    [ARROW_WIDTH / 2, ARROW_HEIGHT * -1],
+    [ARROW_WIDTH / 2, ARROW_HEIGHT],
+  ]
+  return points
+    .map((point, i) => {
+      const [x, y] = point
+      if (i === 0) return `M ${x},${y}`
+      const step = `l ${x},${y}`
+      if (i === points.length - 1) return `${step} Z`
+      return step
+    })
+    .join(' ')
+}
 
 const scaleIn = keyframes`
   from {
@@ -49,7 +64,6 @@ const NotificationWrap = styled.div`
 
 const Floating = styled.div`
   position: relative;
-  padding: 0 2rem;
 `
 
 const Arrow = styled.div`
@@ -57,47 +71,69 @@ const Arrow = styled.div`
   display: block;
   width: ${ARROW_WIDTH / 10}rem;
   height: ${ARROW_HEIGHT / 10}rem;
+  /* outline: 2px solid var(--color-txt); */
 `
 
-const ArrowBack = styled(Arrow)`
-  outline: 2px solid var(--color-txt);
-`
-
-const ArrowFront = styled(Arrow)`
-  background: var(--color-bg);
-`
-
-const Svg = styled.div`
+const Svg = styled.svg.attrs({
+  xmlns: 'http://www.w3.org/2000/svg',
+  xmlnsXlink: 'http://www.w3.org/1999/xlink',
+})`
   position: absolute;
   display: block;
-  top: 0;
-  left: 0;
-  /* outline: 2px solid green; */
+  pointer-events: none;
+  outline: 2px solid green;
+  .inside {
+    fill: var(--color-bg);
+    stroke: var(--color-bg);
+    stroke-width: 1;
+  }
+  .outside {
+    fill: var(--color-txt);
+    stroke: var(--color-txt);
+    stroke-width: 12;
+  }
 `
 
 const ContentWrap = styled.div`
   position: relative;
-  width: clamp(28rem, 80vw, 60rem);
+  width: clamp(26rem, 90vw, 70rem);
   padding: var(--padding-page);
   color: var(--color-txt);
-  background: var(--color-bg);
-  outline: 2px solid var(--color-txt);
+  pointer-events: auto;
 `
 
-const AnnoucementContent = ({ title, content }) => {
-  return (
-    <ContentWrap>
-      <Title as="h1">{title}</Title>
-      <PortableText value={content} />
-    </ContentWrap>
-  )
-}
-
 export const Annoucements = () => {
+  const [bubbleProps, setBubbleProps] = useState(null)
+  const onFloatingResize = useCallback((rects) => {
+    console.log(rects)
+    const w = SVG_PADDING * 2 + rects.floating.width
+    const h = SVG_PADDING * 2 + rects.floating.height
+    const newBubbleProps = {
+      svg: {
+        width: `${w}px`,
+        height: `${h}px`,
+        viewBox: `0 0 ${w} ${h}`,
+        style: {
+          position: 'absolute',
+          top: `-${SVG_PADDING}px`,
+          left: `-${SVG_PADDING}px`,
+        },
+      },
+      baseRect: {
+        x: SVG_PADDING,
+        y: SVG_PADDING,
+        width: rects.floating.width,
+        height: rects.floating.height,
+        rx: 40,
+        ry: 40,
+      },
+    }
+    setBubbleProps(newBubbleProps)
+  }, [])
+
   const [annoucement, amount] = useAnnoucement()
 
   const arrowRef = useRef(null)
-  const svgRef = useRef(null)
   // popover state
   const [open, setOpen] = useState(false)
   // floating ui wiring
@@ -115,23 +151,14 @@ export const Annoucements = () => {
     open,
     onOpenChange: setOpen,
     middleware: [
-      offset({ mainAxis: 10 + ARROW_HEIGHT }),
+      offset({ mainAxis: 20 + ARROW_HEIGHT }),
       flip({
         padding: 30,
       }),
-      // autoPlacement({
-      //   // alignment: 'top',
-      //   padding: 90,
-      //   allowedPlacements: ['bottom', 'top-end', 'top-start'],
-      // }),
       shift(),
       size({
         apply({ rects }) {
-          // console.log(rects?.floating)
-          // Object.assign(svgRef.current.style, {
-          //   width: `${rects.floating.width}px`,
-          //   height: `${rects.floating.height}px`,
-          // })
+          onFloatingResize(rects)
         },
       }),
       arrow({
@@ -165,6 +192,10 @@ export const Annoucements = () => {
     [staticSide]: `-${ARROW_HEIGHT / 10}rem`,
   }
 
+  const arrowPathProps = {
+    d: getArrowPath({ x: arrowX, y: arrowY }),
+  }
+
   return (
     <>
       <NotificationWrap {...getReferenceProps({ ref: reference })}>
@@ -172,7 +203,6 @@ export const Annoucements = () => {
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
       </NotificationWrap>
-      {/* <FloatingPortal> */}
       {open && (
         <FloatingFocusManager context={context} modal={false}>
           <Floating
@@ -190,15 +220,25 @@ export const Annoucements = () => {
             })}
           >
             <ScaleIn>
-              <ArrowBack ref={arrowRef} style={arrowStyle} />
-              {/* <Svg ref={svgRef} /> */}
-              <AnnoucementContent {...annoucement} />
-              <ArrowFront style={arrowStyle} />
+              <Arrow ref={arrowRef} style={arrowStyle} />
+              {bubbleProps && (
+                <Svg {...bubbleProps.svg}>
+                  {['outside', 'inside'].map((className) => (
+                    <g className={className} key={className}>
+                      <path {...arrowPathProps} />
+                      <rect {...bubbleProps.baseRect} />
+                    </g>
+                  ))}
+                </Svg>
+              )}
+              <ContentWrap>
+                <Title as="h1">{annoucement.title}</Title>
+                <PortableText value={annoucement.content} />
+              </ContentWrap>
             </ScaleIn>
           </Floating>
         </FloatingFocusManager>
       )}
-      {/* </FloatingPortal> */}
     </>
   )
 }

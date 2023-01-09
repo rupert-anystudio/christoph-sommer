@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import usePagePropsContext from '../hooks/usePagePropsContext'
 import Head from './Head'
-import Annoucements from './Annoucements'
+import Annoucements from './AnnoucementsFloatingUi'
 import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
 import LandingAccordion from './LandingAccordion'
@@ -55,7 +55,7 @@ const Header = styled(Element)`
   }
   > div {
     position: relative;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
   }
 `
 const Infos = styled(Area)`

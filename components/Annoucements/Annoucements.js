@@ -118,9 +118,9 @@ const Actions = styled.div`
 
 const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
   const [layout, setLayout] = useState(null)
-
   const onBaseRectResize = useCallback((dimensions, baseRect) => {
     const totalLength = baseRect.getTotalLength()
+    console.log('onBaseRectResize', totalLength)
     const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
     const centerPoints = segments.map((segmentLength, index) => {
       const baseLength = segmentLength * (index + 1)
@@ -138,30 +138,12 @@ const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
 
-  // useEffect(() => {
-  //   const baseRect = baseRectRef.current
-  //   if (!baseRect) return
-  //   const totalLength = baseRect.getTotalLength()
-  //   const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
-  //   const centerPoints = segments.map((segmentLength, index) => {
-  //     const baseLength = segmentLength * (index + 1)
-  //     const pointLength = baseLength
-  //     const pointLengthCapped = returnCappedLength(pointLength, totalLength)
-  //     return baseRect.getPointAtLength(pointLengthCapped)
-  //   })
-  //   const newLayout = {
-  //     totalLength,
-  //     segments,
-  //     centerPoints,
-  //   }
-  //   setLayout(newLayout)
-  // }, [bubbleProps])
   return (
-    <Svg {...bubbleProps.svg}>
+    <Svg {...bubbleProps.svg} id="bubble-svg">
       {['outside', 'inside'].map((className) => (
         <g className={className} key={className}>
           <path {...arrowPathProps} />
-          <rect {...bubbleProps.baseRect} ref={baseRectRef} />
+
           {layout && (
             <>
               {layout.centerPoints.map((point, pointIndex) => (
@@ -171,6 +153,12 @@ const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
           )}
         </g>
       ))}
+      <rect
+        {...bubbleProps.baseRect}
+        ref={baseRectRef}
+        id="bubble-base-rect"
+        className="inside"
+      />
     </Svg>
   )
 }
@@ -178,9 +166,9 @@ const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
 export const Annoucements = () => {
   const [bubbleProps, setBubbleProps] = useState(null)
 
-  const onFloatingResize = useCallback((rects) => {
-    const w = SVG_PADDING * 2 + rects.floating.width
-    const h = SVG_PADDING * 2 + rects.floating.height
+  const onFloatingResize = useCallback((rect) => {
+    const w = SVG_PADDING * 2 + rect.width
+    const h = SVG_PADDING * 2 + rect.height
     const newBubbleProps = {
       svg: {
         width: w,
@@ -195,8 +183,8 @@ export const Annoucements = () => {
       baseRect: {
         x: SVG_PADDING + BASESHAPE_INSET,
         y: SVG_PADDING + BASESHAPE_INSET,
-        width: rects.floating.width - BASESHAPE_INSET * 2,
-        height: rects.floating.height - BASESHAPE_INSET * 2,
+        width: rect.width - BASESHAPE_INSET * 2,
+        height: rect.height - BASESHAPE_INSET * 2,
         rx: BASESHAPE_RADIUS,
         ry: BASESHAPE_RADIUS,
       },
@@ -238,7 +226,14 @@ export const Annoucements = () => {
           // Object.assign(elements.floating.style, {
           //   maxWidth: `${availableWidth}px`,
           // })
-          onFloatingResize(rects)
+          const baseRect = document.getElementById('bubble-base-rect')
+          if (baseRect) {
+            baseRect.setAttribute('data-test', 'somevalue')
+          }
+          // Object.assign(elements.floating.attributes, {
+          //   'data-test': 'somevalue',
+          // })
+          onFloatingResize(rects.floating)
         },
       }),
       arrow({

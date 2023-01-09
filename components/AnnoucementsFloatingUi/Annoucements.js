@@ -96,10 +96,11 @@ const Svg = styled.svg.attrs({
 
 const ContentWrap = styled.div`
   position: relative;
-  width: clamp(26rem, 90vw, 70rem);
+  width: clamp(24rem, calc(100vw - 60px), 70rem);
   padding: var(--padding-page);
   color: var(--color-txt);
   pointer-events: auto;
+  /* background: red; */
 `
 
 export const Annoucements = () => {
@@ -153,11 +154,17 @@ export const Annoucements = () => {
     middleware: [
       offset({ mainAxis: 20 + ARROW_HEIGHT }),
       flip({
+        // padding: 30,
+      }),
+      shift({
         padding: 30,
       }),
-      shift(),
       size({
-        apply({ rects }) {
+        apply({ rects, availableWidth, elements }) {
+          // console.log({ elements, availableWidth })
+          // Object.assign(elements.floating.style, {
+          //   maxWidth: `${availableWidth}px`,
+          // })
           onFloatingResize(rects)
         },
       }),

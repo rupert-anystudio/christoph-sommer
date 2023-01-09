@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import {
   useFloating,
   autoUpdate,
@@ -13,11 +13,12 @@ import {
   arrow,
   size,
 } from '@floating-ui/react'
+import { useCallback, useRef, useState, useEffect } from 'react'
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
-import { useCallback, useRef, useState } from 'react'
 import PortableText from '../PortableText'
+import useObservedElement from '../useObservedElement'
 import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect'
 import { returnCappedLength, returnSegmentsFromLength } from './bubbleHelpers'
 
@@ -45,21 +46,6 @@ const getArrowPath = (start) => {
     })
     .join(' ')
 }
-
-const scaleIn = keyframes`
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
-`
-
-const ScaleIn = styled.div`
-  transform-origin: var(--annoucement-transform-origin);
-  position: relative;
-  animation: ${scaleIn} 0.2s ease-out;
-`
 
 const NotificationWrap = styled.div`
   position: absolute;
@@ -116,9 +102,82 @@ const ContentWrap = styled.div`
   }
 `
 
-export const Annoucements = () => {
+const Actions = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  outline: 1px solid red;
+  > * {
+    margin-right: 1rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`
+
+const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
   const [layout, setLayout] = useState(null)
+
+  const onBaseRectResize = useCallback((dimensions, baseRect) => {
+    const totalLength = baseRect.getTotalLength()
+    const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
+    const centerPoints = segments.map((segmentLength, index) => {
+      const baseLength = segmentLength * (index + 1)
+      const pointLength = baseLength
+      const pointLengthCapped = returnCappedLength(pointLength, totalLength)
+      return baseRect.getPointAtLength(pointLengthCapped)
+    })
+    const newLayout = {
+      totalLength,
+      segments,
+      centerPoints,
+    }
+    setLayout(newLayout)
+  }, [])
+
+  const [baseRectRef] = useObservedElement(onBaseRectResize)
+
+  // useEffect(() => {
+  //   const baseRect = baseRectRef.current
+  //   if (!baseRect) return
+  //   const totalLength = baseRect.getTotalLength()
+  //   const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
+  //   const centerPoints = segments.map((segmentLength, index) => {
+  //     const baseLength = segmentLength * (index + 1)
+  //     const pointLength = baseLength
+  //     const pointLengthCapped = returnCappedLength(pointLength, totalLength)
+  //     return baseRect.getPointAtLength(pointLengthCapped)
+  //   })
+  //   const newLayout = {
+  //     totalLength,
+  //     segments,
+  //     centerPoints,
+  //   }
+  //   setLayout(newLayout)
+  // }, [bubbleProps])
+  return (
+    <Svg {...bubbleProps.svg}>
+      {['outside', 'inside'].map((className) => (
+        <g className={className} key={className}>
+          <path {...arrowPathProps} />
+          <rect {...bubbleProps.baseRect} ref={baseRectRef} />
+          {layout && (
+            <>
+              {layout.centerPoints.map((point, pointIndex) => (
+                <circle key={pointIndex} cx={point.x} cy={point.y} r={50} />
+              ))}
+            </>
+          )}
+        </g>
+      ))}
+    </Svg>
+  )
+}
+
+export const Annoucements = () => {
   const [bubbleProps, setBubbleProps] = useState(null)
+
   const onFloatingResize = useCallback((rects) => {
     const w = SVG_PADDING * 2 + rects.floating.width
     const h = SVG_PADDING * 2 + rects.floating.height
@@ -145,10 +204,10 @@ export const Annoucements = () => {
     setBubbleProps(newBubbleProps)
   }, [])
 
-  const [annoucement, amount] = useAnnoucement()
+  const { annoucement, amount, currentIndex, onNextClick, onPreviousClick } =
+    useAnnoucement()
 
   const arrowRef = useRef(null)
-  const baseRectRef = useRef(null)
   // popover state
   const [open, setOpen] = useState(false)
   // floating ui wiring
@@ -217,27 +276,6 @@ export const Annoucements = () => {
     d: getArrowPath({ x: arrowX, y: arrowY }),
   }
 
-  useIsomorphicLayoutEffect(() => {
-    const baseRect = baseRectRef.current
-    if (!baseRect) return
-    const totalLength = baseRect.getTotalLength()
-    const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
-    const centerPoints = segments.map((segmentLength, index) => {
-      const baseLength = segmentLength * (index + 1)
-      // const deviation = sideDeviation(index) // * 0 // DISABLED
-      // const pointLength = baseLength + deviation
-      const pointLength = baseLength
-      const pointLengthCapped = returnCappedLength(pointLength, totalLength)
-      return baseRect.getPointAtLength(pointLengthCapped)
-    })
-    const newLayout = {
-      totalLength,
-      segments,
-      centerPoints,
-    }
-    setLayout(newLayout)
-  }, [bubbleProps])
-
   return (
     <>
       <NotificationWrap {...getReferenceProps({ ref: reference })}>
@@ -261,35 +299,28 @@ export const Annoucements = () => {
               },
             })}
           >
-            <ScaleIn>
+            <ScaleInAnimation
+              style={{
+                transformOrigin: 'var(--annoucement-transform-origin)',
+              }}
+            >
               <Arrow ref={arrowRef} style={arrowStyle} />
               {bubbleProps && (
-                <Svg {...bubbleProps.svg}>
-                  {['outside', 'inside'].map((className) => (
-                    <g className={className} key={className}>
-                      <path {...arrowPathProps} />
-                      <rect {...bubbleProps.baseRect} ref={baseRectRef} />
-                      {layout && (
-                        <>
-                          {layout.centerPoints.map((point, pointIndex) => (
-                            <circle
-                              key={pointIndex}
-                              cx={point.x}
-                              cy={point.y}
-                              r={50}
-                            />
-                          ))}
-                        </>
-                      )}
-                    </g>
-                  ))}
-                </Svg>
+                <SvgBubble
+                  bubbleProps={bubbleProps}
+                  arrowPathProps={arrowPathProps}
+                />
               )}
               <ContentWrap>
+                <Actions>
+                  <button onClick={onPreviousClick}>{'<'}</button>
+                  <span>{`${currentIndex + 1} / ${amount}`}</span>
+                  <button onClick={onNextClick}>{'>'}</button>
+                </Actions>
                 <Title as="h1">{annoucement.title}</Title>
                 <PortableText value={annoucement.content} />
               </ContentWrap>
-            </ScaleIn>
+            </ScaleInAnimation>
           </Floating>
         </FloatingFocusManager>
       )}

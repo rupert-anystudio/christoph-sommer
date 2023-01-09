@@ -15,7 +15,6 @@ const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   max-width: 100vw;
-  overflow-x: hidden;
   grid-template-columns: 1fr;
   grid-template-rows: var(--height-header) auto 1fr;
   grid-template-areas:

@@ -16,13 +16,18 @@ import {
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import PortableText from '../PortableText'
-import { returnLayoutFromElement } from './bubbleHelpers'
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect'
+import { returnCappedLength, returnSegmentsFromLength } from './bubbleHelpers'
 
 const ARROW_WIDTH = 40
 const ARROW_HEIGHT = 68
 const SVG_PADDING = 90
+const SEGMENT_MINLENGTH = 80
+const COLLISION_OFFSET = 60
+const BASESHAPE_RADIUS = 40
+const BASESHAPE_INSET = 10
 
 const getArrowPath = (start) => {
   const points = [
@@ -70,9 +75,8 @@ const Floating = styled.div`
 const Arrow = styled.div`
   position: absolute;
   display: block;
-  width: ${ARROW_WIDTH / 10}rem;
-  height: ${ARROW_HEIGHT / 10}rem;
-  /* outline: 2px solid var(--color-txt); */
+  width: ${ARROW_WIDTH}px;
+  height: ${ARROW_HEIGHT}px;
 `
 
 const Svg = styled.svg.attrs({
@@ -82,7 +86,7 @@ const Svg = styled.svg.attrs({
   position: absolute;
   display: block;
   pointer-events: none;
-  outline: 2px solid green;
+  /* outline: 2px solid green; */
   .inside {
     fill: var(--color-bg);
     stroke: var(--color-bg);
@@ -97,37 +101,45 @@ const Svg = styled.svg.attrs({
 
 const ContentWrap = styled.div`
   position: relative;
-  width: clamp(24rem, calc(100vw - 60px), 70rem);
+  width: clamp(24rem, calc(100vw - ${COLLISION_OFFSET * 2}px), 70rem);
   padding: var(--padding-page);
   color: var(--color-txt);
   pointer-events: auto;
-  /* background: red; */
+  > * {
+    margin: 0.5em 0;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 `
 
 export const Annoucements = () => {
+  const [layout, setLayout] = useState(null)
   const [bubbleProps, setBubbleProps] = useState(null)
   const onFloatingResize = useCallback((rects) => {
-    console.log(rects)
     const w = SVG_PADDING * 2 + rects.floating.width
     const h = SVG_PADDING * 2 + rects.floating.height
     const newBubbleProps = {
       svg: {
-        width: `${w}px`,
-        height: `${h}px`,
+        width: w,
+        height: h,
         viewBox: `0 0 ${w} ${h}`,
         style: {
           position: 'absolute',
-          top: `-${SVG_PADDING}px`,
-          left: `-${SVG_PADDING}px`,
+          top: 0 - SVG_PADDING,
+          left: 0 - SVG_PADDING,
         },
       },
       baseRect: {
-        x: SVG_PADDING,
-        y: SVG_PADDING,
-        width: rects.floating.width,
-        height: rects.floating.height,
-        rx: 40,
-        ry: 40,
+        x: SVG_PADDING + BASESHAPE_INSET,
+        y: SVG_PADDING + BASESHAPE_INSET,
+        width: rects.floating.width - BASESHAPE_INSET * 2,
+        height: rects.floating.height - BASESHAPE_INSET * 2,
+        rx: BASESHAPE_RADIUS,
+        ry: BASESHAPE_RADIUS,
       },
     }
     setBubbleProps(newBubbleProps)
@@ -154,12 +166,12 @@ export const Annoucements = () => {
     open,
     onOpenChange: setOpen,
     middleware: [
-      offset({ mainAxis: 20 + ARROW_HEIGHT }),
+      offset({ mainAxis: 30 + ARROW_HEIGHT }),
       flip({
         // padding: 30,
       }),
       shift({
-        padding: 30,
+        padding: COLLISION_OFFSET,
       }),
       size({
         apply({ rects, availableWidth, elements }) {
@@ -198,19 +210,31 @@ export const Annoucements = () => {
     position: 'absolute',
     left: arrowX != null ? `${arrowX}px` : '',
     top: arrowY != null ? `${arrowY}px` : '',
-    [staticSide]: `-${ARROW_HEIGHT / 10}rem`,
+    [staticSide]: `-${ARROW_HEIGHT}px`,
   }
 
   const arrowPathProps = {
     d: getArrowPath({ x: arrowX, y: arrowY }),
   }
 
-  const [layout, setLayout] = useState(null)
-
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const baseRect = baseRectRef.current
     if (!baseRect) return
-    const newLayout = returnLayoutFromElement(baseRect)
+    const totalLength = baseRect.getTotalLength()
+    const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
+    const centerPoints = segments.map((segmentLength, index) => {
+      const baseLength = segmentLength * (index + 1)
+      // const deviation = sideDeviation(index) // * 0 // DISABLED
+      // const pointLength = baseLength + deviation
+      const pointLength = baseLength
+      const pointLengthCapped = returnCappedLength(pointLength, totalLength)
+      return baseRect.getPointAtLength(pointLengthCapped)
+    })
+    const newLayout = {
+      totalLength,
+      segments,
+      centerPoints,
+    }
     setLayout(newLayout)
   }, [bubbleProps])
 
@@ -245,13 +269,20 @@ export const Annoucements = () => {
                     <g className={className} key={className}>
                       <path {...arrowPathProps} />
                       <rect {...bubbleProps.baseRect} ref={baseRectRef} />
+                      {layout && (
+                        <>
+                          {layout.centerPoints.map((point, pointIndex) => (
+                            <circle
+                              key={pointIndex}
+                              cx={point.x}
+                              cy={point.y}
+                              r={50}
+                            />
+                          ))}
+                        </>
+                      )}
                     </g>
                   ))}
-                  {layout && (
-                    <>
-                      <path d={layout.bubblePath} />
-                    </>
-                  )}
                 </Svg>
               )}
               <ContentWrap>

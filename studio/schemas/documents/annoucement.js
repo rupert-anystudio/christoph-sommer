@@ -37,6 +37,13 @@ export default {
       hidden: ({ document, value }) => !value && !document?.date,
     },
   ],
+  orderings: [
+    {
+      title: 'Publishing Date',
+      name: 'dateDesc',
+      by: [{ field: 'date', direction: 'desc' }],
+    },
+  ],
   preview: {
     select: {
       title: 'title',

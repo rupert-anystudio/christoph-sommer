@@ -90,11 +90,14 @@ export const CircleButton = styled.button`
   background-color: var(--color-element-bg);
   color: var(--color-element-txt);
   line-height: var(--circle-size);
-  font-size: calc(var(--circle-size) * 0.7);
+  font-size: calc(var(--circle-size) * 0.55);
   text-align: center;
   appearance: none;
   border: unset;
   cursor: pointer;
   padding: 0;
   outline: unset;
+  font-family: var(--ff-inter);
+  font-weight: var(--fw-inter);
+  font-style: var(--fx-inter);
 `

@@ -12,6 +12,8 @@ import {
   FloatingFocusManager,
   arrow,
   size,
+  useTransitionStyles,
+  useTransitionStatus,
 } from '@floating-ui/react'
 import { useCallback, useRef, useState } from 'react'
 import { CircleButton, Title } from '../Primitives'
@@ -19,6 +21,7 @@ import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
 import PortableText from '../PortableText'
 import { Actions } from './Actions'
+import { animated } from '@react-spring/web'
 import {
   ARROW_WIDTH,
   ARROW_HEIGHT,
@@ -38,23 +41,7 @@ import {
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
 import { Svg } from './Svg'
-
-const getArrowPath = (start) => {
-  const points = [
-    [SVG_PADDING + start.x, SVG_PADDING],
-    [ARROW_WIDTH / 2, ARROW_HEIGHT * -1],
-    [ARROW_WIDTH / 2, ARROW_HEIGHT],
-  ]
-  return points
-    .map((point, i) => {
-      const [x, y] = point
-      if (i === 0) return `M ${x},${y}`
-      const step = `l ${x},${y}`
-      if (i === points.length - 1) return `${step} Z`
-      return step
-    })
-    .join(' ')
-}
+import { PullRelease } from './PullRelease'
 
 const NotificationWrap = styled.div`
   position: absolute;
@@ -72,6 +59,7 @@ const Arrow = styled.div`
   display: block;
   width: ${ARROW_WIDTH}px;
   height: ${ARROW_HEIGHT}px;
+  pointer-events: none;
 `
 
 const ContentWrap = styled.div`
@@ -81,6 +69,7 @@ const ContentWrap = styled.div`
   margin-bottom: var(--padding-page);
   color: var(--color-txt);
   pointer-events: auto;
+  text-align: center;
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -92,10 +81,10 @@ const ContentWrap = styled.div`
   }
 `
 
-const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
+const BubbleSvg = ({ svg, baseRect, arrowStartX, arrowTipX, arrowTipY }) => {
   const [layout, setLayout] = useState(null)
 
-  const sideDeviation = useStoredDeviationGetter(20)
+  const sideDeviation = useStoredDeviationGetter(50)
 
   const onBaseRectResize = useCallback(
     (dimensions, baseElem) => {
@@ -132,8 +121,8 @@ const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
           let segment = '0,1'
           // segment = i % 2 !== 0 ? '0,1' : '0,0'
           const radius = Math.ceil(p.distance / 2)
-          const ra = radius * 1.05
-          const rb = radius * 1.05
+          const ra = radius * 1.02
+          const rb = radius * 1.02
           const end = `${p.end.x},${p.end.y}`
           const arc = `A ${ra},${rb} ${rotation} ${segment} ${end}`
           if (i === 0) return `M ${p.start.x},${p.start.y} ${arc}`
@@ -150,6 +139,25 @@ const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
 
+  const getArrowPath = useCallback((startX) => {
+    const points = [
+      [SVG_PADDING + startX, SVG_PADDING],
+      [ARROW_WIDTH / 2, ARROW_HEIGHT * -1],
+      [ARROW_WIDTH / 2, ARROW_HEIGHT],
+    ]
+    return points
+      .map((point, i) => {
+        const [x, y] = point
+        if (i === 0) return `M ${x},${y}`
+        const step = `l ${x},${y}`
+        if (i === points.length - 1) return `${step} Z`
+        return step
+      })
+      .join(' ')
+  }, [])
+
+  const arrowPath = getArrowPath(arrowStartX)
+
   return (
     <Svg {...svg}>
       <rect ref={baseRectRef} {...baseRect} fill="none" stroke="none" />
@@ -158,10 +166,14 @@ const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
           {['outside', 'inside'].map((className) => (
             <g className={className} key={className}>
               <path d={layout.bubblePath} />
-              <path d={arrowPath} />
+              <animated.path d={arrowPath} />
             </g>
           ))}
-          {/* <g>
+          <g
+            style={{
+              visibility: 'hidden',
+            }}
+          >
             <rect {...baseRect} fill="none" stroke="red" />
             {layout.arcPoints.map((arcPoint, pointIndex) => (
               <circle
@@ -173,7 +185,7 @@ const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
                 fill="black"
               />
             ))}
-          </g> */}
+          </g>
         </>
       )}
     </Svg>
@@ -250,6 +262,10 @@ export const Annoucements = () => {
     ],
     whileElementsMounted: autoUpdate,
   })
+  // set up unmounting/mounting transition
+  const { isMounted, status } = useTransitionStatus(context, {
+    duration: 1000,
+  })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
@@ -275,8 +291,6 @@ export const Annoucements = () => {
     [staticSide]: `-${ARROW_HEIGHT}px`,
   }
 
-  const arrowPath = getArrowPath({ x: arrowX, y: arrowY })
-
   return (
     <>
       <NotificationWrap {...getReferenceProps({ ref: reference })}>
@@ -284,7 +298,7 @@ export const Annoucements = () => {
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
       </NotificationWrap>
-      {open && (
+      {isMounted && (
         <FloatingFocusManager context={context} modal={false}>
           <Floating
             {...getFloatingProps({
@@ -301,24 +315,36 @@ export const Annoucements = () => {
             })}
           >
             <ScaleInAnimation
+              isHidden={status !== 'open'}
               style={{
                 transformOrigin: 'var(--annoucement-transform-origin)',
               }}
             >
-              <Arrow ref={arrowRef} style={arrowStyle} />
-              {bubbleProps && (
-                <BubbleSvg {...bubbleProps} arrowPath={arrowPath} />
-              )}
-              <ContentWrap>
-                <Actions
-                  onPreviousClick={onPreviousClick}
-                  onNextClick={onNextClick}
-                  currentIndex={currentIndex}
-                  amount={amount}
-                />
-                <Title as="h1">{annoucement.title}</Title>
-                <PortableText value={annoucement.content} />
-              </ContentWrap>
+              <PullRelease>
+                {({ x, y }) => (
+                  <>
+                    <Arrow ref={arrowRef} style={arrowStyle} />
+                    {bubbleProps && (
+                      <BubbleSvg
+                        {...bubbleProps}
+                        arrowTipX={x}
+                        arrowTipY={y}
+                        arrowStartX={arrowX}
+                      />
+                    )}
+                    <ContentWrap>
+                      <Actions
+                        onPreviousClick={onPreviousClick}
+                        onNextClick={onNextClick}
+                        currentIndex={currentIndex}
+                        amount={amount}
+                      />
+                      <Title as="h1">{annoucement.title}</Title>
+                      <PortableText value={annoucement.content} />
+                    </ContentWrap>
+                  </>
+                )}
+              </PullRelease>
             </ScaleInAnimation>
           </Floating>
         </FloatingFocusManager>

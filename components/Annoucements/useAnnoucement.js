@@ -1,9 +1,42 @@
+import { useState } from 'react'
+import { useCallback } from 'react'
 import usePagePropsContext from '../../hooks/usePagePropsContext'
 
 export const useAnnoucement = () => {
   const pageProps = usePagePropsContext()
   const annoucements = pageProps?.annoucements ?? []
-  const annoucement = annoucements[0] || {}
   const amount = annoucements.length
-  return [annoucement, amount]
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const changeIndex = useCallback(
+    (offset) => {
+      const targetIndex = currentIndex + offset
+      const lastIndex = amount - 1
+      if (targetIndex < 0) return setCurrentIndex(lastIndex)
+      if (targetIndex > lastIndex) return setCurrentIndex(0)
+      setCurrentIndex(targetIndex)
+    },
+    [currentIndex, amount]
+  )
+
+  const onNextClick = useCallback(() => {
+    console.log('onNextClick')
+    changeIndex(1)
+  }, [changeIndex])
+
+  const onPreviousClick = useCallback(() => {
+    console.log('onPreviousClick')
+    changeIndex(-1)
+  }, [changeIndex])
+
+  const annoucement = annoucements[currentIndex] || {}
+
+  return {
+    annoucement,
+    amount,
+    currentIndex,
+    onNextClick,
+    onPreviousClick,
+  }
 }

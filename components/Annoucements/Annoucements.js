@@ -13,22 +13,25 @@ import {
   arrow,
   size,
 } from '@floating-ui/react'
-import { useCallback, useRef, useState, useEffect } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
 import PortableText from '../PortableText'
+import { Actions } from './Actions'
+import {
+  ARROW_WIDTH,
+  ARROW_HEIGHT,
+  ARROW_OFFSET,
+  SVG_PADDING,
+  COLLISION_OFFSET,
+  BASESHAPE_RADIUS,
+  BASESHAPE_INSET,
+  SEGMENT_MINLENGTH,
+  returnSegmentsFromLength,
+  returnCappedLength,
+} from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
-import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect'
-import { returnCappedLength, returnSegmentsFromLength } from './bubbleHelpers'
-
-const ARROW_WIDTH = 40
-const ARROW_HEIGHT = 68
-const SVG_PADDING = 90
-const SEGMENT_MINLENGTH = 80
-const COLLISION_OFFSET = 60
-const BASESHAPE_RADIUS = 40
-const BASESHAPE_INSET = 10
 
 const getArrowPath = (start) => {
   const points = [
@@ -65,32 +68,13 @@ const Arrow = styled.div`
   height: ${ARROW_HEIGHT}px;
 `
 
-const Svg = styled.svg.attrs({
-  xmlns: 'http://www.w3.org/2000/svg',
-  xmlnsXlink: 'http://www.w3.org/1999/xlink',
-})`
-  position: absolute;
-  display: block;
-  pointer-events: none;
-  /* outline: 2px solid green; */
-  .inside {
-    fill: var(--color-bg);
-    stroke: var(--color-bg);
-    stroke-width: 1;
-  }
-  .outside {
-    fill: var(--color-txt);
-    stroke: var(--color-txt);
-    stroke-width: 12;
-  }
-`
-
 const ContentWrap = styled.div`
   position: relative;
   width: clamp(24rem, calc(100vw - ${COLLISION_OFFSET * 2}px), 70rem);
   padding: var(--padding-page);
   color: var(--color-txt);
   pointer-events: auto;
+  outline: 1px solid red;
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -102,64 +86,57 @@ const ContentWrap = styled.div`
   }
 `
 
-const Actions = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: baseline;
-  outline: 1px solid red;
-  > * {
-    margin-right: 1rem;
-    &:last-child {
-      margin-right: 0;
-    }
-  }
-`
+const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
+  const [points, setPoints] = useState([])
 
-const SvgBubble = ({ bubbleProps, arrowPathProps }) => {
-  const [layout, setLayout] = useState(null)
-  const onBaseRectResize = useCallback((dimensions, baseRect) => {
-    const totalLength = baseRect.getTotalLength()
-    console.log('onBaseRectResize', totalLength)
+  const onBaseRectResize = useCallback((dimensions, baseElem) => {
+    const totalLength = baseElem.getTotalLength()
+    console.log({ totalLength })
+
     const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
-    const centerPoints = segments.map((segmentLength, index) => {
+    const newPoints = segments.map((segmentLength, index) => {
       const baseLength = segmentLength * (index + 1)
       const pointLength = baseLength
       const pointLengthCapped = returnCappedLength(pointLength, totalLength)
-      return baseRect.getPointAtLength(pointLengthCapped)
+      return baseElem.getPointAtLength(pointLengthCapped)
     })
-    const newLayout = {
-      totalLength,
-      segments,
-      centerPoints,
-    }
-    setLayout(newLayout)
+    setPoints(newPoints)
   }, [])
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
 
   return (
-    <Svg {...bubbleProps.svg} id="bubble-svg">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      style={{
+        position: 'absolute',
+        pointerEvents: 'none',
+        top: -SVG_PADDING,
+        left: -SVG_PADDING,
+        // width: `calc(100% + ${SVG_PADDING * 2}px)`,
+        // height: `calc(100% + ${SVG_PADDING * 2}px)`,
+        outline: '1px solid red',
+      }}
+      {...svg}
+    >
+      <rect
+        ref={baseRectRef}
+        x={SVG_PADDING + BASESHAPE_INSET}
+        y={SVG_PADDING + BASESHAPE_INSET}
+        rx={BASESHAPE_RADIUS}
+        ry={BASESHAPE_RADIUS}
+        {...baseRect}
+      />
       {['outside', 'inside'].map((className) => (
         <g className={className} key={className}>
-          <path {...arrowPathProps} />
-
-          {layout && (
-            <>
-              {layout.centerPoints.map((point, pointIndex) => (
-                <circle key={pointIndex} cx={point.x} cy={point.y} r={50} />
-              ))}
-            </>
-          )}
+          {points.map((point, pointIndex) => (
+            <circle key={pointIndex} cx={point.x} cy={point.y} r={50} />
+          ))}
+          <path d={arrowPath} />
         </g>
       ))}
-      <rect
-        {...bubbleProps.baseRect}
-        ref={baseRectRef}
-        id="bubble-base-rect"
-        className="inside"
-      />
-    </Svg>
+    </svg>
   )
 }
 
@@ -167,27 +144,21 @@ export const Annoucements = () => {
   const [bubbleProps, setBubbleProps] = useState(null)
 
   const onFloatingResize = useCallback((rect) => {
-    const w = SVG_PADDING * 2 + rect.width
-    const h = SVG_PADDING * 2 + rect.height
+    const viewBox = `0 0 ${SVG_PADDING * 2 + rect.width} ${
+      SVG_PADDING * 2 + rect.height
+    }`
+    const svg = {
+      width: rect.width + SVG_PADDING * 2,
+      height: rect.height + SVG_PADDING * 2,
+      viewBox,
+    }
+    const baseRect = {
+      width: rect.width - BASESHAPE_INSET * 2,
+      height: rect.height - BASESHAPE_INSET * 2,
+    }
     const newBubbleProps = {
-      svg: {
-        width: w,
-        height: h,
-        viewBox: `0 0 ${w} ${h}`,
-        style: {
-          position: 'absolute',
-          top: 0 - SVG_PADDING,
-          left: 0 - SVG_PADDING,
-        },
-      },
-      baseRect: {
-        x: SVG_PADDING + BASESHAPE_INSET,
-        y: SVG_PADDING + BASESHAPE_INSET,
-        width: rect.width - BASESHAPE_INSET * 2,
-        height: rect.height - BASESHAPE_INSET * 2,
-        rx: BASESHAPE_RADIUS,
-        ry: BASESHAPE_RADIUS,
-      },
+      svg,
+      baseRect,
     }
     setBubbleProps(newBubbleProps)
   }, [])
@@ -213,7 +184,7 @@ export const Annoucements = () => {
     open,
     onOpenChange: setOpen,
     middleware: [
-      offset({ mainAxis: 30 + ARROW_HEIGHT }),
+      offset({ mainAxis: ARROW_OFFSET + ARROW_HEIGHT }),
       flip({
         // padding: 30,
       }),
@@ -222,17 +193,6 @@ export const Annoucements = () => {
       }),
       size({
         apply({ rects, availableWidth, elements }) {
-          // console.log({ elements, availableWidth })
-          // Object.assign(elements.floating.style, {
-          //   maxWidth: `${availableWidth}px`,
-          // })
-          const baseRect = document.getElementById('bubble-base-rect')
-          if (baseRect) {
-            baseRect.setAttribute('data-test', 'somevalue')
-          }
-          // Object.assign(elements.floating.attributes, {
-          //   'data-test': 'somevalue',
-          // })
           onFloatingResize(rects.floating)
         },
       }),
@@ -267,9 +227,7 @@ export const Annoucements = () => {
     [staticSide]: `-${ARROW_HEIGHT}px`,
   }
 
-  const arrowPathProps = {
-    d: getArrowPath({ x: arrowX, y: arrowY }),
-  }
+  const arrowPath = getArrowPath({ x: arrowX, y: arrowY })
 
   return (
     <>
@@ -301,17 +259,15 @@ export const Annoucements = () => {
             >
               <Arrow ref={arrowRef} style={arrowStyle} />
               {bubbleProps && (
-                <SvgBubble
-                  bubbleProps={bubbleProps}
-                  arrowPathProps={arrowPathProps}
-                />
+                <BubbleSvg {...bubbleProps} arrowPath={arrowPath} />
               )}
               <ContentWrap>
-                <Actions>
-                  <button onClick={onPreviousClick}>{'<'}</button>
-                  <span>{`${currentIndex + 1} / ${amount}`}</span>
-                  <button onClick={onNextClick}>{'>'}</button>
-                </Actions>
+                <Actions
+                  onPreviousClick={onPreviousClick}
+                  onNextClick={onNextClick}
+                  currentIndex={currentIndex}
+                  amount={amount}
+                />
                 <Title as="h1">{annoucement.title}</Title>
                 <PortableText value={annoucement.content} />
               </ContentWrap>

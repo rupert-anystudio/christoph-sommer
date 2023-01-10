@@ -1,3 +1,12 @@
+export const ARROW_WIDTH = 40
+export const ARROW_HEIGHT = 68
+export const ARROW_OFFSET = 0
+export const SVG_PADDING = 90
+export const COLLISION_OFFSET = 60
+export const BASESHAPE_RADIUS = 40
+export const BASESHAPE_INSET = 10
+export const SEGMENT_MINLENGTH = 80
+
 export const returnSegmentsFromLength = (totalLength, minLength = 80) => {
   if (!totalLength) return []
   const segmentAmount = Math.ceil(totalLength / minLength)

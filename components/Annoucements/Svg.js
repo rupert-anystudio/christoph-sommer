@@ -18,4 +18,8 @@ export const Svg = styled.svg.attrs({
     stroke: var(--color-txt);
     stroke-width: 12;
   }
+  polygon,
+  path {
+    pointer-events: auto;
+  }
 `

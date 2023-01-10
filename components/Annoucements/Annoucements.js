@@ -40,6 +40,7 @@ import {
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
 import { Svg } from './Svg'
+import { PullRelease } from './PullRelease'
 
 const getArrowPath = (start) => {
   const points = [
@@ -74,6 +75,7 @@ const Arrow = styled.div`
   display: block;
   width: ${ARROW_WIDTH}px;
   height: ${ARROW_HEIGHT}px;
+  pointer-events: none;
 `
 
 const ContentWrap = styled.div`
@@ -314,20 +316,22 @@ export const Annoucements = () => {
                 transformOrigin: 'var(--annoucement-transform-origin)',
               }}
             >
-              <Arrow ref={arrowRef} style={arrowStyle} />
-              {bubbleProps && (
-                <BubbleSvg {...bubbleProps} arrowPath={arrowPath} />
-              )}
-              <ContentWrap>
-                <Actions
-                  onPreviousClick={onPreviousClick}
-                  onNextClick={onNextClick}
-                  currentIndex={currentIndex}
-                  amount={amount}
-                />
-                <Title as="h1">{annoucement.title}</Title>
-                <PortableText value={annoucement.content} />
-              </ContentWrap>
+              <PullRelease>
+                <Arrow ref={arrowRef} style={arrowStyle} />
+                {bubbleProps && (
+                  <BubbleSvg {...bubbleProps} arrowPath={arrowPath} />
+                )}
+                <ContentWrap>
+                  <Actions
+                    onPreviousClick={onPreviousClick}
+                    onNextClick={onNextClick}
+                    currentIndex={currentIndex}
+                    amount={amount}
+                  />
+                  <Title as="h1">{annoucement.title}</Title>
+                  <PortableText value={annoucement.content} />
+                </ContentWrap>
+              </PullRelease>
             </ScaleInAnimation>
           </Floating>
         </FloatingFocusManager>

@@ -30,8 +30,14 @@ import {
   SEGMENT_MINLENGTH,
   returnSegmentsFromLength,
   returnCappedLength,
+  returnPointBetweenPoints,
+  returnVectorFromPoints,
+  returnDistanceBetweenPoints,
+  returnAngleFromVector,
+  useStoredDeviationGetter,
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
+import { Svg } from './Svg'
 
 const getArrowPath = (start) => {
   const points = [
@@ -72,9 +78,9 @@ const ContentWrap = styled.div`
   position: relative;
   width: clamp(24rem, calc(100vw - ${COLLISION_OFFSET * 2}px), 70rem);
   padding: var(--padding-page);
+  margin-bottom: var(--padding-page);
   color: var(--color-txt);
   pointer-events: auto;
-  outline: 1px solid red;
   > * {
     margin: 0.5em 0;
     &:first-child {
@@ -87,56 +93,90 @@ const ContentWrap = styled.div`
 `
 
 const BubbleSvg = ({ svg, baseRect, arrowPath }) => {
-  const [points, setPoints] = useState([])
+  const [layout, setLayout] = useState(null)
 
-  const onBaseRectResize = useCallback((dimensions, baseElem) => {
-    const totalLength = baseElem.getTotalLength()
-    console.log({ totalLength })
+  const sideDeviation = useStoredDeviationGetter(20)
 
-    const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
-    const newPoints = segments.map((segmentLength, index) => {
-      const baseLength = segmentLength * (index + 1)
-      const pointLength = baseLength
-      const pointLengthCapped = returnCappedLength(pointLength, totalLength)
-      return baseElem.getPointAtLength(pointLengthCapped)
-    })
-    setPoints(newPoints)
-  }, [])
+  const onBaseRectResize = useCallback(
+    (dimensions, baseElem) => {
+      const totalLength = baseElem.getTotalLength()
+
+      const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
+
+      const points = segments.map((segmentLength, index) => {
+        const baseLength = segmentLength * (index + 1)
+        const deviation = sideDeviation(index)
+        const pointLength = baseLength + deviation
+        const pointLengthCapped = returnCappedLength(pointLength, totalLength)
+        return baseElem.getPointAtLength(pointLengthCapped)
+      })
+
+      const arcPoints = points.map((end, index) => {
+        const start =
+          index === 0 ? points[points.length - 1] : points[index - 1]
+        const mid = returnPointBetweenPoints(start, end)
+        const normal = returnVectorFromPoints(start, end)
+        const distance = returnDistanceBetweenPoints(start, end)
+        return {
+          start,
+          mid,
+          end,
+          normal,
+          distance,
+        }
+      })
+
+      const bubblePath = arcPoints
+        .map((p, i) => {
+          const rotation = returnAngleFromVector(p.normal)
+          let segment = '0,1'
+          // segment = i % 2 !== 0 ? '0,1' : '0,0'
+          const radius = Math.ceil(p.distance / 2)
+          const ra = radius * 1.05
+          const rb = radius * 1.05
+          const end = `${p.end.x},${p.end.y}`
+          const arc = `A ${ra},${rb} ${rotation} ${segment} ${end}`
+          if (i === 0) return `M ${p.start.x},${p.start.y} ${arc}`
+          if (i === arcPoints.length - 1) return `${arc} Z`
+          return arc
+        })
+        .filter(Boolean)
+        .join(' ')
+
+      setLayout({ points, arcPoints, bubblePath })
+    },
+    [sideDeviation]
+  )
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      style={{
-        position: 'absolute',
-        pointerEvents: 'none',
-        top: -SVG_PADDING,
-        left: -SVG_PADDING,
-        // width: `calc(100% + ${SVG_PADDING * 2}px)`,
-        // height: `calc(100% + ${SVG_PADDING * 2}px)`,
-        outline: '1px solid red',
-      }}
-      {...svg}
-    >
-      <rect
-        ref={baseRectRef}
-        x={SVG_PADDING + BASESHAPE_INSET}
-        y={SVG_PADDING + BASESHAPE_INSET}
-        rx={BASESHAPE_RADIUS}
-        ry={BASESHAPE_RADIUS}
-        {...baseRect}
-      />
-      {['outside', 'inside'].map((className) => (
-        <g className={className} key={className}>
-          {points.map((point, pointIndex) => (
-            <circle key={pointIndex} cx={point.x} cy={point.y} r={50} />
+    <Svg {...svg}>
+      <rect ref={baseRectRef} {...baseRect} fill="none" stroke="none" />
+      {layout && (
+        <>
+          {['outside', 'inside'].map((className) => (
+            <g className={className} key={className}>
+              <path d={layout.bubblePath} />
+              <path d={arrowPath} />
+            </g>
           ))}
-          <path d={arrowPath} />
-        </g>
-      ))}
-    </svg>
+          {/* <g>
+            <rect {...baseRect} fill="none" stroke="red" />
+            {layout.arcPoints.map((arcPoint, pointIndex) => (
+              <circle
+                key={pointIndex}
+                cx={arcPoint.end.x}
+                cy={arcPoint.end.y}
+                r={5}
+                stroke="none"
+                fill="black"
+              />
+            ))}
+          </g> */}
+        </>
+      )}
+    </Svg>
   )
 }
 
@@ -151,10 +191,18 @@ export const Annoucements = () => {
       width: rect.width + SVG_PADDING * 2,
       height: rect.height + SVG_PADDING * 2,
       viewBox,
+      style: {
+        top: -SVG_PADDING,
+        left: -SVG_PADDING,
+      },
     }
     const baseRect = {
       width: rect.width - BASESHAPE_INSET * 2,
       height: rect.height - BASESHAPE_INSET * 2,
+      x: SVG_PADDING + BASESHAPE_INSET,
+      y: SVG_PADDING + BASESHAPE_INSET,
+      rx: BASESHAPE_RADIUS,
+      ry: BASESHAPE_RADIUS,
     }
     const newBubbleProps = {
       svg,

@@ -5,7 +5,6 @@ const Wrap = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: baseline;
-  outline: 1px solid red;
   > * {
     margin-right: 1rem;
     &:last-child {

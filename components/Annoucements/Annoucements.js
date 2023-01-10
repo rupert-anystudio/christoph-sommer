@@ -340,7 +340,7 @@ export const Annoucements = () => {
                         amount={amount}
                       />
                       <Title as="h1">{annoucement.title}</Title>
-                      {/* <PortableText value={annoucement.content} /> */}
+                      <PortableText value={annoucement.content} />
                     </ContentWrap>
                   </>
                 )}

@@ -17,6 +17,7 @@ export const Svg = styled.svg.attrs({
     fill: var(--color-txt);
     stroke: var(--color-txt);
     stroke-width: 12;
+    transform: translate3d(0px, 2px, 0);
   }
   polygon,
   path {

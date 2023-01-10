@@ -4,6 +4,7 @@ import {
   useSpringValue,
 } from '@react-spring/web'
 import styled from 'styled-components'
+import { springConfig } from './bubbleHelpers'
 
 const Wrap = styled(animated.div)`
   transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1);
@@ -11,11 +12,7 @@ const Wrap = styled(animated.div)`
 
 export const ScaleInAnimation = ({ children, style, isHidden = false }) => {
   const value = useSpringValue(0, {
-    config: {
-      tension: 200,
-      friction: 12,
-      precision: 0.001,
-    },
+    config: springConfig,
   })
 
   useIsomorphicLayoutEffect(() => {

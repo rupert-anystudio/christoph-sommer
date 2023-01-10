@@ -5,8 +5,9 @@ const Wrap = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: baseline;
+  font-size: 80%;
   > * {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     &:last-child {
       margin-right: 0;
     }
@@ -21,9 +22,9 @@ export const Actions = ({
 }) => {
   return (
     <Wrap>
-      <button onClick={onPreviousClick}>{'<'}</button>
+      <span onClick={onPreviousClick}>{'<'}</span>
       <span>{`${currentIndex + 1} / ${amount}`}</span>
-      <button onClick={onNextClick}>{'>'}</button>
+      <span onClick={onNextClick}>{'>'}</span>
     </Wrap>
   )
 }

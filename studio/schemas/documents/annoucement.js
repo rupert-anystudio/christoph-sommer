@@ -22,9 +22,19 @@ export default {
     {
       type: 'date',
       name: 'date',
-      title: 'Publishing Date',
+      title: 'Publishing date',
       description:
         'The date this annoucement will be published. As soon as this date is reached, it will be displayed on the frontend.',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      type: 'date',
+      name: 'dateUntil',
+      title: 'Display until date',
+      description:
+        'After this date, this annoucement wont be dislpayed anymore.',
+      validation: (Rule) => Rule.min(Rule.valueOfField('date')),
+      hidden: ({ document, value }) => !value && !document?.date,
     },
   ],
   preview: {

@@ -14,7 +14,7 @@ export async function getStaticProps({ preview = false }) {
   const aboutQuery = `*[_type == "aboutPage"][0]{ aboutText, missionStatement }`
   const about = await client.fetch(aboutQuery)
   // fetch annoucements
-  const annoucementsQuery = `*[_type == "annoucement"]{ title, content, date, _id }`
+  const annoucementsQuery = `*[_type == "annoucement" && now() >= date && now() <= dateUntil]{ title, content, date, _id }`
   const annoucements = await client.fetch(annoucementsQuery)
   return {
     revalidate: 10,

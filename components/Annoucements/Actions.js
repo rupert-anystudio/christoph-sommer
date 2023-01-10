@@ -9,15 +9,21 @@ const Wrap = styled.div`
   font-family: var(--ff-inter);
   font-weight: var(--fw-inter);
   font-style: var(--fx-inter);
-  > * {
-    margin-right: 2rem;
-    &:last-child {
-      margin-right: 0;
-    }
-  }
-  > button {
-    pointer-events: auto;
-  }
+`
+
+const ArrowButton = styled.button`
+  pointer-events: auto;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
 `
 
 export const Actions = ({
@@ -28,9 +34,9 @@ export const Actions = ({
 }) => {
   return (
     <Wrap>
-      <button onClick={onPreviousClick}>{'<'}</button>
+      <ArrowButton onClick={onPreviousClick}>{'<'}</ArrowButton>
       <span>{`${currentIndex + 1} / ${amount}`}</span>
-      <button onClick={onNextClick}>{'>'}</button>
+      <ArrowButton onClick={onNextClick}>{'>'}</ArrowButton>
     </Wrap>
   )
 }

@@ -21,7 +21,11 @@ import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
 import PortableText from '../PortableText'
 import { Actions } from './Actions'
-import { animated } from '@react-spring/web'
+import {
+  animated,
+  useIsomorphicLayoutEffect,
+  useSpring,
+} from '@react-spring/web'
 import {
   returnSegmentsFromLength,
   returnCappedLength,
@@ -29,7 +33,8 @@ import {
   returnVectorFromPoints,
   returnDistanceBetweenPoints,
   returnAngleFromVector,
-  useStoredDeviationGetter,
+  springConfig,
+  // useStoredDeviationGetter,
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
 import { PullRelease } from './PullRelease'
@@ -51,7 +56,7 @@ const Arrow = styled.div`
   pointer-events: none;
 `
 
-const ContentWrap = styled.div`
+const Content = styled.div`
   position: relative;
   width: clamp(220px, calc(100vw - ${(p) => p.COLLISION_OFFSET * 2}px), 800px);
   padding: var(--padding-page);
@@ -59,15 +64,10 @@ const ContentWrap = styled.div`
   color: var(--color-txt);
   pointer-events: none;
   text-align: center;
-  > * {
-    margin: 0.5em 0;
-    &:first-child {
-      margin-top: 0;
-    }
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+`
+
+const ContentTitle = styled(Title).attrs({ as: 'h1' })`
+  margin-bottom: var(--padding-page);
 `
 
 const Svg = styled.svg.attrs({
@@ -94,27 +94,48 @@ const Svg = styled.svg.attrs({
   }
 `
 
+const AnimatedPath = ({ d }) => {
+  const [style, api] = useSpring(() => ({
+    d,
+    config: springConfig,
+  }))
+
+  useIsomorphicLayoutEffect(() => {
+    api.start({
+      d,
+    })
+  }, [d, api])
+
+  return <animated.path d={style.d} />
+}
+
 const BubbleSvg = ({
   svg,
   baseRect,
   pulledArrowPath,
   pullProps,
   SEGMENT_MINLENGTH = 100,
+  POINT_DEVIATION_RANGE = 50,
+  START_OFFSET = 100,
 }) => {
   const [layout, setLayout] = useState(null)
 
-  const sideDeviation = useStoredDeviationGetter(50)
+  // const sideDeviation = useStoredDeviationGetter(50)
 
   const onBaseRectResize = useCallback(
     (dimensions, baseElem) => {
       const totalLength = baseElem.getTotalLength()
 
+      const randomStartOffset = Math.random() * START_OFFSET - START_OFFSET * 2
+
       const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
 
       const points = segments.map((segmentLength, index) => {
         const baseLength = segmentLength * (index + 1)
-        const deviation = sideDeviation(index)
-        const pointLength = baseLength + deviation
+        // const deviation = sideDeviation(index)
+        const deviation =
+          Math.random() * POINT_DEVIATION_RANGE - POINT_DEVIATION_RANGE * 2
+        const pointLength = baseLength + deviation + randomStartOffset
         const pointLengthCapped = returnCappedLength(pointLength, totalLength)
         return baseElem.getPointAtLength(pointLengthCapped)
       })
@@ -153,7 +174,7 @@ const BubbleSvg = ({
 
       setLayout({ points, arcPoints, bubblePath })
     },
-    [sideDeviation, SEGMENT_MINLENGTH]
+    [SEGMENT_MINLENGTH, POINT_DEVIATION_RANGE, START_OFFSET]
   )
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
@@ -166,7 +187,8 @@ const BubbleSvg = ({
           <g {...pullProps}>
             {['outside', 'inside'].map((className) => (
               <g className={className} key={className}>
-                <path d={layout.bubblePath} />
+                {/* <path d={layout.bubblePath} /> */}
+                <AnimatedPath d={layout.bubblePath} />
                 <animated.path d={pulledArrowPath} strokeLinejoin="round" />
               </g>
             ))}
@@ -194,7 +216,7 @@ export const Annoucements = ({
   ARROW_WIDTH = 70,
   ARROW_HEIGHT = 110,
   ARROW_OFFSET = 10,
-  SVG_PADDING = 400,
+  SVG_PADDING = 500,
   BASESHAPE_RADIUS = 70,
   BASESHAPE_INSET = 0,
   COLLISION_OFFSET = 80,
@@ -378,16 +400,16 @@ export const Annoucements = ({
                           pullProps={pullProps}
                         />
                       )}
-                      <ContentWrap COLLISION_OFFSET={COLLISION_OFFSET}>
+                      <Content COLLISION_OFFSET={COLLISION_OFFSET}>
                         <Actions
                           onPreviousClick={onPreviousClick}
                           onNextClick={onNextClick}
                           currentIndex={currentIndex}
                           amount={amount}
                         />
-                        <Title as="h1">{annoucement.title}</Title>
+                        <ContentTitle>{annoucement.title}</ContentTitle>
                         <PortableText value={annoucement.content} />
-                      </ContentWrap>
+                      </Content>
                     </>
                   )}
                 </PullRelease>

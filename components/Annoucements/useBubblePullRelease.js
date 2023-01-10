@@ -10,10 +10,10 @@ const basePull = {
 }
 
 const bounds = {
-  top: -100,
-  right: 200,
-  bottom: 200,
-  left: -100,
+  top: -40,
+  right: 300,
+  bottom: 300,
+  left: -80,
 }
 
 export const useBubblePullRelease = ({ arrowX, getArrowPath }) => {

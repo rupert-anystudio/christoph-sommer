@@ -6,8 +6,11 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: baseline;
   font-size: 80%;
+  font-family: var(--ff-inter);
+  font-weight: var(--fw-inter);
+  font-style: var(--fx-inter);
   > * {
-    margin-right: 0.5rem;
+    margin-right: 2rem;
     &:last-child {
       margin-right: 0;
     }

@@ -12,6 +12,8 @@ import {
   FloatingFocusManager,
   arrow,
   size,
+  useTransitionStyles,
+  useTransitionStatus,
 } from '@floating-ui/react'
 import { useCallback, useRef, useState } from 'react'
 import { CircleButton, Title } from '../Primitives'
@@ -250,6 +252,10 @@ export const Annoucements = () => {
     ],
     whileElementsMounted: autoUpdate,
   })
+  // set up unmounting/mounting transition
+  const { isMounted, status } = useTransitionStatus(context, {
+    duration: 1000,
+  })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
@@ -277,6 +283,8 @@ export const Annoucements = () => {
 
   const arrowPath = getArrowPath({ x: arrowX, y: arrowY })
 
+  console.log({ status })
+
   return (
     <>
       <NotificationWrap {...getReferenceProps({ ref: reference })}>
@@ -284,7 +292,7 @@ export const Annoucements = () => {
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
       </NotificationWrap>
-      {open && (
+      {isMounted && (
         <FloatingFocusManager context={context} modal={false}>
           <Floating
             {...getFloatingProps({
@@ -301,6 +309,7 @@ export const Annoucements = () => {
             })}
           >
             <ScaleInAnimation
+              isHidden={status !== 'open'}
               style={{
                 transformOrigin: 'var(--annoucement-transform-origin)',
               }}

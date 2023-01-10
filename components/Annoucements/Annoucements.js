@@ -10,9 +10,9 @@ import {
   useRole,
   useInteractions,
   FloatingFocusManager,
+  FloatingPortal,
   arrow,
   size,
-  useTransitionStyles,
   useTransitionStatus,
 } from '@floating-ui/react'
 import { useCallback, useRef, useState } from 'react'
@@ -23,14 +23,6 @@ import PortableText from '../PortableText'
 import { Actions } from './Actions'
 import { animated } from '@react-spring/web'
 import {
-  ARROW_WIDTH,
-  ARROW_HEIGHT,
-  ARROW_OFFSET,
-  SVG_PADDING,
-  COLLISION_OFFSET,
-  BASESHAPE_RADIUS,
-  BASESHAPE_INSET,
-  SEGMENT_MINLENGTH,
   returnSegmentsFromLength,
   returnCappedLength,
   returnPointBetweenPoints,
@@ -40,14 +32,13 @@ import {
   useStoredDeviationGetter,
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
-import { Svg } from './Svg'
 import { PullRelease } from './PullRelease'
 
 const NotificationWrap = styled.div`
   position: absolute;
   transform: translate3d(-50%, -50%, 0);
   top: 28.9%;
-  left: 77.6%;
+  left: 78%;
 `
 
 const Floating = styled.div`
@@ -57,18 +48,16 @@ const Floating = styled.div`
 const Arrow = styled.div`
   position: absolute;
   display: block;
-  width: ${ARROW_WIDTH}px;
-  height: ${ARROW_HEIGHT}px;
   pointer-events: none;
 `
 
 const ContentWrap = styled.div`
   position: relative;
-  width: clamp(24rem, calc(100vw - ${COLLISION_OFFSET * 2}px), 70rem);
+  width: clamp(220px, calc(100vw - ${(p) => p.COLLISION_OFFSET * 2}px), 800px);
   padding: var(--padding-page);
   margin-bottom: var(--padding-page);
   color: var(--color-txt);
-  pointer-events: auto;
+  pointer-events: none;
   text-align: center;
   > * {
     margin: 0.5em 0;
@@ -81,7 +70,37 @@ const ContentWrap = styled.div`
   }
 `
 
-const BubbleSvg = ({ svg, baseRect, arrowStartX, arrowTipX, arrowTipY }) => {
+const Svg = styled.svg.attrs({
+  xmlns: 'http://www.w3.org/2000/svg',
+  xmlnsXlink: 'http://www.w3.org/1999/xlink',
+})`
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  .inside {
+    fill: var(--color-bg);
+    stroke: var(--color-bg);
+    stroke-width: 1;
+  }
+  .outside {
+    fill: var(--color-txt);
+    stroke: var(--color-txt);
+    stroke-width: 12;
+    transform: translate3d(0px, 2px, 0);
+  }
+  polygon,
+  path {
+    pointer-events: auto;
+  }
+`
+
+const BubbleSvg = ({
+  svg,
+  baseRect,
+  pulledArrowPath,
+  pullProps,
+  SEGMENT_MINLENGTH = 100,
+}) => {
   const [layout, setLayout] = useState(null)
 
   const sideDeviation = useStoredDeviationGetter(50)
@@ -134,97 +153,93 @@ const BubbleSvg = ({ svg, baseRect, arrowStartX, arrowTipX, arrowTipY }) => {
 
       setLayout({ points, arcPoints, bubblePath })
     },
-    [sideDeviation]
+    [sideDeviation, SEGMENT_MINLENGTH]
   )
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
-
-  const getArrowPath = useCallback((startX) => {
-    const points = [
-      [SVG_PADDING + startX, SVG_PADDING],
-      [ARROW_WIDTH / 2, ARROW_HEIGHT * -1],
-      [ARROW_WIDTH / 2, ARROW_HEIGHT],
-    ]
-    return points
-      .map((point, i) => {
-        const [x, y] = point
-        if (i === 0) return `M ${x},${y}`
-        const step = `l ${x},${y}`
-        if (i === points.length - 1) return `${step} Z`
-        return step
-      })
-      .join(' ')
-  }, [])
-
-  const arrowPath = getArrowPath(arrowStartX)
 
   return (
     <Svg {...svg}>
       <rect ref={baseRectRef} {...baseRect} fill="none" stroke="none" />
       {layout && (
         <>
-          {['outside', 'inside'].map((className) => (
-            <g className={className} key={className}>
-              <path d={layout.bubblePath} />
-              <animated.path d={arrowPath} />
-            </g>
-          ))}
-          <g
-            style={{
-              visibility: 'hidden',
-            }}
-          >
+          <g {...pullProps}>
+            {['outside', 'inside'].map((className) => (
+              <g className={className} key={className}>
+                <path d={layout.bubblePath} />
+                <animated.path d={pulledArrowPath} strokeLinejoin="round" />
+              </g>
+            ))}
+          </g>
+          {/* <g>
             <rect {...baseRect} fill="none" stroke="red" />
             {layout.arcPoints.map((arcPoint, pointIndex) => (
               <circle
                 key={pointIndex}
-                cx={arcPoint.end.x}
-                cy={arcPoint.end.y}
+                cx={arcPoint.start.x}
+                cy={arcPoint.start.y}
                 r={5}
                 stroke="none"
-                fill="black"
+                fill={pointIndex === 0 ? 'red' : 'black'}
               />
             ))}
-          </g>
+          </g> */}
         </>
       )}
     </Svg>
   )
 }
 
-export const Annoucements = () => {
+export const Annoucements = ({
+  ARROW_WIDTH = 70,
+  ARROW_HEIGHT = 110,
+  ARROW_OFFSET = 10,
+  SVG_PADDING = 400,
+  BASESHAPE_RADIUS = 70,
+  BASESHAPE_INSET = 0,
+  COLLISION_OFFSET = 80,
+}) => {
   const [bubbleProps, setBubbleProps] = useState(null)
 
-  const onFloatingResize = useCallback((rect) => {
-    const viewBox = `0 0 ${SVG_PADDING * 2 + rect.width} ${
-      SVG_PADDING * 2 + rect.height
-    }`
-    const svg = {
-      width: rect.width + SVG_PADDING * 2,
-      height: rect.height + SVG_PADDING * 2,
-      viewBox,
-      style: {
-        top: -SVG_PADDING,
-        left: -SVG_PADDING,
-      },
-    }
-    const baseRect = {
-      width: rect.width - BASESHAPE_INSET * 2,
-      height: rect.height - BASESHAPE_INSET * 2,
-      x: SVG_PADDING + BASESHAPE_INSET,
-      y: SVG_PADDING + BASESHAPE_INSET,
-      rx: BASESHAPE_RADIUS,
-      ry: BASESHAPE_RADIUS,
-    }
-    const newBubbleProps = {
-      svg,
-      baseRect,
-    }
-    setBubbleProps(newBubbleProps)
-  }, [])
+  const onFloatingResize = useCallback(
+    (rect) => {
+      const viewBox = `0 0 ${SVG_PADDING * 2 + rect.width} ${
+        SVG_PADDING * 2 + rect.height
+      }`
+      const svg = {
+        width: rect.width + SVG_PADDING * 2,
+        height: rect.height + SVG_PADDING * 2,
+        viewBox,
+        style: {
+          top: -SVG_PADDING,
+          left: -SVG_PADDING,
+        },
+      }
+      const baseRect = {
+        width: rect.width - BASESHAPE_INSET * 2,
+        height: rect.height - BASESHAPE_INSET * 2,
+        x: SVG_PADDING + BASESHAPE_INSET,
+        y: SVG_PADDING + BASESHAPE_INSET,
+        rx: BASESHAPE_RADIUS,
+        ry: BASESHAPE_RADIUS,
+      }
+      const newBubbleProps = {
+        svg,
+        baseRect,
+      }
+      setBubbleProps(newBubbleProps)
+    },
+    [SVG_PADDING, BASESHAPE_RADIUS, BASESHAPE_INSET]
+  )
 
-  const { annoucement, amount, currentIndex, onNextClick, onPreviousClick } =
-    useAnnoucement()
+  // prettier-ignore
+  const {
+    annoucement,
+    amount,
+    currentIndex,
+    onNextClick,
+    onPreviousClick,
+  } = useAnnoucement()
 
   const arrowRef = useRef(null)
   // popover state
@@ -240,19 +255,18 @@ export const Annoucements = () => {
     placement: floatingPlacement,
     middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
   } = useFloating({
+    strategy: 'fixed',
     placement: 'top',
     open,
     onOpenChange: setOpen,
     middleware: [
       offset({ mainAxis: ARROW_OFFSET + ARROW_HEIGHT }),
-      flip({
-        // padding: 30,
-      }),
+      flip(),
       shift({
         padding: COLLISION_OFFSET,
       }),
       size({
-        apply({ rects, availableWidth, elements }) {
+        apply({ rects, availableWidth, availableHeight, elements }) {
           onFloatingResize(rects.floating)
         },
       }),
@@ -262,6 +276,7 @@ export const Annoucements = () => {
     ],
     whileElementsMounted: autoUpdate,
   })
+
   // set up unmounting/mounting transition
   const { isMounted, status } = useTransitionStatus(context, {
     duration: 1000,
@@ -288,8 +303,38 @@ export const Annoucements = () => {
     position: 'absolute',
     left: arrowX != null ? `${arrowX}px` : '',
     top: arrowY != null ? `${arrowY}px` : '',
+    width: ARROW_WIDTH,
+    height: ARROW_HEIGHT,
     [staticSide]: `-${ARROW_HEIGHT}px`,
   }
+
+  const getArrowPath = useCallback(
+    (arrowOffsetX = 0, tipOffset) => {
+      const bottomOffsetY = 0
+      const tipOffsetX = tipOffset?.x ?? 0
+      const tipOffsetY = tipOffset?.y ?? 0
+      const arrowBottomLeft = {
+        x: SVG_PADDING + arrowOffsetX,
+        y: SVG_PADDING + bottomOffsetY,
+      }
+      const arrowBottomRight = {
+        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH,
+        y: SVG_PADDING + bottomOffsetY,
+      }
+      const arrowTop = {
+        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH / 2 - tipOffsetX,
+        y: SVG_PADDING - ARROW_HEIGHT - tipOffsetY,
+      }
+      // prettier-ignore
+      return `
+        M ${arrowBottomLeft.x},${arrowBottomLeft.y}
+        L ${arrowBottomRight.x},${arrowBottomRight.y}
+        L ${arrowTop.x},${arrowTop.y}
+        Z
+      `
+    },
+    [ARROW_WIDTH, ARROW_HEIGHT, SVG_PADDING]
+  )
 
   return (
     <>
@@ -298,57 +343,59 @@ export const Annoucements = () => {
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
       </NotificationWrap>
-      {isMounted && (
-        <FloatingFocusManager context={context} modal={false}>
-          <Floating
-            {...getFloatingProps({
-              ref: floating,
-              style: {
-                position: strategy,
-                top: y ?? 0,
-                left: x ?? 0,
-                width: 'max-content',
-                '--annoucement-transform-origin': `${
-                  arrowX != null ? `${arrowX + ARROW_WIDTH / 2}px` : 'center'
-                } -${ARROW_HEIGHT}px`,
-              },
-            })}
-          >
-            <ScaleInAnimation
-              isHidden={status !== 'open'}
-              style={{
-                transformOrigin: 'var(--annoucement-transform-origin)',
-              }}
+      <FloatingPortal>
+        {isMounted && (
+          <FloatingFocusManager context={context} modal={false}>
+            <Floating
+              {...getFloatingProps({
+                ref: floating,
+                style: {
+                  position: strategy,
+                  zIndex: 1000,
+                  top: y ?? 0,
+                  left: x ?? 0,
+                  width: 'max-content',
+                  '--annoucement-transform-origin': `${
+                    arrowX != null ? `${arrowX + ARROW_WIDTH / 2}px` : 'center'
+                  } -${ARROW_HEIGHT}px`,
+                },
+              })}
             >
-              <PullRelease>
-                {({ x, y }) => (
-                  <>
-                    <Arrow ref={arrowRef} style={arrowStyle} />
-                    {bubbleProps && (
-                      <BubbleSvg
-                        {...bubbleProps}
-                        arrowTipX={x}
-                        arrowTipY={y}
-                        arrowStartX={arrowX}
-                      />
-                    )}
-                    <ContentWrap>
-                      <Actions
-                        onPreviousClick={onPreviousClick}
-                        onNextClick={onNextClick}
-                        currentIndex={currentIndex}
-                        amount={amount}
-                      />
-                      <Title as="h1">{annoucement.title}</Title>
-                      <PortableText value={annoucement.content} />
-                    </ContentWrap>
-                  </>
-                )}
-              </PullRelease>
-            </ScaleInAnimation>
-          </Floating>
-        </FloatingFocusManager>
-      )}
+              <ScaleInAnimation
+                isHidden={status !== 'open'}
+                style={{
+                  transformOrigin: 'var(--annoucement-transform-origin)',
+                }}
+              >
+                <PullRelease getArrowPath={getArrowPath} arrowX={arrowX}>
+                  {({ pulledArrowPath, pullProps }) => (
+                    <>
+                      <Arrow ref={arrowRef} style={arrowStyle} />
+                      {bubbleProps && (
+                        <BubbleSvg
+                          {...bubbleProps}
+                          pulledArrowPath={pulledArrowPath}
+                          pullProps={pullProps}
+                        />
+                      )}
+                      <ContentWrap COLLISION_OFFSET={COLLISION_OFFSET}>
+                        <Actions
+                          onPreviousClick={onPreviousClick}
+                          onNextClick={onNextClick}
+                          currentIndex={currentIndex}
+                          amount={amount}
+                        />
+                        <Title as="h1">{annoucement.title}</Title>
+                        <PortableText value={annoucement.content} />
+                      </ContentWrap>
+                    </>
+                  )}
+                </PullRelease>
+              </ScaleInAnimation>
+            </Floating>
+          </FloatingFocusManager>
+        )}
+      </FloatingPortal>
     </>
   )
 }

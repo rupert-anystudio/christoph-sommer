@@ -1,20 +1,14 @@
-import { useSpring, animated } from '@react-spring/web'
-import { useDrag } from '@use-gesture/react'
-import { springConfig } from './bubbleHelpers'
+import { animated } from '@react-spring/web'
+import { useBubblePullRelease } from './useBubblePullRelease'
 
-export const PullRelease = ({ children }) => {
-  const [{ x, y }, api] = useSpring(() => ({
-    x: 0,
-    y: 0,
-    config: springConfig,
-  }))
-  // Set the drag hook and define component movement based on gesture data
-  const bind = useDrag(({ down, movement: [mx, my] }) => {
-    api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+export const PullRelease = ({ children, getArrowPath, arrowX }) => {
+  const [{ x, y, pulledArrowPath }, pullProps] = useBubblePullRelease({
+    arrowX,
+    getArrowPath,
   })
   return (
-    <animated.div {...bind()} style={{ x, y }}>
-      {children({ x, y })}
+    <animated.div style={{ x, y }}>
+      {children({ pulledArrowPath, pullProps })}
     </animated.div>
   )
 }

@@ -15,6 +15,9 @@ const Wrap = styled.div`
       margin-right: 0;
     }
   }
+  > button {
+    pointer-events: auto;
+  }
 `
 
 export const Actions = ({
@@ -25,9 +28,9 @@ export const Actions = ({
 }) => {
   return (
     <Wrap>
-      <span onClick={onPreviousClick}>{'<'}</span>
+      <button onClick={onPreviousClick}>{'<'}</button>
       <span>{`${currentIndex + 1} / ${amount}`}</span>
-      <span onClick={onNextClick}>{'>'}</span>
+      <button onClick={onNextClick}>{'>'}</button>
     </Wrap>
   )
 }

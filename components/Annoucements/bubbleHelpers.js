@@ -1,15 +1,6 @@
 import { useCallback } from 'react'
 import { useRef } from 'react'
 
-export const ARROW_WIDTH = 70
-export const ARROW_HEIGHT = 110
-export const ARROW_OFFSET = 30
-export const SVG_PADDING = 120
-export const COLLISION_OFFSET = 60
-export const BASESHAPE_RADIUS = 120
-export const BASESHAPE_INSET = 0
-export const SEGMENT_MINLENGTH = 100
-
 export const springConfig = {
   tension: 200,
   friction: 12,

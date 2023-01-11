@@ -297,7 +297,7 @@ const Bubble = ({
   useEffect(() => {
     renderLayout()
   }, [stage, seed, renderLayout])
-  console.log(layout)
+  // console.log(layout)
 
   return (
     <Wrap

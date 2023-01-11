@@ -341,14 +341,14 @@ export const Annoucements = ({
 
   const { arrow: { x: arrowX, y: arrowY } = {} } = middlewareData
 
-  // console.log({ middlewareData })
+  // console.log({ context })
 
   // set up unmounting/mounting transition
   const { isMounted, status } = useTransitionStatus(context, {
     duration: 1000,
   })
 
-  console.log({ status })
+  // console.log({ status })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
@@ -362,7 +362,7 @@ export const Annoucements = ({
       close: 600,
     },
   })
-  console.log({ hover })
+  // console.log({ hover })
   // Merge all the interactions into prop getters
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
@@ -423,7 +423,7 @@ export const Annoucements = ({
     className,
   })
 
-  console.log({ refereceProps })
+  // console.log({ refereceProps })
 
   return (
     <>

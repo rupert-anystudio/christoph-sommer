@@ -64,7 +64,8 @@ const Wrap = styled.div`
   @media (hover: hover) {
     > button > div {
       transition: transform 0.3s ease-in-out;
-      transform: translate3d(0, ${(p) => (p.isSelected ? 0 : '100%')}, 0);
+      /* transform: translate3d(0, ${(p) => (p.isSelected ? 0 : '100%')}, 0); */
+      transform: translate3d(0, 100%, 0);
     }
     &:hover {
       > button > div {

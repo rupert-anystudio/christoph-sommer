@@ -15,7 +15,7 @@ import {
   size,
   useTransitionStatus,
 } from '@floating-ui/react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { CircleButton, Title } from '../Primitives'
 import { ScaleInAnimation } from './ScaleInAnimation'
 import { useAnnoucement } from './useAnnoucement'
@@ -241,7 +241,18 @@ export const Annoucements = ({
   BASESHAPE_INSET = 0,
   COLLISION_OFFSET = 80,
 }) => {
+  const arrowRef = useRef(null)
   const [bubbleProps, setBubbleProps] = useState(null)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setOpen(true)
+    }, 500)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
 
   const onFloatingResize = useCallback(
     (rect) => {
@@ -282,10 +293,6 @@ export const Annoucements = ({
     onNextClick,
     onPreviousClick,
   } = useAnnoucement()
-
-  const arrowRef = useRef(null)
-  // popover state
-  const [open, setOpen] = useState(false)
   // floating ui wiring
   const {
     x,
@@ -378,10 +385,14 @@ export const Annoucements = ({
     [ARROW_WIDTH, ARROW_HEIGHT, SVG_PADDING]
   )
 
+  const hasNotification = amount >= 1
+
+  const notificationWrapProps = hasNotification ? getReferenceProps() : null
+
   return (
     <>
-      <NotificationWrap {...getReferenceProps({ ref: reference })}>
-        <ScaleInAnimation>
+      <NotificationWrap ref={reference} {...notificationWrapProps}>
+        <ScaleInAnimation isHidden={amount < 1}>
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
       </NotificationWrap>
@@ -404,7 +415,7 @@ export const Annoucements = ({
               })}
             >
               <ScaleInAnimation
-                isHidden={status !== 'open'}
+                isHidden={status !== 'open' || !hasNotification}
                 style={{
                   transformOrigin: 'var(--annoucement-transform-origin)',
                 }}

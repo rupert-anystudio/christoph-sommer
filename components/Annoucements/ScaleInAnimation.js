@@ -11,7 +11,7 @@ const Wrap = styled(animated.div)`
 `
 
 export const ScaleInAnimation = ({ children, style, isHidden = false }) => {
-  const value = useSpringValue(0, {
+  const value = useSpringValue(isHidden ? 0 : 1, {
     config: springConfig,
   })
 

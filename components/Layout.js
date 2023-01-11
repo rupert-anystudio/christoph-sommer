@@ -136,7 +136,18 @@ const Layout = () => {
       <Header>
         <div>
           <Logo />
-          <Annoucements />
+          <Annoucements
+            style={{
+              top: '28.9%',
+              left: '78%',
+            }}
+          />
+          {/* <Annoucements
+            style={{
+              top: '38.9%',
+              left: '18%',
+            }}
+          /> */}
         </div>
       </Header>
       <Infos>

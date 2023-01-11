@@ -3,6 +3,7 @@ import {
   useIsomorphicLayoutEffect,
   useSpringValue,
 } from '@react-spring/web'
+import { useDrag, useHover } from '@use-gesture/react'
 import styled from 'styled-components'
 import { springConfig } from './bubbleHelpers'
 
@@ -11,7 +12,8 @@ const Wrap = styled(animated.div)`
 `
 
 export const ScaleInAnimation = ({ children, style, isHidden = false }) => {
-  const value = useSpringValue(isHidden ? 0 : 1, {
+  // const bind = useHover()
+  const value = useSpringValue(0, {
     config: springConfig,
   })
 

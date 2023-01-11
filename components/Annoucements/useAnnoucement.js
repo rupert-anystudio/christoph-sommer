@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useCallback } from 'react'
 import usePagePropsContext from '../../hooks/usePagePropsContext'
 
-export const useAnnoucement = () => {
+export const useAnnoucement = (initialIndex = 0) => {
   const pageProps = usePagePropsContext()
   const annoucements = pageProps?.annoucements ?? []
   const amount = annoucements.length
 
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(initialIndex)
 
   const changeIndex = useCallback(
     (offset) => {

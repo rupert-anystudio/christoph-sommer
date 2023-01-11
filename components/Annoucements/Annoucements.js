@@ -14,6 +14,8 @@ import {
   arrow,
   size,
   useTransitionStatus,
+  useHover,
+  safePolygon,
 } from '@floating-ui/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CircleButton, Title } from '../Primitives'
@@ -117,7 +119,7 @@ const BubbleSvg = ({
   pulledArrowPath,
   pullProps,
   SEGMENT_MINLENGTH = 100,
-  SEGMENT_AMOUNT = 24,
+  SEGMENT_AMOUNT = 18,
   POINT_DEVIATION_RANGE = 45,
   START_OFFSET = 70,
 }) => {
@@ -146,7 +148,7 @@ const BubbleSvg = ({
         // const deviation = sideDeviation(index)
         const deviation =
           Math.random() * POINT_DEVIATION_RANGE - POINT_DEVIATION_RANGE * 2
-        const pointLength = baseLength + deviation + startOffset
+        const pointLength = baseLength + deviation
         const pointLengthCapped = returnCappedLength(pointLength, totalLength)
         return element.getPointAtLength(pointLengthCapped)
       })
@@ -216,14 +218,22 @@ const BubbleSvg = ({
           {/* <g>
             <rect {...baseRect} fill="none" stroke="red" />
             {layout.arcPoints.map((arcPoint, pointIndex) => (
-              <circle
-                key={pointIndex}
-                cx={arcPoint.start.x}
-                cy={arcPoint.start.y}
-                r={5}
-                stroke="none"
-                fill={pointIndex === 0 ? 'red' : 'black'}
-              />
+              <g key={pointIndex}>
+                <circle
+                  cx={arcPoint.start.x}
+                  cy={arcPoint.start.y}
+                  r={pointIndex === 0 ? 12 : 5}
+                  stroke="none"
+                  fill={'black'}
+                />
+                <circle
+                  cx={arcPoint.mid.x}
+                  cy={arcPoint.mid.y}
+                  r={5}
+                  stroke="none"
+                  fill={'blue'}
+                />
+              </g>
             ))}
           </g> */}
         </>
@@ -233,26 +243,28 @@ const BubbleSvg = ({
 }
 
 export const Annoucements = ({
-  ARROW_WIDTH = 90,
+  ARROW_WIDTH = 110,
   ARROW_HEIGHT = 110,
   ARROW_OFFSET = 10,
   SVG_PADDING = 500,
-  BASESHAPE_RADIUS = 70,
+  BASESHAPE_RADIUS = 120,
   BASESHAPE_INSET = 0,
-  COLLISION_OFFSET = 80,
+  COLLISION_OFFSET = 20,
+  style,
+  className,
 }) => {
   const arrowRef = useRef(null)
   const [bubbleProps, setBubbleProps] = useState(null)
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setOpen(true)
-    }, 500)
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setOpen(true)
+  //   }, 500)
+  //   return () => {
+  //     clearTimeout(timeout)
+  //   }
+  // }, [])
 
   const onFloatingResize = useCallback(
     (rect) => {
@@ -302,10 +314,10 @@ export const Annoucements = ({
     strategy,
     context,
     placement: floatingPlacement,
-    middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
+    middlewareData,
   } = useFloating({
     strategy: 'fixed',
-    placement: 'top',
+    placement: 'top-start',
     open,
     onOpenChange: setOpen,
     middleware: [
@@ -321,21 +333,39 @@ export const Annoucements = ({
       }),
       arrow({
         element: arrowRef,
+        padding: COLLISION_OFFSET,
       }),
     ],
     whileElementsMounted: autoUpdate,
   })
 
+  const { arrow: { x: arrowX, y: arrowY } = {} } = middlewareData
+
+  // console.log({ middlewareData })
+
   // set up unmounting/mounting transition
   const { isMounted, status } = useTransitionStatus(context, {
     duration: 1000,
   })
+
+  console.log({ status })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
   const role = useRole(context)
+  const hover = useHover(context, {
+    mouseOnly: true,
+    handleClose: safePolygon(),
+    // restMs: 150,
+    delay: {
+      open: 10,
+      close: 600,
+    },
+  })
+  console.log({ hover })
   // Merge all the interactions into prop getters
   const { getReferenceProps, getFloatingProps } = useInteractions([
+    hover,
     click,
     dismiss,
     role,
@@ -363,11 +393,11 @@ export const Annoucements = ({
       const tipOffsetX = tipOffset?.x ?? 0
       const tipOffsetY = tipOffset?.y ?? 0
       const arrowBottomLeft = {
-        x: SVG_PADDING + arrowOffsetX,
-        y: SVG_PADDING + bottomOffsetY,
+        x: SVG_PADDING + arrowOffsetX - 40,
+        y: SVG_PADDING + bottomOffsetY + 120,
       }
       const arrowBottomRight = {
-        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH,
+        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH + 40,
         y: SVG_PADDING + bottomOffsetY,
       }
       const arrowTop = {
@@ -376,9 +406,9 @@ export const Annoucements = ({
       }
       // prettier-ignore
       return `
-        M ${arrowBottomLeft.x},${arrowBottomLeft.y}
-        L ${arrowBottomRight.x},${arrowBottomRight.y}
-        L ${arrowTop.x},${arrowTop.y}
+      M ${arrowBottomRight.x},${arrowBottomRight.y}
+      C ${arrowBottomRight.x - 60},${arrowBottomRight.y} ${arrowTop.x},${arrowTop.y + ARROW_HEIGHT} ${arrowTop.x},${arrowTop.y}
+      C ${arrowTop.x},${arrowTop.y + ARROW_HEIGHT} ${arrowBottomLeft.x + 20},${arrowBottomLeft.y} ${arrowBottomLeft.x},${arrowBottomLeft.y}
         Z
       `
     },
@@ -387,11 +417,17 @@ export const Annoucements = ({
 
   const hasNotification = amount >= 1
 
-  const notificationWrapProps = hasNotification ? getReferenceProps() : null
+  const refereceProps = getReferenceProps({
+    ref: reference,
+    style,
+    className,
+  })
+
+  console.log({ refereceProps })
 
   return (
     <>
-      <NotificationWrap ref={reference} {...notificationWrapProps}>
+      <NotificationWrap {...refereceProps}>
         <ScaleInAnimation isHidden={amount < 1}>
           <CircleButton>{amount}</CircleButton>
         </ScaleInAnimation>
@@ -439,7 +475,7 @@ export const Annoucements = ({
                           amount={amount}
                         />
                         <ContentTitle>{annoucement.title}</ContentTitle>
-                        <PortableText value={annoucement.content} />
+                        {/* <PortableText value={annoucement.content} /> */}
                       </Content>
                     </>
                   )}

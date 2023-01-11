@@ -358,8 +358,8 @@ export const Annoucements = ({
     handleClose: safePolygon(),
     // restMs: 150,
     delay: {
-      open: 10,
-      close: 600,
+      open: 0,
+      close: 200,
     },
   })
   console.log({ hover })

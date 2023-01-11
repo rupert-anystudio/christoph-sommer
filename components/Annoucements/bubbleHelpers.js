@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { useRef } from 'react'
 
 export const springConfig = {
-  tension: 200,
-  friction: 12,
+  tension: 220,
+  friction: 14,
   precision: 0.001,
 }
 

@@ -243,13 +243,13 @@ const BubbleSvg = ({
 }
 
 export const Annoucements = ({
-  ARROW_WIDTH = 110,
+  ARROW_WIDTH = 60,
   ARROW_HEIGHT = 110,
   ARROW_OFFSET = 10,
   SVG_PADDING = 500,
-  BASESHAPE_RADIUS = 120,
+  BASESHAPE_RADIUS = 80,
   BASESHAPE_INSET = 0,
-  COLLISION_OFFSET = 20,
+  COLLISION_OFFSET = 60,
   style,
   className,
 }) => {
@@ -389,15 +389,15 @@ export const Annoucements = ({
 
   const getArrowPath = useCallback(
     (arrowOffsetX = 0, tipOffset) => {
-      const bottomOffsetY = 0
+      const bottomOffsetY = 20
       const tipOffsetX = tipOffset?.x ?? 0
       const tipOffsetY = tipOffset?.y ?? 0
       const arrowBottomLeft = {
-        x: SVG_PADDING + arrowOffsetX - 40,
+        x: SVG_PADDING + arrowOffsetX - 20,
         y: SVG_PADDING + bottomOffsetY,
       }
       const arrowBottomRight = {
-        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH + 40,
+        x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH + 20,
         y: SVG_PADDING + bottomOffsetY,
       }
       const arrowTop = {
@@ -407,7 +407,7 @@ export const Annoucements = ({
       // prettier-ignore
       return `
       M ${arrowBottomRight.x},${arrowBottomRight.y}
-      C ${arrowBottomRight.x - 60},${arrowBottomRight.y} ${arrowTop.x},${arrowTop.y + ARROW_HEIGHT} ${arrowTop.x},${arrowTop.y}
+      C ${arrowBottomRight.x - 20},${arrowBottomRight.y} ${arrowTop.x},${arrowTop.y + ARROW_HEIGHT} ${arrowTop.x},${arrowTop.y}
       C ${arrowTop.x},${arrowTop.y + ARROW_HEIGHT} ${arrowBottomLeft.x + 20},${arrowBottomLeft.y} ${arrowBottomLeft.x},${arrowBottomLeft.y}
         Z
       `

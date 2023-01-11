@@ -81,7 +81,7 @@ export const EntryToggle = ({ onClick, isSelected }) => {
         <span>{isSelected ? 'Close' : 'Open'}</span>
         <div>
           <div>
-            <span>{isSelected ? '▲' : '▼'}</span>
+            <span>{isSelected ? '⋯' : '⋯'}</span>
           </div>
         </div>
       </button>

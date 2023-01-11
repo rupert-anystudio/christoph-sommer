@@ -8,6 +8,7 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
+import AnnoucementNotification from './AnnoucementNotification'
 
 const Container = styled.div`
   position: relative;
@@ -41,7 +42,7 @@ const Element = styled.div`
   background: var(--color-bg);
   padding: var(--padding-page);
 `
-const Header = styled(Element)`
+const Header = styled.header`
   grid-area: Header;
   z-index: 100;
   border-bottom: var(--border);
@@ -53,10 +54,13 @@ const Header = styled(Element)`
     top: 0;
     border-right: var(--border);
   }
-  > div {
-    position: relative;
-    /* outline: 1px solid red; */
-  }
+`
+const HeaderElem = styled(Element)`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* outline: 1px solid red; */
 `
 const Infos = styled(Area)`
   grid-area: Infos;
@@ -134,7 +138,7 @@ const Layout = () => {
     <Container>
       <Head />
       <Header>
-        <div>
+        <HeaderElem>
           <Logo />
           <Annoucements
             style={{
@@ -142,13 +146,8 @@ const Layout = () => {
               left: '78%',
             }}
           />
-          {/* <Annoucements
-            style={{
-              top: '38.9%',
-              left: '18%',
-            }}
-          /> */}
-        </div>
+          <AnnoucementNotification />
+        </HeaderElem>
       </Header>
       <Infos>
         <div>

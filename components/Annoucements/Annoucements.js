@@ -353,19 +353,19 @@ export const Annoucements = ({
   const click = useClick(context)
   const dismiss = useDismiss(context)
   const role = useRole(context)
-  const hover = useHover(context, {
-    mouseOnly: true,
-    handleClose: safePolygon(),
-    // restMs: 150,
-    delay: {
-      open: 0,
-      close: 200,
-    },
-  })
-  console.log({ hover })
+  // const hover = useHover(context, {
+  //   mouseOnly: true,
+  //   handleClose: safePolygon(),
+  //   // restMs: 150,
+  //   delay: {
+  //     open: 0,
+  //     close: 200,
+  //   },
+  // })
+  // console.log({ hover })
   // Merge all the interactions into prop getters
   const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
+    // hover,
     click,
     dismiss,
     role,
@@ -394,7 +394,7 @@ export const Annoucements = ({
       const tipOffsetY = tipOffset?.y ?? 0
       const arrowBottomLeft = {
         x: SVG_PADDING + arrowOffsetX - 40,
-        y: SVG_PADDING + bottomOffsetY + 120,
+        y: SVG_PADDING + bottomOffsetY,
       }
       const arrowBottomRight = {
         x: SVG_PADDING + arrowOffsetX + ARROW_WIDTH + 40,

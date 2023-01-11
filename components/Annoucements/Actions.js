@@ -34,9 +34,9 @@ export const Actions = ({
 }) => {
   return (
     <Wrap>
-      <ArrowButton onClick={onPreviousClick}>{'<'}</ArrowButton>
+      <ArrowButton onClick={onPreviousClick}>{'◀'}</ArrowButton>
       <span>{`${currentIndex + 1} / ${amount}`}</span>
-      <ArrowButton onClick={onNextClick}>{'>'}</ArrowButton>
+      <ArrowButton onClick={onNextClick}>{'▶'}</ArrowButton>
     </Wrap>
   )
 }

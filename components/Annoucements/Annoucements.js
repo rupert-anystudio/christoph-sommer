@@ -34,7 +34,7 @@ import {
   returnDistanceBetweenPoints,
   returnAngleFromVector,
   springConfig,
-  // useStoredDeviationGetter,
+  useStoredDeviationGetter,
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
 import { PullRelease } from './PullRelease'
@@ -54,6 +54,7 @@ const Arrow = styled.div`
   position: absolute;
   display: block;
   pointer-events: none;
+  /* outline: 1px solid red; */
 `
 
 const Content = styled.div`
@@ -64,6 +65,7 @@ const Content = styled.div`
   color: var(--color-txt);
   pointer-events: none;
   text-align: center;
+  /* outline: 1px solid red; */
 `
 
 const ContentTitle = styled(Title).attrs({ as: 'h1' })`
@@ -115,29 +117,38 @@ const BubbleSvg = ({
   pulledArrowPath,
   pullProps,
   SEGMENT_MINLENGTH = 100,
-  POINT_DEVIATION_RANGE = 50,
-  START_OFFSET = 100,
+  SEGMENT_AMOUNT = 24,
+  POINT_DEVIATION_RANGE = 45,
+  START_OFFSET = 70,
 }) => {
   const [layout, setLayout] = useState(null)
 
-  // const sideDeviation = useStoredDeviationGetter(50)
+  const sideDeviation = useStoredDeviationGetter(POINT_DEVIATION_RANGE)
+  const layoutCountStore = useRef(0)
 
-  const onBaseRectResize = useCallback(
-    (dimensions, baseElem) => {
-      const totalLength = baseElem.getTotalLength()
+  const updateLayoutFromElement = useCallback(
+    (element) => {
+      const layoutCount = layoutCountStore.current
+      layoutCountStore.current = layoutCount + 1
+      const totalLength = element.getTotalLength()
 
-      const randomStartOffset = Math.random() * START_OFFSET - START_OFFSET * 2
+      const startOffset = Math.random() * START_OFFSET - START_OFFSET * 2
+      // const startOffset = layoutCount * START_OFFSET
 
-      const segments = returnSegmentsFromLength(totalLength, SEGMENT_MINLENGTH)
+      const segments = returnSegmentsFromLength(
+        totalLength,
+        SEGMENT_MINLENGTH,
+        SEGMENT_AMOUNT
+      )
 
       const points = segments.map((segmentLength, index) => {
         const baseLength = segmentLength * (index + 1)
         // const deviation = sideDeviation(index)
         const deviation =
           Math.random() * POINT_DEVIATION_RANGE - POINT_DEVIATION_RANGE * 2
-        const pointLength = baseLength + deviation + randomStartOffset
+        const pointLength = baseLength + deviation + startOffset
         const pointLengthCapped = returnCappedLength(pointLength, totalLength)
-        return baseElem.getPointAtLength(pointLengthCapped)
+        return element.getPointAtLength(pointLengthCapped)
       })
 
       const arcPoints = points.map((end, index) => {
@@ -171,10 +182,19 @@ const BubbleSvg = ({
         })
         .filter(Boolean)
         .join(' ')
-
-      setLayout({ points, arcPoints, bubblePath })
+      setLayout({
+        arcPoints,
+        bubblePath,
+      })
     },
-    [SEGMENT_MINLENGTH, POINT_DEVIATION_RANGE, START_OFFSET]
+    [SEGMENT_MINLENGTH, POINT_DEVIATION_RANGE, START_OFFSET, SEGMENT_AMOUNT]
+  )
+
+  const onBaseRectResize = useCallback(
+    (dimensions, element) => {
+      updateLayoutFromElement(element)
+    },
+    [updateLayoutFromElement]
   )
 
   const [baseRectRef] = useObservedElement(onBaseRectResize)
@@ -213,7 +233,7 @@ const BubbleSvg = ({
 }
 
 export const Annoucements = ({
-  ARROW_WIDTH = 70,
+  ARROW_WIDTH = 90,
   ARROW_HEIGHT = 110,
   ARROW_OFFSET = 10,
   SVG_PADDING = 500,
@@ -392,7 +412,6 @@ export const Annoucements = ({
                 <PullRelease getArrowPath={getArrowPath} arrowX={arrowX}>
                   {({ pulledArrowPath, pullProps }) => (
                     <>
-                      <Arrow ref={arrowRef} style={arrowStyle} />
                       {bubbleProps && (
                         <BubbleSvg
                           {...bubbleProps}
@@ -400,6 +419,7 @@ export const Annoucements = ({
                           pullProps={pullProps}
                         />
                       )}
+                      <Arrow ref={arrowRef} style={arrowStyle} />
                       <Content COLLISION_OFFSET={COLLISION_OFFSET}>
                         <Actions
                           onPreviousClick={onPreviousClick}

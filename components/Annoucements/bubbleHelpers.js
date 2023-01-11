@@ -7,9 +7,13 @@ export const springConfig = {
   precision: 0.001,
 }
 
-export const returnSegmentsFromLength = (totalLength, minLength = 80) => {
+export const returnSegmentsFromLength = (
+  totalLength,
+  minLength = 80,
+  fixedAmount = undefined
+) => {
   if (!totalLength) return []
-  const segmentAmount = 18 || Math.ceil(totalLength / minLength)
+  const segmentAmount = fixedAmount || Math.ceil(totalLength / minLength)
   const segmentLength = totalLength / segmentAmount
   return Array.from({ length: segmentAmount }, (v, i) => segmentLength)
 }

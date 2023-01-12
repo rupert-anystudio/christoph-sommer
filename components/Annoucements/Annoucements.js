@@ -349,7 +349,7 @@ export const Annoucements = ({
     duration: 1000,
   })
 
-  console.log({ status })
+  // console.log({ status })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
@@ -424,7 +424,7 @@ export const Annoucements = ({
     className,
   })
 
-  console.log({ refereceProps })
+  // console.log({ refereceProps })
 
   return (
     <>

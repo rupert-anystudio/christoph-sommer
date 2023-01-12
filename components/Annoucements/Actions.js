@@ -26,12 +26,20 @@ const ArrowButton = styled.button`
   user-select: none;
 `
 
+const Label = styled.span`
+  padding: 2rem 0;
+  display: inline-block;
+`
+
 export const Actions = ({ amount, label, onNextClick, onPreviousClick }) => {
+  const showButtons = amount >= 2
   return (
     <Wrap>
-      <ArrowButton onClick={onPreviousClick}>{'◀'}</ArrowButton>
-      <span>{label}</span>
-      <ArrowButton onClick={onNextClick}>{'▶'}</ArrowButton>
+      {showButtons && (
+        <ArrowButton onClick={onPreviousClick}>{'◀'}</ArrowButton>
+      )}
+      <Label>{label}</Label>
+      {showButtons && <ArrowButton onClick={onNextClick}>{'▶'}</ArrowButton>}
     </Wrap>
   )
 }

@@ -1,4 +1,5 @@
 import { BiBroadcast } from 'react-icons/bi'
+import { formatIsoDate } from '../../lib/schemaHelpers'
 
 export default {
   title: 'Annoucement',
@@ -47,7 +48,19 @@ export default {
   preview: {
     select: {
       title: 'title',
-      subtitle: 'date',
+      date: 'date',
+      dateUntil: 'dateUntil',
+    },
+    prepare: ({ title, date, dateUntil }) => {
+      const publishedDateFormatted = formatIsoDate(date)
+      const dateUntilFormatted = formatIsoDate(dateUntil)
+      const subtitle = [publishedDateFormatted, dateUntilFormatted]
+        .filter(Boolean)
+        .join(' - ')
+      return {
+        title,
+        subtitle,
+      }
     },
   },
 }

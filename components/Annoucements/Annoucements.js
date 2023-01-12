@@ -40,6 +40,7 @@ import {
 } from './bubbleHelpers'
 import useObservedElement from '../useObservedElement'
 import { PullRelease } from './PullRelease'
+import { formatIsoDate } from '../../lib/dateHelpers'
 
 const NotificationWrap = styled.div`
   position: absolute;
@@ -471,7 +472,7 @@ export const Annoucements = ({
                         <Actions
                           onPreviousClick={onPreviousClick}
                           onNextClick={onNextClick}
-                          currentIndex={currentIndex}
+                          label={formatIsoDate(annoucement.date)}
                           amount={amount}
                         />
                         <ContentTitle>{annoucement.title}</ContentTitle>

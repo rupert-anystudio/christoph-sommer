@@ -26,16 +26,11 @@ const ArrowButton = styled.button`
   user-select: none;
 `
 
-export const Actions = ({
-  amount,
-  currentIndex,
-  onNextClick,
-  onPreviousClick,
-}) => {
+export const Actions = ({ amount, label, onNextClick, onPreviousClick }) => {
   return (
     <Wrap>
       <ArrowButton onClick={onPreviousClick}>{'◀'}</ArrowButton>
-      <span>{`${currentIndex + 1} / ${amount}`}</span>
+      <span>{label}</span>
       <ArrowButton onClick={onNextClick}>{'▶'}</ArrowButton>
     </Wrap>
   )

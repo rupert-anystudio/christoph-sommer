@@ -21,12 +21,12 @@ export const useAnnoucement = (initialIndex = 0) => {
   )
 
   const onNextClick = useCallback(() => {
-    console.log('onNextClick')
+    // console.log('onNextClick')
     changeIndex(1)
   }, [changeIndex])
 
   const onPreviousClick = useCallback(() => {
-    console.log('onPreviousClick')
+    // console.log('onPreviousClick')
     changeIndex(-1)
   }, [changeIndex])
 

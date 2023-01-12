@@ -12,7 +12,7 @@ const useAboutAccordionItems = () => {
       },
       {
         key: 'aboutText',
-        label: 'über Mich',
+        label: 'über mich',
         content: about?.aboutText,
       },
     ]

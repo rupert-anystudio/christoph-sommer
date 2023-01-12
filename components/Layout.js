@@ -8,7 +8,6 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
-import PortfolioPage from './PortfolioPage'
 
 const Container = styled.div`
   position: relative;
@@ -56,6 +55,7 @@ const Header = styled(Element)`
   }
   > div {
     position: relative;
+    /* outline: 1px solid red; */
   }
 `
 const Infos = styled(Area)`
@@ -136,7 +136,18 @@ const Layout = () => {
       <Header>
         <div>
           <Logo />
-          <Annoucements />
+          <Annoucements
+            style={{
+              top: '28.9%',
+              left: '78%',
+            }}
+          />
+          {/* <Annoucements
+            style={{
+              top: '38.9%',
+              left: '18%',
+            }}
+          /> */}
         </div>
       </Header>
       <Infos>

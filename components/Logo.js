@@ -7,7 +7,7 @@ export const LogoWrap = styled.div`
 `
 
 const LogoText = styled.a`
-  font-size: calc(var(--height-header) * 0.4);
+  font-size: calc(var(--height-header) * 0.42);
   line-height: 0.8334;
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);

@@ -15,10 +15,10 @@ const Wrap = styled.div`
   }
   a {
     color: currentColor;
-    pointer-events: 'auto';
+    pointer-events: auto;
   }
   button {
-    pointer-events: 'auto';
+    pointer-events: auto;
   }
 `
 

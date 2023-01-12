@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.16.0",
     "@portabletext/react": "^1.0.6",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-accordion": "^1.0.1",
@@ -16,9 +17,12 @@
     "@radix-ui/react-popover": "^1.0.2",
     "@radix-ui/react-radio-group": "^1.1.0",
     "@radix-ui/react-scroll-area": "^1.0.2",
+    "@react-spring/web": "^9.6.1",
+    "@use-gesture/react": "^10.2.23",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "gsap": "^3.11.3",
+    "lodash": "^4.17.21",
     "next": "12.3.1",
     "next-sanity": "^0.8.4",
     "next-transpile-modules": "^10.0.0",

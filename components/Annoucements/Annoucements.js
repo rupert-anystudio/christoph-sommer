@@ -258,15 +258,6 @@ export const Annoucements = ({
   const [bubbleProps, setBubbleProps] = useState(null)
   const [open, setOpen] = useState(false)
 
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setOpen(true)
-  //   }, 500)
-  //   return () => {
-  //     clearTimeout(timeout)
-  //   }
-  // }, [])
-
   const onFloatingResize = useCallback(
     (rect) => {
       const viewBox = `0 0 ${SVG_PADDING * 2 + rect.width} ${
@@ -306,6 +297,17 @@ export const Annoucements = ({
     onNextClick,
     onPreviousClick,
   } = useAnnoucement()
+
+  useEffect(() => {
+    if (amount < 1) return
+    const timeout = setTimeout(() => {
+      setOpen(true)
+    }, 600)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [amount])
+
   // floating ui wiring
   const {
     x,

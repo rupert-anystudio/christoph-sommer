@@ -352,7 +352,6 @@ export const Annoucements = ({
   })
 
   // console.log({ status })
-  // console.log({ status })
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)

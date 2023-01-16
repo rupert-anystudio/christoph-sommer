@@ -8,7 +8,6 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
-import AnnoucementNotification from './AnnoucementNotification'
 
 const Container = styled.div`
   position: relative;
@@ -140,13 +139,12 @@ const Layout = () => {
       <Header>
         <HeaderElem>
           <Logo />
-          <Annoucements
+          {/* <Annoucements
             style={{
               top: '28.9%',
               left: '78%',
             }}
-          />
-          <AnnoucementNotification />
+          /> */}
         </HeaderElem>
       </Header>
       <Infos>

@@ -2,22 +2,23 @@ import {
   arrow,
   autoPlacement,
   autoUpdate,
-  flip,
-  hide,
   offset,
   safePolygon,
   shift,
   size,
+  hide,
   useClick,
   useDismiss,
   useFloating,
+  useFocus,
   useHover,
   useInteractions,
   useRole,
   useTransitionStatus,
 } from '@floating-ui/react'
-import { useState } from 'react'
-import { useRef } from 'react'
+import { useCallback, useState, useRef } from 'react'
+
+const arrowOverflow = 1
 
 const transformOriginGetters = {
   bottom: ({ size, x }) => `${x + size / 2}px -${size}px`,
@@ -28,22 +29,22 @@ const transformOriginGetters = {
 
 const arrowStyleGetters = {
   bottom: ({ size, x }) => ({
-    top: 0 - size,
+    top: arrowOverflow - size,
     left: x,
     transform: 'rotate(0deg)',
   }),
   left: ({ size, y }) => ({
-    right: 0 - size,
+    right: arrowOverflow - size,
     top: y,
     transform: 'rotate(90deg)',
   }),
   top: ({ size, x }) => ({
-    bottom: 0 - size,
+    bottom: arrowOverflow - size,
     left: x,
     transform: 'rotate(180deg)',
   }),
   right: ({ size, y }) => ({
-    left: 0 - size,
+    left: arrowOverflow - size,
     top: y,
     transform: 'rotate(-90deg)',
   }),
@@ -52,10 +53,19 @@ const arrowStyleGetters = {
 export const useNotificationPopover = ({
   arrowSize = 60,
   transitionDelay = 400,
+  onResize,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const arrowRef = useRef(null)
+
+  const handleResize = useCallback(
+    (args) => {
+      if (typeof onResize !== 'function') return
+      onResize(args)
+    },
+    [onResize]
+  )
 
   const {
     x,
@@ -77,7 +87,6 @@ export const useNotificationPopover = ({
       offset({
         mainAxis: arrowSize + 10,
       }),
-      // flip(),
       autoPlacement({
         padding: 0,
       }),
@@ -86,7 +95,7 @@ export const useNotificationPopover = ({
       }),
       size({
         apply({ rects, availableWidth, availableHeight, elements }) {
-          // onResize({ rects, availableWidth, availableHeight, elements })
+          handleResize({ rects, availableHeight, availableWidth, elements })
         },
       }),
       arrow({
@@ -104,18 +113,23 @@ export const useNotificationPopover = ({
   const click = useClick(context)
   const dismiss = useDismiss(context)
   const role = useRole(context)
+  const focus = useFocus(context, {
+    enabled: true,
+  })
   const hover = useHover(context, {
     mouseOnly: true,
     handleClose: safePolygon(),
-    delay: { open: 0, close: 2000 },
+    delay: { open: 0, close: 80 },
+    // enabled: false,
   })
 
   // get props getters for all interactions
   const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
     click,
     dismiss,
     role,
+    focus,
+    hover,
   ])
 
   // setup transition status for unmounting animations
@@ -155,10 +169,9 @@ export const useNotificationPopover = ({
       position: strategy,
       width: 'max-content',
       zIndex: 1000,
-      // top: 0,
-      // left: 0,
-      top: y ?? 0,
-      left: x ?? 0,
+      top: 0,
+      left: 0,
+      transform: `translate(${Math.round(x ?? 0)}px,${Math.round(y ?? 0)}px)`,
       transformOrigin,
     },
   })

@@ -1,10 +1,11 @@
 import { forwardRef } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import Notification from '../Notification'
 import PortableText from '../PortableText'
 import { CircleButton, Title } from '../Primitives'
-import { PopoverAnimation, ShiftAnimation } from './Animations'
 import { useAnnoucements } from './useAnnoucements'
+import { usePopoverAnimation } from './usePopoverAnimation'
+import { animated } from '@react-spring/web'
 
 const Wrap = styled.div`
   position: absolute;
@@ -12,7 +13,8 @@ const Wrap = styled.div`
 `
 
 const Floating = styled.div`
-  --color-bg: blue;
+  position: relative;
+  --color-bg: black;
   --color-txt: white;
 `
 
@@ -22,23 +24,40 @@ const Content = styled.div`
   background: var(--color-bg);
   color: var(--color-txt);
   width: clamp(120px, 90vw, 600px);
-  box-shadow: 1px 4px 16px -6px black;
-  border-radius: 2px;
+  border-radius: 4px;
 `
 
-const PopoverContent = ({ title, content, actions = [] }) => (
-  <Content>
-    <Title as="h1">{title}</Title>
-    <PortableText value={content} />
-    {actions
-      .filter((a) => a.isVisible)
-      .map(({ key, ...actionProps }) => (
-        <button key={key} {...actionProps}>
-          {key}
-        </button>
-      ))}
-  </Content>
-)
+const PopoverContent = ({
+  title,
+  content,
+  actions = [],
+  children,
+  style,
+  isOpen,
+}) => {
+  const props = usePopoverAnimation(isOpen)
+  return (
+    <animated.div
+      style={{
+        ...style,
+        ...props,
+      }}
+    >
+      {children}
+      <Content>
+        <Title as="h1">{title}</Title>
+        <PortableText value={content} />
+        {actions
+          .filter((a) => a.isVisible)
+          .map(({ key, ...actionProps }) => (
+            <button key={key} {...actionProps}>
+              {key}
+            </button>
+          ))}
+      </Content>
+    </animated.div>
+  )
+}
 
 const Arrow = styled.div`
   position: absolute;
@@ -67,34 +86,32 @@ export const AnnoucementNotification = forwardRef(
       <Wrap style={style} className={className} ref={ref}>
         <Notification
           label={amount}
-          arrowSize={20}
-          transitionDelay={200}
+          arrowSize={30}
+          transitionDelay={800}
           referenceComponent={CircleButton}
         >
           {({ floatingProps, arrowProps, transformOrigin, isOpen }) => (
-            // <ShiftAnimation
-            //   x={floatingProps.style.left}
-            //   y={floatingProps.style.top}
-            // >
             <Floating {...floatingProps}>
-              <PopoverAnimation isOpen={isOpen} style={{ transformOrigin }}>
-                <PopoverContent
-                  title={annoucement.title}
-                  content={annoucement.content}
-                  actions={[
-                    {
-                      key: 'next',
-                      onClick: onNextClick,
-                      isVisible: amount > 1,
-                    },
-                  ]}
-                />
+              {/* <PopoverAnimation isOpen={isOpen} style={{ transformOrigin }}> */}
+              <PopoverContent
+                style={{ transformOrigin }}
+                isOpen={isOpen}
+                title={annoucement.title}
+                content={annoucement.content}
+                actions={[
+                  {
+                    key: 'next',
+                    onClick: onNextClick,
+                    isVisible: amount > 1,
+                  },
+                ]}
+              >
                 <Arrow {...arrowProps}>
                   <ArrowContent />
                 </Arrow>
-              </PopoverAnimation>
+              </PopoverContent>
+              {/* </PopoverAnimation> */}
             </Floating>
-            // </ShiftAnimation>
           )}
         </Notification>
       </Wrap>

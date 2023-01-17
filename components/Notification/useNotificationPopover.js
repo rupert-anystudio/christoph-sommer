@@ -18,41 +18,47 @@ import {
 } from '@floating-ui/react'
 import { useCallback, useState, useRef } from 'react'
 
-const arrowOverflow = 1
-
-const transformOriginGetters = {
-  bottom: ({ size, x }) => `${x + size / 2}px -${size}px`,
-  left: ({ size, y }) => `calc(100% + ${size}px) ${y + size / 2}px`,
-  top: ({ size, x }) => `${x + size / 2}px calc(100% + ${size}px)`,
-  right: ({ size, y }) => `-${size}px ${y + size / 2}px`,
-}
-
-const arrowStyleGetters = {
-  bottom: ({ size, x }) => ({
-    top: arrowOverflow - size,
-    left: x,
-    transform: 'rotate(0deg)',
-  }),
-  left: ({ size, y }) => ({
-    right: arrowOverflow - size,
-    top: y,
-    transform: 'rotate(90deg)',
-  }),
-  top: ({ size, x }) => ({
-    bottom: arrowOverflow - size,
-    left: x,
-    transform: 'rotate(180deg)',
-  }),
-  right: ({ size, y }) => ({
-    left: arrowOverflow - size,
-    top: y,
-    transform: 'rotate(-90deg)',
-  }),
+const sides = {
+  top: {
+    returnTransformOrigin: ({ size, x }) =>
+      `${x + size / 2}px calc(100% + ${size}px)`,
+    returnArrowStyle: ({ overlap = 0, size, x }) => ({
+      bottom: overlap - size,
+      left: x,
+      transform: 'rotate(180deg)',
+    }),
+  },
+  right: {
+    returnTransformOrigin: ({ size, y }) => `-${size}px ${y + size / 2}px`,
+    returnArrowStyle: ({ overlap = 0, size, y }) => ({
+      left: overlap - size,
+      top: y,
+      transform: 'rotate(-90deg)',
+    }),
+  },
+  bottom: {
+    returnTransformOrigin: ({ size, x }) => `${x + size / 2}px -${size}px`,
+    returnArrowStyle: ({ overlap = 0, size, x }) => ({
+      top: overlap - size,
+      left: x,
+      transform: 'rotate(0deg)',
+    }),
+  },
+  left: {
+    returnTransformOrigin: ({ size, y }) =>
+      `calc(100% + ${size}px) ${y + size / 2}px`,
+    returnArrowStyle: ({ overlap = 0, size, y }) => ({
+      right: overlap - size,
+      top: y,
+      transform: 'rotate(90deg)',
+    }),
+  },
 }
 
 export const useNotificationPopover = ({
   arrowSize = 60,
   transitionDelay = 400,
+  arrowOverlap = 1,
   onResize,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -119,7 +125,7 @@ export const useNotificationPopover = ({
   const hover = useHover(context, {
     mouseOnly: true,
     handleClose: safePolygon(),
-    delay: { open: 0, close: 80 },
+    delay: { open: 0, close: 200 },
     // enabled: false,
   })
 
@@ -137,17 +143,16 @@ export const useNotificationPopover = ({
     duration: transitionDelay,
   })
 
-  const floatingSide = floatingPlacement.split('-')[0]
-  const arrowStyleGetter = arrowStyleGetters[floatingSide]
-  const transformOriginGetter = transformOriginGetters[floatingSide]
+  const side = sides[floatingPlacement.split('-')[0]]
 
-  const arrowStyle = arrowStyleGetter({
+  const arrowStyle = side.returnArrowStyle({
     x: arrowX,
     y: arrowY,
     size: arrowSize,
+    overlap: arrowOverlap,
   })
 
-  const transformOrigin = transformOriginGetter({
+  const transformOrigin = side.returnTransformOrigin({
     x: arrowX,
     y: arrowY,
     size: arrowSize,

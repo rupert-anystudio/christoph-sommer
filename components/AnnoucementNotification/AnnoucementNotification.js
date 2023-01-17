@@ -92,7 +92,6 @@ export const AnnoucementNotification = forwardRef(
         >
           {({ floatingProps, arrowProps, transformOrigin, isOpen }) => (
             <Floating {...floatingProps}>
-              {/* <PopoverAnimation isOpen={isOpen} style={{ transformOrigin }}> */}
               <PopoverContent
                 style={{ transformOrigin }}
                 isOpen={isOpen}
@@ -110,7 +109,6 @@ export const AnnoucementNotification = forwardRef(
                   <ArrowContent />
                 </Arrow>
               </PopoverContent>
-              {/* </PopoverAnimation> */}
             </Floating>
           )}
         </Notification>

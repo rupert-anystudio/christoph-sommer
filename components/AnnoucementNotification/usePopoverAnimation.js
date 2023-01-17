@@ -1,4 +1,4 @@
-import { useSpring } from '@react-spring/web'
+import { useIsomorphicLayoutEffect, useSpring } from '@react-spring/web'
 import { useEffect } from 'react'
 
 export const usePopoverAnimation = (isOpen) => {
@@ -17,21 +17,20 @@ export const usePopoverAnimation = (isOpen) => {
     []
   )
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (isOpen) {
       api.start({
-        to: {
-          opacity: 1,
-          scale: 1,
+        opacity: 1,
+        scale: 1,
+        config: {
+          clamp: false,
         },
       })
       return
     }
     api.start({
-      to: {
-        opacity: 0,
-        scale: 0.4,
-      },
+      opacity: 0,
+      scale: 0.4,
       config: {
         clamp: true,
       },

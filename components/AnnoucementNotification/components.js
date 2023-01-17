@@ -335,7 +335,7 @@ const BubbleShape = ({ points = [], arrowTip }) => {
     closePoints[closePoints.length - 1],
   ].filter(Boolean)
 
-  console.log({ arrowPoints, points })
+  // console.log({ arrowPoints, points })
 
   return (
     <>

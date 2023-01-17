@@ -1,1 +1,1 @@
-export { AnnoucementNotification as default } from './AnnoucementNotification'
+export { AnnoucementNotificationContainer as default } from './AnnoucementNotificationContainer'

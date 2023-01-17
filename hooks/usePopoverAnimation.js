@@ -1,5 +1,4 @@
 import { useIsomorphicLayoutEffect, useSpring } from '@react-spring/web'
-import { useEffect } from 'react'
 
 export const usePopoverAnimation = (isOpen) => {
   const [props, api] = useSpring(

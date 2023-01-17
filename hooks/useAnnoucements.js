@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useState } from 'react'
-import usePagePropsContext from '../../hooks/usePagePropsContext'
+import usePagePropsContext from './usePagePropsContext'
 
 export const useAnnoucements = () => {
   const { annoucements = [] } = usePagePropsContext()

@@ -8,6 +8,7 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
+import HeaderNotification from './HeaderNotification'
 
 const Container = styled.div`
   position: relative;
@@ -99,6 +100,7 @@ const Scrollables = styled(Area)`
   }
 `
 const Main = styled(Element)`
+  position: relative;
   padding: 0;
   @media (min-width: 1440px) {
     grid-area: Main;
@@ -139,12 +141,18 @@ const Layout = () => {
       <Header>
         <HeaderElem>
           <Logo />
-          {/* <Annoucements
+          <Annoucements
             style={{
               top: '28.9%',
               left: '78%',
             }}
-          /> */}
+          />
+          <HeaderNotification
+            style={{
+              top: '28.9%',
+              left: '28%',
+            }}
+          />
         </HeaderElem>
       </Header>
       <Infos>
@@ -163,6 +171,13 @@ const Layout = () => {
           {layout === 'static' && <StaticPage />}
           {/* {layout === 'portfolio' && <PortfolioPage />} */}
           {layout === 'portfolio' && <Portfolio />}
+
+          <HeaderNotification
+            style={{
+              top: '900px',
+              right: '60px',
+            }}
+          />
         </Main>
         <Footer>
           <FooterNav />

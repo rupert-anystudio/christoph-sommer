@@ -1,6 +1,5 @@
 import {
   arrow,
-  autoPlacement,
   autoUpdate,
   offset,
   safePolygon,
@@ -15,7 +14,10 @@ import {
   useInteractions,
   useRole,
   useTransitionStatus,
+  autoPlacement,
+  flip,
 } from '@floating-ui/react'
+import { useIsomorphicLayoutEffect } from '@react-spring/web'
 import { useCallback, useState, useRef } from 'react'
 
 const sides = {
@@ -59,6 +61,8 @@ export const useNotificationPopover = ({
   arrowSize = 60,
   transitionDelay = 400,
   arrowOverlap = 1,
+  arrowDistance = 20,
+  collisionPadding = 20,
   onResize,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -72,6 +76,10 @@ export const useNotificationPopover = ({
     },
     [onResize]
   )
+
+  const close = useCallback(() => {
+    setIsOpen(false)
+  }, [])
 
   const {
     x,
@@ -89,44 +97,40 @@ export const useNotificationPopover = ({
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
     middleware: [
-      hide(),
       offset({
-        mainAxis: arrowSize + 10,
+        mainAxis: arrowSize + arrowDistance,
       }),
-      autoPlacement({
-        padding: 0,
-      }),
+      autoPlacement(),
+      // flip(),
       shift({
-        padding: 10,
+        padding: collisionPadding,
       }),
       size({
         apply({ rects, availableWidth, availableHeight, elements }) {
-          handleResize({ rects, availableHeight, availableWidth, elements })
+          handleResize({ rects, availableWidth, availableHeight, elements })
         },
       }),
       arrow({
         element: arrowRef,
         padding: 0,
       }),
+      // hide(),
     ],
   })
 
-  const { arrow: arrowData = {} } = middlewareData
-
-  const { x: arrowX = 0, y: arrowY = 0 } = arrowData
+  const { arrow: arrowData = {}, hide: hideData = {} } = middlewareData
+  const { x: arrowX, y: arrowY } = arrowData
+  const { referenceHidden } = hideData
 
   // set up interactions
   const click = useClick(context)
   const dismiss = useDismiss(context)
   const role = useRole(context)
-  const focus = useFocus(context, {
-    enabled: true,
-  })
+  const focus = useFocus(context)
   const hover = useHover(context, {
     mouseOnly: true,
     handleClose: safePolygon(),
-    delay: { open: 0, close: 200 },
-    // enabled: false,
+    enabled: false,
   })
 
   // get props getters for all interactions
@@ -143,7 +147,9 @@ export const useNotificationPopover = ({
     duration: transitionDelay,
   })
 
-  const side = sides[floatingPlacement.split('-')[0]]
+  const currentSide = floatingPlacement.split('-')[0]
+
+  const side = sides[currentSide]
 
   const arrowStyle = side.returnArrowStyle({
     x: arrowX,
@@ -177,7 +183,6 @@ export const useNotificationPopover = ({
       top: 0,
       left: 0,
       transform: `translate(${Math.round(x ?? 0)}px,${Math.round(y ?? 0)}px)`,
-      transformOrigin,
     },
   })
 
@@ -191,15 +196,24 @@ export const useNotificationPopover = ({
     },
   }
 
+  useIsomorphicLayoutEffect(() => {
+    if (referenceHidden && isOpen) {
+      setIsOpen(false)
+    }
+  }, [referenceHidden, isOpen])
+
   return {
-    context,
+    close,
     isOpen,
     isMounted,
-    status,
     referenceProps,
     focusManagerProps,
     floatingProps,
     arrowProps,
     transformOrigin,
+    currentSide,
+    arrowX,
+    arrowY,
+    arrowSize,
   }
 }

@@ -5,7 +5,6 @@ import PortfolioEntry from './PortfolioEntry'
 import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
 import { EntryToggle } from './EntryToggle'
 import EntryGradient from './EntryGradient'
-import AnnoucementNotification from './AnnoucementNotification'
 
 const returnScrollTargetId = (key) => `entry-${key}`
 
@@ -130,19 +129,6 @@ const Portfolio = () => {
   return (
     <Wrap ref={rootRef}>
       <Entries className={classes.entries}>
-        <div
-          style={{
-            width: '100%',
-            height: 600,
-            position: 'relative',
-            background: 'khaki',
-          }}
-        >
-          <AnnoucementNotification style={{ top: 10, left: 10 }} />
-          <AnnoucementNotification style={{ top: 10, right: 10 }} />
-          <AnnoucementNotification style={{ bottom: 10, left: 10 }} />
-          <AnnoucementNotification style={{ bottom: 10, right: 10 }} />
-        </div>
         {entries.map((entry) => {
           const key = entry._id
           const isSelected = key === value

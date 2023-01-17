@@ -1,11 +1,10 @@
-import { forwardRef } from 'react'
 import styled from 'styled-components'
 import Notification from '../Notification'
 import PortableText from '../PortableText'
 import { CircleButton, Title } from '../Primitives'
-import { useAnnoucements } from './useAnnoucements'
-import { usePopoverAnimation } from './usePopoverAnimation'
-import { animated } from '@react-spring/web'
+import { useCallback } from 'react'
+import { Arrow } from './Arrow'
+import { PopoverAnimation } from './PopoverAnimation'
 
 const Wrap = styled.div`
   position: absolute;
@@ -27,94 +26,44 @@ const Content = styled.div`
   border-radius: 4px;
 `
 
-const PopoverContent = ({
-  title,
-  content,
-  actions = [],
-  children,
+export const AnnoucementNotification = ({
   style,
-  isOpen,
+  className,
+  annoucement,
+  amount,
 }) => {
-  const props = usePopoverAnimation(isOpen)
+  const handleResize = useCallback((args) => {
+    console.log('handleResize', args)
+  }, [])
+
+  const renderContent = useCallback(
+    ({ floatingProps, arrowProps, transformOrigin, isOpen, close }) => (
+      <Floating {...floatingProps}>
+        <PopoverAnimation style={{ transformOrigin }} isOpen={isOpen}>
+          <Content>
+            <Title as="h1">{annoucement.title}</Title>
+            <PortableText value={annoucement.content} />
+            <button onClick={close}>{'Close'}</button>
+          </Content>
+          <Arrow {...arrowProps} />
+        </PopoverAnimation>
+      </Floating>
+    ),
+    [annoucement]
+  )
+
   return (
-    <animated.div
-      style={{
-        ...style,
-        ...props,
-      }}
-    >
-      {children}
-      <Content>
-        <Title as="h1">{title}</Title>
-        <PortableText value={content} />
-        {actions
-          .filter((a) => a.isVisible)
-          .map(({ key, ...actionProps }) => (
-            <button key={key} {...actionProps}>
-              {key}
-            </button>
-          ))}
-      </Content>
-    </animated.div>
+    <Wrap style={style} className={className}>
+      <Notification
+        arrowSize={30}
+        transitionDelay={800}
+        onResize={handleResize}
+        renderContent={renderContent}
+      >
+        {(notificationProps) => (
+          <CircleButton {...notificationProps}>{amount}</CircleButton>
+        )}
+      </Notification>
+    </Wrap>
   )
 }
-
-const Arrow = styled.div`
-  position: absolute;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-  path {
-    fill: var(--color-bg);
-    stroke: none;
-  }
-`
-
-const ArrowContent = () => (
-  <svg viewBox={'0 0 50 50'} width="100%" height="100%">
-    <path d={`M 25,0 L 50,50 L 0,50 Z`} />
-  </svg>
-)
-
-export const AnnoucementNotification = forwardRef(
-  ({ style, className }, ref) => {
-    const { annoucement, amount, onNextClick } = useAnnoucements()
-    if (!annoucement) return null
-
-    return (
-      <Wrap style={style} className={className} ref={ref}>
-        <Notification
-          label={amount}
-          arrowSize={30}
-          transitionDelay={800}
-          referenceComponent={CircleButton}
-        >
-          {({ floatingProps, arrowProps, transformOrigin, isOpen }) => (
-            <Floating {...floatingProps}>
-              <PopoverContent
-                style={{ transformOrigin }}
-                isOpen={isOpen}
-                title={annoucement.title}
-                content={annoucement.content}
-                actions={[
-                  {
-                    key: 'next',
-                    onClick: onNextClick,
-                    isVisible: amount > 1,
-                  },
-                ]}
-              >
-                <Arrow {...arrowProps}>
-                  <ArrowContent />
-                </Arrow>
-              </PopoverContent>
-            </Floating>
-          )}
-        </Notification>
-      </Wrap>
-    )
-  }
-)
-
-AnnoucementNotification.displayName = 'AnnoucementNotification'

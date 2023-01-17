@@ -1,16 +1,17 @@
 import { FloatingFocusManager, FloatingPortal } from '@floating-ui/react'
-import { useNotificationPopover } from './useNotificationPopover'
+import { useNotificationPopover } from '../../hooks/useNotificationPopover'
 
 export const Notification = ({
-  referenceComponent: Reference,
-  children,
-  label = 1,
-  arrowSize,
-  transitionDelay,
+  children = () => null,
+  renderContent = () => null,
+  arrowSize = 40,
+  transitionDelay = 0,
+  onResize = () => null,
 }) => {
   const {
     isOpen,
     isMounted,
+    close,
     referenceProps,
     focusManagerProps,
     floatingProps,
@@ -19,18 +20,20 @@ export const Notification = ({
   } = useNotificationPopover({
     arrowSize,
     transitionDelay,
+    onResize,
   })
   return (
     <>
-      <Reference {...referenceProps}>{label}</Reference>
+      {children(referenceProps)}
       <FloatingPortal>
         {isMounted && (
           <FloatingFocusManager {...focusManagerProps}>
-            {children({
+            {renderContent({
               floatingProps,
               arrowProps,
               transformOrigin,
               isOpen,
+              close,
             })}
           </FloatingFocusManager>
         )}

@@ -1,5 +1,6 @@
-import { useIsomorphicLayoutEffect } from '@react-spring/web'
+import { to, useIsomorphicLayoutEffect } from '@react-spring/web'
 import { useCallback, useState } from 'react'
+import { animated } from '@react-spring/web'
 import styled from 'styled-components'
 import useObservedElement from '../useObservedElement'
 
@@ -54,28 +55,25 @@ const Svg = styled.svg.attrs({
   pointer-events: none;
   outline: none;
   /* outline: 1px solid red; */
+  path {
+    fill: var(--color-bg);
+    stroke: none;
+    pointer-events: auto;
+  }
+  .baseShape {
+    fill: none;
+    stroke: none;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+  }
 `
 
-const BaseRect = styled.rect`
-  fill: none;
-  stroke: none;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-`
-
-const ShapePath = styled.path`
-  fill: var(--color-bg);
-  stroke: none;
-  pointer-events: auto;
-`
-
-const useBubblePoints = () => {
+const useBubblePoints = (config = {}) => {
+  const { pointAmount = 19, pointDeviation = 30 } = config
   const [bubblePoints, setBubblePoints] = useState([])
   const [bubblePointGroups, setBubblePointGroups] = useState([])
   const onBaseElemResize = useCallback((dimensions, element) => {
-    const pointDeviation = 40
-    const pointAmount = 22
     const totalLength = element.getTotalLength()
     const segments = returnSegmentsFromLength({
       totalLength,
@@ -129,8 +127,8 @@ const useBubblePath = ({ bubblePointGroups }) => {
         let segment = '0,1'
         // segment = i % 2 !== 0 ? '0,1' : '0,0'
         const radius = Math.ceil(p.distance / 2)
-        const ra = radius * 1.04
-        const rb = radius * 1.04
+        const ra = radius * 1.08
+        const rb = radius * 1.08
         const end = `${p.end.x},${p.end.y}`
         const arc = `A ${ra},${rb} ${rotation} ${segment} ${end}`
         if (i === 0) return `M ${p.start.x},${p.start.y} ${arc}`
@@ -147,26 +145,26 @@ const useBubblePath = ({ bubblePointGroups }) => {
 const sides = {
   top: {
     getArrowPoint: ({ x, y, arrowSize, height, arrowX }) => ({
-      x: x + arrowX + arrowSize / 2,
-      y: y + height + arrowSize,
+      x: x + arrowX + arrowSize.width / 2,
+      y: y + height + arrowSize.length,
     }),
   },
   right: {
     getArrowPoint: ({ x, y, arrowSize, arrowY }) => ({
-      x: x - arrowSize,
-      y: y + arrowY + arrowSize / 2,
+      x: x - arrowSize.length,
+      y: y + arrowY + arrowSize.width / 2,
     }),
   },
   bottom: {
     getArrowPoint: ({ x, y, arrowSize, arrowX }) => ({
-      x: x + arrowX + arrowSize / 2,
-      y: y - arrowSize,
+      x: x + arrowX + arrowSize.width / 2,
+      y: y - arrowSize.length,
     }),
   },
   left: {
     getArrowPoint: ({ x, y, arrowSize, width, arrowY }) => ({
-      x: x + width + arrowSize,
-      y: y + arrowY + arrowSize / 2,
+      x: x + width + arrowSize.length,
+      y: y + arrowY + arrowSize.width / 2,
     }),
   },
 }
@@ -177,7 +175,15 @@ const useArrowTip = ({ baseRectProps = {}, arrowState = {} }) => {
   const { x, y, width, height } = baseRectProps
   const side = sides[currentSide]
   if (!side) return null
-  return side.getArrowPoint({ x, y, width, height, arrowX, arrowY, arrowSize })
+  return side.getArrowPoint({
+    x,
+    y,
+    width,
+    height,
+    arrowX,
+    arrowY,
+    arrowSize,
+  })
 }
 
 const useMeasuredPoints = (points, target) => {
@@ -204,38 +210,35 @@ const useMeasuredPoints = (points, target) => {
 }
 
 const useArrowPoints = ({ measuredPoints, arrowTip }) => {
-  if (!arrowTip || !measuredPoints || !measuredPoints.length) return []
+  if (!arrowTip || !measuredPoints || !measuredPoints.length) return null
   const closestPoint = measuredPoints.find((p) => p.distanceIndex === 0)
   const closestPointIndex = measuredPoints.indexOf(closestPoint)
 
-  return [
-    {
-      ...getFromWrappingArray(measuredPoints, closestPointIndex - 3),
+  const arrowPoints = {
+    tip: {
+      point: arrowTip,
+      bezier: arrowTip,
     },
-    {
-      ...arrowTip,
-      bstart: getFromWrappingArray(measuredPoints, closestPointIndex),
-      bend: arrowTip,
+    a: {
+      point: getFromWrappingArray(measuredPoints, closestPointIndex - 3),
+      bezier: closestPoint,
     },
-    {
-      ...getFromWrappingArray(measuredPoints, closestPointIndex + 3),
-      bstart: arrowTip,
-      bend: getFromWrappingArray(measuredPoints, closestPointIndex),
+    b: {
+      point: getFromWrappingArray(measuredPoints, closestPointIndex + 3),
+      bezier: closestPoint,
     },
-  ]
+  }
+
+  return arrowPoints
 }
 
-const useArrowPath = (arrowPoints) => {
-  // prettier-ignore
-  return arrowPoints.map((p, index) => {
-    if (index === 0) return `M ${p.x},${p.y}`
-    const arc = `C ${p.bstart.x},${p.bstart.y} ${p.bend.x},${p.bend.y} ${p.x},${p.y}`
-    if (index === arrowPoints.length - 1) return `${arc} Z`
-    return arc
-  }).join(' ')
-}
-
-export const SvgBubble = ({ svgProps, baseRectProps, arrowState }) => {
+export const SvgBubble = ({
+  svgProps,
+  baseRectProps,
+  shapeRectProps,
+  arrowState,
+  pullStyle,
+}) => {
   const arrowTip = useArrowTip({ baseRectProps, arrowState })
   const { baseElemRef, bubblePointGroups } = useBubblePoints()
   const allPoints = bubblePointGroups.reduce((acc, p) => {
@@ -244,15 +247,33 @@ export const SvgBubble = ({ svgProps, baseRectProps, arrowState }) => {
     return acc
   }, [])
   const measuredPoints = useMeasuredPoints(allPoints, arrowTip)
-  const arrowPoints = useArrowPoints({ measuredPoints, arrowTip })
-  const arrowPath = useArrowPath(arrowPoints)
+  const arrowPoints = useArrowPoints({
+    measuredPoints,
+    arrowTip,
+  })
+  // const arrowPath = useArrowPath(arrowPoints)
   const bubblePath = useBubblePath({ bubblePointGroups })
+
   return (
     <Svg {...svgProps}>
-      <BaseRect ref={baseElemRef} {...baseRectProps} />
-      {bubblePath && <ShapePath d={bubblePath} />}
-      {arrowPath && <ShapePath d={arrowPath} />}
-
+      <rect className="baseShape" {...shapeRectProps} ref={baseElemRef} />
+      {/* <rect {...baseRectProps} /> */}
+      {bubblePath && <path d={bubblePath} />}
+      {arrowPoints && (
+        <animated.path
+          d={to(
+            [pullStyle.x, pullStyle.y],
+            (x, y) =>
+              // prettier-ignore
+              `M ${arrowPoints.a.point.x},${arrowPoints.a.point.y}
+              C ${arrowPoints.a.bezier.x},${arrowPoints.a.bezier.y} ${arrowPoints.tip.bezier.x - x},${arrowPoints.tip.bezier.y - y} ${arrowPoints.tip.point.x - x},${arrowPoints.tip.point.y - y}
+              C ${arrowPoints.tip.bezier.x - x},${arrowPoints.tip.bezier.y - y} ${arrowPoints.b.bezier.x},${arrowPoints.b.bezier.y} ${arrowPoints.b.point.x},${arrowPoints.b.point.y}
+              Z`
+          )}
+        />
+      )}
+      {/* <rect {...baseRectProps} stroke="yellow" fill="none" />
+      <rect {...shapeRectProps} stroke="yellow" fill="none" /> */}
       {/* <g>
         <rect {...baseRectProps} stroke="yellow" fill="none" />
         {arrowPath && <path d={arrowPath} stroke="yellow" fill="none" />}

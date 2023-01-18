@@ -11,6 +11,7 @@ import {
 import { useNotificationPopover } from '../../hooks/useNotificationPopover'
 import { useSvgBubble } from './useSvgBubble'
 import { SvgBubble } from './SvgBubble'
+import { usePullAnimation } from './PullAnimation'
 
 const Wrap = styled.div`
   position: absolute;
@@ -27,31 +28,16 @@ const Floating = styled.div`
 
 const Content = styled.div`
   position: relative;
-  padding: 2rem;
-  /* background: var(--color-bg); */
+  padding: 1rem;
   color: var(--color-txt);
-  width: clamp(120px, 70vw, 740px);
-  /* border-radius: 4px; */
-  /* outline: 1px solid red; */
+  width: clamp(120px, 90vw, 800px);
+  /* background: var(--color-bg); */
 `
-
-const Animation = ({ children, transformOrigin, isOpen }) => {
-  const props = usePopoverAnimation(isOpen)
-  return (
-    <animated.div
-      style={{
-        transformOrigin,
-        ...props,
-      }}
-    >
-      {children}
-    </animated.div>
-  )
-}
 
 const Arrow_ = styled.div`
   position: absolute;
   visibility: hidden;
+  /* background: red; */
   svg {
     width: 100%;
     height: 100%;
@@ -71,8 +57,25 @@ const Arrow = forwardRef((props, ref) => (
 ))
 Arrow.displayName = 'Arrow'
 
+const Animation = ({ children, transformOrigin, isOpen }) => {
+  const props = usePopoverAnimation(isOpen)
+  return (
+    <animated.div
+      style={{
+        transformOrigin,
+        ...props,
+      }}
+    >
+      {children}
+    </animated.div>
+  )
+}
+
 export const HeaderNotification = ({ style, annoucement, amount }) => {
-  const { onResize, bubbleProps } = useSvgBubble()
+  const { onResize, bubbleProps } = useSvgBubble({
+    baseOffset: 15,
+    safeZone: 800,
+  })
 
   const {
     isOpen,
@@ -88,11 +91,14 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
     arrowY,
     arrowSize,
   } = useNotificationPopover({
-    arrowSize: 120,
-    collisionPadding: 20,
+    arrowLength: 140,
+    arrowWidth: 40,
+    collisionPadding: 10,
     transitionDelay: 800,
     onResize,
   })
+
+  const [pullStyle, pullProps] = usePullAnimation()
 
   return (
     <>
@@ -104,23 +110,28 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
           <FocusManager {...focusManagerProps}>
             <Floating {...floatingProps}>
               <Animation transformOrigin={transformOrigin} isOpen={isOpen}>
-                <Arrow {...arrowProps} />
-                {bubbleProps && (
-                  <SvgBubble
-                    {...bubbleProps}
-                    arrowState={{
-                      currentSide,
-                      arrowX,
-                      arrowY,
-                      arrowSize,
-                    }}
-                  />
-                )}
-                <Content>
-                  <Title as="h1">{annoucement.title}</Title>
-                  <PortableText value={annoucement.content} />
-                  <button onClick={close}>{'Close'}</button>
-                </Content>
+                <animated.div style={pullStyle}>
+                  <div {...pullProps}>
+                    <Arrow {...arrowProps} />
+                    {bubbleProps && (
+                      <SvgBubble
+                        {...bubbleProps}
+                        pullStyle={pullStyle}
+                        arrowState={{
+                          currentSide,
+                          arrowX,
+                          arrowY,
+                          arrowSize,
+                        }}
+                      />
+                    )}
+                    <Content>
+                      <Title as="h1">{annoucement.title}</Title>
+                      <PortableText value={annoucement.content} />
+                      <button onClick={close}>{'Close'}</button>
+                    </Content>
+                  </div>
+                </animated.div>
               </Animation>
             </Floating>
           </FocusManager>

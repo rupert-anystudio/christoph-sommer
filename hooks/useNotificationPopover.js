@@ -23,47 +23,60 @@ import { useCallback, useState, useRef } from 'react'
 const sides = {
   top: {
     returnTransformOrigin: ({ size, x }) =>
-      `${x + size / 2}px calc(100% + ${size}px)`,
+      `${x + size.width / 2}px calc(100% + ${size.length}px)`,
     returnArrowStyle: ({ overlap = 0, size, x }) => ({
-      bottom: overlap - size,
+      bottom: overlap - size.length,
       left: x,
-      transform: 'rotate(180deg)',
+      // transform: 'rotate(180deg)',
+      width: size.width,
+      height: size.length,
     }),
   },
   right: {
-    returnTransformOrigin: ({ size, y }) => `-${size}px ${y + size / 2}px`,
+    returnTransformOrigin: ({ size, y }) =>
+      `-${size.length}px ${y + size.width / 2}px`,
     returnArrowStyle: ({ overlap = 0, size, y }) => ({
-      left: overlap - size,
+      left: overlap - size.length,
       top: y,
-      transform: 'rotate(-90deg)',
+      // transform: 'rotate(-90deg)',
+      width: size.length,
+      height: size.width,
     }),
   },
   bottom: {
-    returnTransformOrigin: ({ size, x }) => `${x + size / 2}px -${size}px`,
+    returnTransformOrigin: ({ size, x }) =>
+      `${x + size.width / 2}px -${size.length}px`,
     returnArrowStyle: ({ overlap = 0, size, x }) => ({
-      top: overlap - size,
+      top: overlap - size.length,
       left: x,
-      transform: 'rotate(0deg)',
+      // transform: 'rotate(0deg)',
+      width: size.width,
+      height: size.length,
     }),
   },
   left: {
     returnTransformOrigin: ({ size, y }) =>
-      `calc(100% + ${size}px) ${y + size / 2}px`,
+      `calc(100% + ${size.length}px) ${y + size.width / 2}px`,
     returnArrowStyle: ({ overlap = 0, size, y }) => ({
-      right: overlap - size,
+      right: overlap - size.length,
       top: y,
-      transform: 'rotate(90deg)',
+      // transform: 'rotate(90deg)',
+      width: size.length,
+      height: size.width,
     }),
   },
 }
 
 export const useNotificationPopover = ({
-  arrowSize = 60,
   transitionDelay = 400,
   arrowOverlap = 1,
-  arrowDistance = 20,
+  arrowDistance = 0,
   collisionPadding = 20,
   onResize,
+  arrowSize = {
+    length: 200,
+    width: 20,
+  },
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -98,7 +111,7 @@ export const useNotificationPopover = ({
     whileElementsMounted: autoUpdate,
     middleware: [
       offset({
-        mainAxis: arrowSize + arrowDistance,
+        mainAxis: arrowSize.length + arrowDistance,
       }),
       autoPlacement(),
       // flip(),
@@ -149,7 +162,7 @@ export const useNotificationPopover = ({
 
   const currentSide = floatingPlacement.split('-')[0]
 
-  const side = sides[currentSide]
+  const side = sides[currentSide] || sides.top
 
   const arrowStyle = side.returnArrowStyle({
     x: arrowX,
@@ -190,8 +203,6 @@ export const useNotificationPopover = ({
     ref: arrowRef,
     style: {
       position: 'absolute',
-      width: arrowSize,
-      height: arrowSize,
       ...arrowStyle,
     },
   }

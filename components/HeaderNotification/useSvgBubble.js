@@ -4,7 +4,7 @@ const ARROW_WIDTH = 60
 const ARROW_HEIGHT = 110
 const ARROW_OFFSET = 10
 const COLLISION_OFFSET = 60
-const SVG_PADDING = 500
+const SVG_PADDING = 200
 const BASE_OFFSET = 0
 
 export const useSvgBubble = () => {
@@ -26,6 +26,8 @@ export const useSvgBubble = () => {
       height: height + BASE_OFFSET * 2,
       x: SVG_PADDING - BASE_OFFSET,
       y: SVG_PADDING - BASE_OFFSET,
+      rx: 100,
+      ry: 100,
     }
     setBubbleProps({
       svgProps,

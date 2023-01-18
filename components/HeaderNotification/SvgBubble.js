@@ -3,6 +3,12 @@ import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import useObservedElement from '../useObservedElement'
 
+export const getFromWrappingArray = (array, index) => {
+  if (index > array.length - 1) return array[index - array.length]
+  if (index < 0) return array[array.length + index]
+  return array[index]
+}
+
 export const returnSegmentsFromLength = ({
   totalLength,
   fixedAmount = undefined,
@@ -44,26 +50,32 @@ const Svg = styled.svg.attrs({
   xmlns: 'http://www.w3.org/2000/svg',
   xmlnsXlink: 'http://www.w3.org/1999/xlink',
 })`
-  outline: 1px solid red;
+  user-select: none;
   pointer-events: none;
+  outline: none;
+  /* outline: 1px solid red; */
 `
 
 const BaseRect = styled.rect`
   fill: none;
   stroke: none;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
 `
 
-const BubblePath = styled.path`
+const ShapePath = styled.path`
   fill: var(--color-bg);
   stroke: none;
+  pointer-events: auto;
 `
 
 const useBubblePoints = () => {
-  const [bubblePoints, setBubblePoints] = useState(null)
-  const [bubblePointGroups, setBubblePointGroups] = useState(null)
+  const [bubblePoints, setBubblePoints] = useState([])
+  const [bubblePointGroups, setBubblePointGroups] = useState([])
   const onBaseElemResize = useCallback((dimensions, element) => {
-    const pointDeviation = 15
-    const pointAmount = 18
+    const pointDeviation = 40
+    const pointAmount = 22
     const totalLength = element.getTotalLength()
     const segments = returnSegmentsFromLength({
       totalLength,
@@ -117,8 +129,8 @@ const useBubblePath = ({ bubblePointGroups }) => {
         let segment = '0,1'
         // segment = i % 2 !== 0 ? '0,1' : '0,0'
         const radius = Math.ceil(p.distance / 2)
-        const ra = radius * 1.02
-        const rb = radius * 1.02
+        const ra = radius * 1.04
+        const rb = radius * 1.04
         const end = `${p.end.x},${p.end.y}`
         const arc = `A ${ra},${rb} ${rotation} ${segment} ${end}`
         if (i === 0) return `M ${p.start.x},${p.start.y} ${arc}`
@@ -168,79 +180,116 @@ const useArrowTip = ({ baseRectProps = {}, arrowState = {} }) => {
   return side.getArrowPoint({ x, y, width, height, arrowX, arrowY, arrowSize })
 }
 
-const useArrowPoints = ({ arrowTip, bubblePointGroups }) => {
-  if (!arrowTip || !bubblePointGroups || !bubblePointGroups.length) return null
-  const closestPoints = bubblePointGroups
-    .map((p, index) => ({
-      x: p.mid.x,
-      y: p.mid.y,
-      distanceToArrowTip: returnDistanceBetweenPoints(p.mid, arrowTip),
+const useMeasuredPoints = (points, target) => {
+  if (!target || !points || !points.length) return []
+  const pointsMeasured = points
+    .map((point, index) => ({
+      ...point,
       index,
+      distance:
+        Math.round(returnDistanceBetweenPoints(point, target) * 10) / 10,
     }))
-    .sort((a, b) => a.distanceToArrowTip - b.distanceToArrowTip)
-    .slice(0, 2)
+    .sort((a, b) => a.distance - b.distance)
+  const dMax = pointsMeasured[pointsMeasured.length - 1]?.distance
+  const dMin = pointsMeasured[0]?.distance
+  const distanceRange = dMax - dMin
+  const measuredPoints = pointsMeasured
+    .map((point, distanceIndex) => ({
+      ...point,
+      distanceIndex,
+      distanceRelative: (point.distance - dMin) / distanceRange,
+    }))
     .sort((a, b) => a.index - b.index)
-    .map(({ x, y }) => ({ x, y }))
-
-  return [closestPoints[0], arrowTip, closestPoints[closestPoints.length - 1]]
+  return measuredPoints
 }
 
-const useArrowPath = ({ arrowPoints }) => {
-  if (!arrowPoints) return null
+const useArrowPoints = ({ measuredPoints, arrowTip }) => {
+  if (!arrowTip || !measuredPoints || !measuredPoints.length) return []
+  const closestPoint = measuredPoints.find((p) => p.distanceIndex === 0)
+  const closestPointIndex = measuredPoints.indexOf(closestPoint)
+
+  return [
+    {
+      ...getFromWrappingArray(measuredPoints, closestPointIndex - 3),
+    },
+    {
+      ...arrowTip,
+      bstart: getFromWrappingArray(measuredPoints, closestPointIndex),
+      bend: arrowTip,
+    },
+    {
+      ...getFromWrappingArray(measuredPoints, closestPointIndex + 3),
+      bstart: arrowTip,
+      bend: getFromWrappingArray(measuredPoints, closestPointIndex),
+    },
+  ]
+}
+
+const useArrowPath = (arrowPoints) => {
   // prettier-ignore
   return arrowPoints.map((p, index) => {
-    const position = `${p.x},${p.y}`
-    if (index === 0) return `M ${position}`
-    if (index === arrowPoints.length - 1) return `L ${position} Z`
-    return `L ${position}`
+    if (index === 0) return `M ${p.x},${p.y}`
+    const arc = `C ${p.bstart.x},${p.bstart.y} ${p.bend.x},${p.bend.y} ${p.x},${p.y}`
+    if (index === arrowPoints.length - 1) return `${arc} Z`
+    return arc
   }).join(' ')
 }
 
 export const SvgBubble = ({ svgProps, baseRectProps, arrowState }) => {
   const arrowTip = useArrowTip({ baseRectProps, arrowState })
-  const { baseElemRef, bubblePoints, bubblePointGroups } = useBubblePoints()
-  const arrowPoints = useArrowPoints({ arrowTip, bubblePointGroups })
-  const arrowPath = useArrowPath({ arrowPoints })
+  const { baseElemRef, bubblePointGroups } = useBubblePoints()
+  const allPoints = bubblePointGroups.reduce((acc, p) => {
+    acc.push({ x: p.start.x, y: p.start.y })
+    acc.push({ x: p.mid.x, y: p.mid.y })
+    return acc
+  }, [])
+  const measuredPoints = useMeasuredPoints(allPoints, arrowTip)
+  const arrowPoints = useArrowPoints({ measuredPoints, arrowTip })
+  const arrowPath = useArrowPath(arrowPoints)
   const bubblePath = useBubblePath({ bubblePointGroups })
   return (
     <Svg {...svgProps}>
-      <BaseRect ref={baseElemRef} {...baseRectProps} rx={30} ry={30} />
-      {arrowPath && <BubblePath d={arrowPath} />}
-      {bubblePath && <BubblePath d={bubblePath} />}
-      {arrowTip && (
-        <circle
-          cx={arrowTip.x}
-          cy={arrowTip.y}
-          r={8}
-          stroke="none"
-          fill="black"
-        />
-      )}
-      <g style={{ display: 'none' }}>
-        {bubblePoints && (
-          <g>
-            {bubblePoints.map((p, pIndex) => (
-              <circle
-                key={pIndex}
-                cx={p.x}
-                cy={p.y}
-                r={8}
-                stroke="none"
-                fill="black"
-              />
-            ))}
-          </g>
+      <BaseRect ref={baseElemRef} {...baseRectProps} />
+      {bubblePath && <ShapePath d={bubblePath} />}
+      {arrowPath && <ShapePath d={arrowPath} />}
+
+      {/* <g>
+        <rect {...baseRectProps} stroke="yellow" fill="none" />
+        {arrowPath && <path d={arrowPath} stroke="yellow" fill="none" />}
+        {arrowTip && (
+          <circle
+            cx={arrowTip.x}
+            cy={arrowTip.y}
+            r={8}
+            stroke="none"
+            fill="red"
+          />
         )}
-        {arrowPoints && (
+        {measuredPoints && (
           <g>
-            {arrowPoints.map((p, pIndex) => (
-              <g key={pIndex}>
-                <circle cx={p.x} cy={p.y} r={12} stroke="none" fill="red" />
+            {measuredPoints.map((p, index) => (
+              <g key={index}>
+                <g transform={`translate(${p.x} ${p.y})`}>
+                  <circle
+                    r={14 + 5 - p.distanceRelative * 5}
+                    stroke="none"
+                    fill="grey"
+                  />
+                  <circle r={14} stroke="none" fill="black" />
+                  <text
+                    textAnchor="middle"
+                    fill="white"
+                    fontSize={12}
+                    alignmentBaseline="central"
+                  >
+                    {p.index}
+                  </text>
+                </g>
               </g>
             ))}
           </g>
         )}
-      </g>
+      </g> */}
     </Svg>
   )
 }

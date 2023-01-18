@@ -30,7 +30,7 @@ const Content = styled.div`
   padding: 2rem;
   /* background: var(--color-bg); */
   color: var(--color-txt);
-  width: clamp(120px, 90vw, 600px);
+  width: clamp(120px, 70vw, 740px);
   /* border-radius: 4px; */
   /* outline: 1px solid red; */
 `
@@ -88,7 +88,7 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
     arrowY,
     arrowSize,
   } = useNotificationPopover({
-    arrowSize: 80,
+    arrowSize: 120,
     collisionPadding: 20,
     transitionDelay: 800,
     onResize,
@@ -118,7 +118,7 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
                 )}
                 <Content>
                   <Title as="h1">{annoucement.title}</Title>
-                  {/* <PortableText value={annoucement.content} /> */}
+                  <PortableText value={annoucement.content} />
                   <button onClick={close}>{'Close'}</button>
                 </Content>
               </Animation>

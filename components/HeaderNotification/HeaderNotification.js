@@ -36,8 +36,8 @@ const Content = styled.div`
 
 const Arrow_ = styled.div`
   position: absolute;
+  outline: 1px solid red;
   visibility: hidden;
-  /* background: red; */
   svg {
     width: 100%;
     height: 100%;
@@ -93,7 +93,7 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
   } = useNotificationPopover({
     arrowLength: 140,
     arrowWidth: 40,
-    collisionPadding: 10,
+    collisionPadding: 0,
     transitionDelay: 800,
     onResize,
   })

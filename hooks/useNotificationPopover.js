@@ -71,7 +71,7 @@ export const useNotificationPopover = ({
   transitionDelay = 400,
   arrowOverlap = 1,
   arrowDistance = 0,
-  collisionPadding = 20,
+  collisionPadding = 0,
   onResize,
   arrowSize = {
     length: 200,
@@ -113,11 +113,13 @@ export const useNotificationPopover = ({
       offset({
         mainAxis: arrowSize.length + arrowDistance,
       }),
-      autoPlacement(),
-      // flip(),
       shift({
         padding: collisionPadding,
       }),
+      autoPlacement({
+        padding: 0,
+      }),
+      // flip(),
       size({
         apply({ rects, availableWidth, availableHeight, elements }) {
           handleResize({ rects, availableWidth, availableHeight, elements })

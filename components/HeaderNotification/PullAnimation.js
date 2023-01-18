@@ -3,10 +3,10 @@ import { useDrag } from '@use-gesture/react'
 import _clamp from 'lodash/clamp'
 
 const bounds = {
-  top: -500,
-  right: 500,
-  bottom: 500,
-  left: -500,
+  top: -200,
+  right: 200,
+  bottom: 200,
+  left: -200,
 }
 
 export const usePullAnimation = () => {

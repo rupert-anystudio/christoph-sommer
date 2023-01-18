@@ -22,6 +22,11 @@ const Wrap = styled.div`
   z-index: 2;
 `
 
+const Notification = styled(CircleButton)`
+  box-shadow: 0px 0px 80px 10px
+    ${(p) => (p.isOpen ? 'var(--color-bg)' : 'transparent')};
+`
+
 const Floating = styled.div`
   position: relative;
 `
@@ -124,7 +129,9 @@ export const HeaderNotification = ({
   return (
     <>
       <Wrap style={style}>
-        <CircleButton {...referenceProps}>{amount}</CircleButton>
+        <Notification {...referenceProps} isOpen={isOpen}>
+          {amount}
+        </Notification>
       </Wrap>
       <Portal>
         {isMounted && (

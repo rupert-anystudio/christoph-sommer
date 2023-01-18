@@ -4,10 +4,10 @@ import Head from './Head'
 import Annoucements from './Annoucements'
 import FilterSelect from './FilterSelect'
 import FooterNav from './FooterNav'
-import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
+import { ConstrainedLandingAccordion } from './ConstrainedLandingAccordion'
 
 const Container = styled.div`
   position: relative;
@@ -48,6 +48,7 @@ const Header = styled(Element)`
   display: flex;
   justify-content: center;
   align-items: center;
+  touch-action: none;
   @media (min-width: 800px) {
     position: sticky;
     top: 0;
@@ -63,6 +64,7 @@ const Infos = styled(Area)`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;
+  touch-action: none;
   @media (max-width: 919px) {
     border-bottom: var(--border);
   }
@@ -72,6 +74,7 @@ const Infos = styled(Area)`
   }
   > div {
     position: relative;
+    /* border: 3px solid red; */
     @media (min-width: 800px) {
       position: sticky;
       top: var(--height-header);
@@ -152,7 +155,8 @@ const Layout = () => {
       </Header>
       <Infos>
         <div>
-          <LandingAccordion />
+          <ConstrainedLandingAccordion />
+          {/* <LandingAccordion /> */}
         </div>
       </Infos>
       <Scrollables>

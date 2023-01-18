@@ -2,19 +2,22 @@ import styled from 'styled-components'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 
 const ScrollRoot = styled(ScrollArea.Root)`
-  position: relative;
-  height: 100%;
-  transform: translate3d(0px, 0px, 0px);
   --scrollbar-size: 12px;
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  @media (min-width: 800px) {
+    height: 100%;
+  }
 `
 const ScrollViewport = styled(ScrollArea.Viewport)`
   position: relative;
   height: 100%;
-  @media (max-width: 919px) {
-    /* overflow: visible !important; */
-  }
   > div {
+    height: 100%;
     min-height: 100%;
+    /* margin-bottom: 1px; */
   }
 `
 const ScrollBar = styled(ScrollArea.Scrollbar)`
@@ -60,7 +63,7 @@ const ScrollThumb = styled(ScrollArea.Thumb)`
   }
 `
 
-const Scroll = ({ children, rootRef, viewportRef }) => (
+export const Scroll = ({ children, rootRef, viewportRef }) => (
   <ScrollRoot ref={rootRef}>
     <ScrollViewport ref={viewportRef}>{children}</ScrollViewport>
     <ScrollBar orientation="vertical">
@@ -68,5 +71,3 @@ const Scroll = ({ children, rootRef, viewportRef }) => (
     </ScrollBar>
   </ScrollRoot>
 )
-
-export default Scroll

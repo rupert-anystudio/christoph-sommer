@@ -5,10 +5,10 @@ export const usePopoverAnimation = (isOpen) => {
     () => ({
       from: {
         opacity: 0,
-        scale: 0.4,
+        scale: 0.1,
       },
       config: {
-        tension: 200,
+        tension: 120,
         friction: 14,
         precision: 0.001,
       },
@@ -29,7 +29,7 @@ export const usePopoverAnimation = (isOpen) => {
     }
     api.start({
       opacity: 0,
-      scale: 0.4,
+      scale: 0.1,
       config: {
         clamp: true,
       },

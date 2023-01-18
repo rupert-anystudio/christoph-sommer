@@ -113,13 +113,16 @@ export const useNotificationPopover = ({
       offset({
         mainAxis: arrowSize.length + arrowDistance,
       }),
+      // autoPlacement({
+      //   alignment: 'start',
+      //   autoAlignment: false,
+      // }),
+      flip({
+        padding: collisionPadding,
+      }),
       shift({
         padding: collisionPadding,
       }),
-      autoPlacement({
-        padding: 0,
-      }),
-      // flip(),
       size({
         apply({ rects, availableWidth, availableHeight, elements }) {
           handleResize({ rects, availableWidth, availableHeight, elements })
@@ -145,7 +148,7 @@ export const useNotificationPopover = ({
   const hover = useHover(context, {
     mouseOnly: true,
     handleClose: safePolygon(),
-    enabled: false,
+    // enabled: false,
   })
 
   // get props getters for all interactions

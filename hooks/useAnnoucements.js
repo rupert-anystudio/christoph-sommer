@@ -16,11 +16,20 @@ export const useAnnoucements = () => {
     })
   }, [amount])
 
+  const onPreviousClick = useCallback(() => {
+    setCurrentIndex((i) => {
+      const nextIndex = i - 1
+      if (nextIndex < 0) return amount - 1
+      return nextIndex
+    })
+  }, [amount])
+
   const annoucement = annoucements[currentIndex] || null
 
   return {
     annoucement,
     amount,
     onNextClick,
+    onPreviousClick,
   }
 }

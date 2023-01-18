@@ -56,8 +56,6 @@ const Svg = styled.svg.attrs({
   outline: none;
   /* outline: 1px solid red; */
   path {
-    fill: var(--color-bg);
-    stroke: none;
     pointer-events: auto;
   }
   .baseShape {
@@ -66,6 +64,17 @@ const Svg = styled.svg.attrs({
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
+  }
+  .inside {
+    fill: var(--color-bg);
+    stroke: var(--color-bg);
+    stroke-width: 0;
+  }
+  .outside {
+    fill: var(--color-txt);
+    stroke: var(--color-txt);
+    stroke-width: 12;
+    transform: translate3d(0px, 2px, 0);
   }
 `
 
@@ -215,17 +224,26 @@ const useArrowPoints = ({ measuredPoints, arrowTip }) => {
   const closestPointIndex = measuredPoints.indexOf(closestPoint)
 
   const arrowPoints = {
+    a: {
+      point: getFromWrappingArray(measuredPoints, closestPointIndex - 2),
+      bezier: getFromWrappingArray(measuredPoints, closestPointIndex - 1),
+    },
     tip: {
       point: arrowTip,
-      bezier: arrowTip,
-    },
-    a: {
-      point: getFromWrappingArray(measuredPoints, closestPointIndex - 3),
-      bezier: closestPoint,
+      beziera: getFromWrappingArray(measuredPoints, closestPointIndex),
+      bezierb: getFromWrappingArray(measuredPoints, closestPointIndex),
+      beziera: {
+        ...arrowTip,
+        x: arrowTip.x - 1,
+      },
+      bezierb: {
+        ...arrowTip,
+        x: arrowTip.x + 1,
+      },
     },
     b: {
-      point: getFromWrappingArray(measuredPoints, closestPointIndex + 3),
-      bezier: closestPoint,
+      point: getFromWrappingArray(measuredPoints, closestPointIndex + 4),
+      bezier: getFromWrappingArray(measuredPoints, closestPointIndex + 0),
     },
   }
 
@@ -258,20 +276,26 @@ export const SvgBubble = ({
     <Svg {...svgProps}>
       <rect className="baseShape" {...shapeRectProps} ref={baseElemRef} />
       {/* <rect {...baseRectProps} /> */}
-      {bubblePath && <path d={bubblePath} />}
-      {arrowPoints && (
-        <animated.path
-          d={to(
-            [pullStyle.x, pullStyle.y],
-            (x, y) =>
-              // prettier-ignore
-              `M ${arrowPoints.a.point.x},${arrowPoints.a.point.y}
-              C ${arrowPoints.a.bezier.x},${arrowPoints.a.bezier.y} ${arrowPoints.tip.bezier.x - x},${arrowPoints.tip.bezier.y - y} ${arrowPoints.tip.point.x - x},${arrowPoints.tip.point.y - y}
-              C ${arrowPoints.tip.bezier.x - x},${arrowPoints.tip.bezier.y - y} ${arrowPoints.b.bezier.x},${arrowPoints.b.bezier.y} ${arrowPoints.b.point.x},${arrowPoints.b.point.y}
+
+      {['outside', 'inside'].map((className) => (
+        <g className={className} key={className}>
+          {bubblePath && <path d={bubblePath} />}
+          {arrowPoints && (
+            <animated.path
+              d={to(
+                [pullStyle.x, pullStyle.y],
+                (x, y) =>
+                  // prettier-ignore
+                  `M ${arrowPoints.a.point.x},${arrowPoints.a.point.y}
+              C ${arrowPoints.a.bezier.x},${arrowPoints.a.bezier.y} ${arrowPoints.tip.beziera.x - x},${arrowPoints.tip.beziera.y - y} ${arrowPoints.tip.point.x - x},${arrowPoints.tip.point.y - y}
+              C ${arrowPoints.tip.bezierb.x - x},${arrowPoints.tip.bezierb.y - y} ${arrowPoints.b.bezier.x},${arrowPoints.b.bezier.y} ${arrowPoints.b.point.x},${arrowPoints.b.point.y}
               Z`
+              )}
+            />
           )}
-        />
-      )}
+        </g>
+      ))}
+
       {/* <rect {...baseRectProps} stroke="yellow" fill="none" />
       <rect {...shapeRectProps} stroke="yellow" fill="none" /> */}
       {/* <g>

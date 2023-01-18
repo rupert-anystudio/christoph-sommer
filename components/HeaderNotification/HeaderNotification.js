@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { forwardRef } from 'react'
 import { animated } from '@react-spring/web'
 import PortableText from '../PortableText'
-import { CircleButton, Title } from '../Primitives'
+import { CircleButton, Title as TitlePrimitive } from '../Primitives'
 import { usePopoverAnimation } from '../../hooks/usePopoverAnimation'
 import {
   FloatingFocusManager as FocusManager,
@@ -12,6 +12,8 @@ import { useNotificationPopover } from '../../hooks/useNotificationPopover'
 import { useSvgBubble } from './useSvgBubble'
 import { SvgBubble } from './SvgBubble'
 import { usePullAnimation } from './PullAnimation'
+import { Actions } from './Actions'
+import { formatIsoDate } from '../../lib/dateHelpers'
 
 const Wrap = styled.div`
   position: absolute;
@@ -22,16 +24,25 @@ const Wrap = styled.div`
 
 const Floating = styled.div`
   position: relative;
-  --color-bg: blue;
-  --color-txt: white;
 `
 
 const Content = styled.div`
   position: relative;
-  padding: 1rem;
+  padding: 0 0 4rem 0;
   color: var(--color-txt);
-  width: clamp(120px, 90vw, 800px);
-  /* background: var(--color-bg); */
+  width: clamp(80px, 100vw, 800px);
+  text-align: center;
+`
+
+const Title = styled(TitlePrimitive).attrs({ as: 'h1' })`
+  margin-bottom: 1rem;
+`
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%) translateY(-50%);
 `
 
 const Arrow_ = styled.div`
@@ -71,9 +82,16 @@ const Animation = ({ children, transformOrigin, isOpen }) => {
   )
 }
 
-export const HeaderNotification = ({ style, annoucement, amount }) => {
+export const HeaderNotification = ({
+  style,
+  annoucement,
+  amount,
+  collisionPadding = 70,
+  onPreviousClick,
+  onNextClick,
+}) => {
   const { onResize, bubbleProps } = useSvgBubble({
-    baseOffset: 15,
+    baseOffset: 20,
     safeZone: 800,
   })
 
@@ -91,14 +109,17 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
     arrowY,
     arrowSize,
   } = useNotificationPopover({
-    arrowLength: 140,
-    arrowWidth: 40,
-    collisionPadding: 0,
+    collisionPadding,
     transitionDelay: 800,
+    arrowDistance: 10,
     onResize,
+    arrowSize: {
+      length: 140,
+      width: 12,
+    },
   })
 
-  const [pullStyle, pullProps] = usePullAnimation()
+  const [pullStyle, pullProps] = usePullAnimation({ isOpen, currentSide })
 
   return (
     <>
@@ -125,10 +146,20 @@ export const HeaderNotification = ({ style, annoucement, amount }) => {
                         }}
                       />
                     )}
-                    <Content>
-                      <Title as="h1">{annoucement.title}</Title>
+                    <Content
+                      style={{
+                        maxWidth: `calc(100vw - ${collisionPadding * 2}px)`,
+                      }}
+                    >
+                      <Actions
+                        onPreviousClick={onPreviousClick}
+                        onNextClick={onNextClick}
+                        label={formatIsoDate(annoucement.date)}
+                        amount={amount}
+                      />
+                      <Title>{annoucement.title}</Title>
                       <PortableText value={annoucement.content} />
-                      <button onClick={close}>{'Close'}</button>
+                      <CloseButton onClick={close}>{'Close'}</CloseButton>
                     </Content>
                   </div>
                 </animated.div>

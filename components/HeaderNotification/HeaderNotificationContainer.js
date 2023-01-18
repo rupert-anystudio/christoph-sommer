@@ -2,7 +2,8 @@ import { useAnnoucements } from '../../hooks/useAnnoucements'
 import { HeaderNotification } from './HeaderNotification'
 
 export const HeaderNotificationContainer = (props) => {
-  const { annoucement, amount, onNextClick } = useAnnoucements()
+  const { annoucement, amount, onNextClick, onPreviousClick } =
+    useAnnoucements()
 
   if (!annoucement) return null
 
@@ -12,6 +13,7 @@ export const HeaderNotificationContainer = (props) => {
       annoucement={annoucement}
       amount={amount}
       onNextClick={onNextClick}
+      onPreviousClick={onPreviousClick}
     />
   )
 }

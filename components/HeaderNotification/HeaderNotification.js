@@ -14,6 +14,7 @@ import { SvgBubble } from './SvgBubble'
 import { usePullAnimation } from './PullAnimation'
 import { Actions } from './Actions'
 import { formatIsoDate } from '../../lib/dateHelpers'
+import { HoverAnimation } from './HoverAnimation'
 
 const Wrap = styled.div`
   position: absolute;
@@ -37,17 +38,70 @@ const Content = styled.div`
   color: var(--color-txt);
   width: clamp(80px, 100vw, 800px);
   text-align: center;
+  /* outline: 1px solid red; */
 `
 
 const Title = styled(TitlePrimitive).attrs({ as: 'h1' })`
   margin-bottom: 1rem;
 `
 
-const CloseButton = styled.button`
+const ClosePosition = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(-50%) translateY(-50%);
+  top: calc(var(--lh-small) * var(--fs-smaller) * 0.5);
+  right: 10px;
+  transform: translateY(-50%) translateX(50%);
+  border-radius: 100%;
+  border: none;
+  appearance: none;
+  color: var(--color-txt);
+  background: var(--color-txt);
+  outline: 4px solid var(--color-txt);
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  pointer-events: none;
+  font-family: var(--ff-inter);
+  font-weight: var(--fw-inter);
+  font-style: var(--fx-inter);
+  font-size: var(--fs-smaller);
+  line-height: var(--lh-small);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  padding: 24px;
+`
+
+const CloseCross = styled.svg.attrs({
+  xmlns: 'http://www.w3.org/2000/svg',
+  xmlnsXlink: 'http://www.w3.org/1999/xlink',
+  viewBox: '0 0 50 50',
+})`
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  background: none;
+  line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 6;
+  }
+`
+
+const CloseButton = styled(ClosePosition).attrs({ as: 'button' })`
+  appearance: none;
+  background: var(--color-bg);
+  outline: none;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  &:hover {
+    color: var(--color-bg);
+    background: var(--color-txt);
+    border: 1px solid var(--color-txt);
+    outline: 1px solid var(--color-txt);
+  }
 `
 
 const Arrow_ = styled.div`
@@ -119,7 +173,7 @@ export const HeaderNotification = ({
     arrowDistance: 10,
     onResize,
     arrowSize: {
-      length: 140,
+      length: 100,
       width: 12,
     },
   })
@@ -129,9 +183,11 @@ export const HeaderNotification = ({
   return (
     <>
       <Wrap style={style}>
-        <Notification {...referenceProps} isOpen={isOpen}>
-          {amount}
-        </Notification>
+        <HoverAnimation isOpen={isOpen}>
+          <Notification {...referenceProps} isOpen={isOpen}>
+            {amount}
+          </Notification>
+        </HoverAnimation>
       </Wrap>
       <Portal>
         {isMounted && (
@@ -141,6 +197,8 @@ export const HeaderNotification = ({
                 <animated.div style={pullStyle}>
                   <div {...pullProps}>
                     <Arrow {...arrowProps} />
+
+                    <ClosePosition />
                     {bubbleProps && (
                       <SvgBubble
                         {...bubbleProps}
@@ -166,8 +224,13 @@ export const HeaderNotification = ({
                       />
                       <Title>{annoucement.title}</Title>
                       <PortableText value={annoucement.content} />
-                      <CloseButton onClick={close}>{'Close'}</CloseButton>
                     </Content>
+                    <CloseButton onClick={close}>
+                      <CloseCross>
+                        <line x1={5} y1={5} x2={45} y2={45} />
+                        <line x1={45} y1={5} x2={5} y2={45} />
+                      </CloseCross>
+                    </CloseButton>
                   </div>
                 </animated.div>
               </Animation>

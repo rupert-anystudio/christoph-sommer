@@ -39,14 +39,14 @@ export const usePullAnimation = ({ isOpen, currentSide }) => {
     if (!isOpen) return
     if (currentSide === 'top') {
       api.set({
-        x: -800,
-        y: -2000,
+        x: -80,
+        y: -200,
       })
     }
     if (currentSide === 'bottom') {
       api.set({
-        x: 800,
-        y: 2000,
+        x: 80,
+        y: 200,
       })
     }
     // if (currentSide === 'left') {

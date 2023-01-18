@@ -75,7 +75,7 @@ export const useNotificationPopover = ({
   onResize,
   arrowSize = {
     length: 200,
-    width: 20,
+    width: 10,
   },
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -105,7 +105,7 @@ export const useNotificationPopover = ({
     middlewareData,
   } = useFloating({
     strategy: 'fixed',
-    placement: 'top-center',
+    placement: 'top-start',
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
@@ -130,7 +130,7 @@ export const useNotificationPopover = ({
       }),
       arrow({
         element: arrowRef,
-        padding: 0,
+        padding: 40,
       }),
       // hide(),
     ],

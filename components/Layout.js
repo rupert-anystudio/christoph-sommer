@@ -141,16 +141,16 @@ const Layout = () => {
       <Header>
         <HeaderElem>
           <Logo />
-          <Annoucements
+          {/* <Annoucements
             style={{
               top: '28.9%',
               left: '78%',
             }}
-          />
+          /> */}
           <HeaderNotification
             style={{
               top: '28.9%',
-              left: '28%',
+              left: '78%',
             }}
           />
         </HeaderElem>
@@ -172,12 +172,12 @@ const Layout = () => {
           {/* {layout === 'portfolio' && <PortfolioPage />} */}
           {layout === 'portfolio' && <Portfolio />}
 
-          <HeaderNotification
+          {/* <HeaderNotification
             style={{
               top: '900px',
               right: '60px',
             }}
-          />
+          /> */}
         </Main>
         <Footer>
           <FooterNav />

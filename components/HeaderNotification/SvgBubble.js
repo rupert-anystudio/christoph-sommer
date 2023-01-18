@@ -56,12 +56,11 @@ const Svg = styled.svg.attrs({
   outline: none;
   /* outline: 1px solid red; */
   path {
-    pointer-events: auto;
+    /* pointer-events: auto; */
   }
   .baseShape {
     fill: none;
     stroke: none;
-    pointer-events: none;
     opacity: 0;
     visibility: hidden;
   }

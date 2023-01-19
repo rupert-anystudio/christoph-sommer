@@ -9,7 +9,7 @@ const ScrollRoot = styled(ScrollArea.Root)`
 const ScrollViewport = styled(ScrollArea.Viewport)`
   height: 100%;
   @media (max-width: 919px) {
-    overflow: visible !important;
+    /* overflow: visible !important; */
   }
   > div {
     min-height: 100%;

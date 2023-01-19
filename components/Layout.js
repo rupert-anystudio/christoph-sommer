@@ -8,6 +8,7 @@ import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
+import HeaderNotification from './HeaderNotification'
 
 const Container = styled.div`
   position: relative;
@@ -41,7 +42,7 @@ const Element = styled.div`
   background: var(--color-bg);
   padding: var(--padding-page);
 `
-const Header = styled(Element)`
+const Header = styled.header`
   grid-area: Header;
   z-index: 100;
   border-bottom: var(--border);
@@ -53,10 +54,13 @@ const Header = styled(Element)`
     top: 0;
     border-right: var(--border);
   }
-  > div {
-    position: relative;
-    /* outline: 1px solid red; */
-  }
+`
+const HeaderElem = styled(Element)`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* outline: 1px solid red; */
 `
 const Infos = styled(Area)`
   grid-area: Infos;
@@ -96,6 +100,7 @@ const Scrollables = styled(Area)`
   }
 `
 const Main = styled(Element)`
+  position: relative;
   padding: 0;
   @media (min-width: 1440px) {
     grid-area: Main;
@@ -134,21 +139,21 @@ const Layout = () => {
     <Container>
       <Head />
       <Header>
-        <div>
+        <HeaderElem>
           <Logo />
-          <Annoucements
+          {/* <Annoucements
+            style={{
+              top: '28.9%',
+              left: '78%',
+            }}
+          /> */}
+          <HeaderNotification
             style={{
               top: '28.9%',
               left: '78%',
             }}
           />
-          {/* <Annoucements
-            style={{
-              top: '38.9%',
-              left: '18%',
-            }}
-          /> */}
-        </div>
+        </HeaderElem>
       </Header>
       <Infos>
         <div>
@@ -166,6 +171,13 @@ const Layout = () => {
           {layout === 'static' && <StaticPage />}
           {/* {layout === 'portfolio' && <PortfolioPage />} */}
           {layout === 'portfolio' && <Portfolio />}
+
+          {/* <HeaderNotification
+            style={{
+              top: '900px',
+              right: '60px',
+            }}
+          /> */}
         </Main>
         <Footer>
           <FooterNav />

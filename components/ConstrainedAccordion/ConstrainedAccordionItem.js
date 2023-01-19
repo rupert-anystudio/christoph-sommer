@@ -1,7 +1,12 @@
+import {
+  animated,
+  useIsomorphicLayoutEffect,
+  useSpring,
+} from '@react-spring/web'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-const Wrap = styled.div`
+const Wrap = styled(animated.div)`
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -9,7 +14,7 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  flex: ${(p) => (p.autoHeight ? '0 0 auto' : '1 0 90px')};
+  flex: 1 0 auto;
 `
 
 // style={{ flex: isSelected ? '1 0 auto' : '0 0 80px' }}
@@ -37,15 +42,37 @@ export const ConstrainedAccordionItem = ({ children, item, observer }) => {
     }
   }, [observer, wrapRef, contentRef])
 
+  const [style, api] = useSpring(() => ({
+    from: {
+      opacity: 0,
+      maxHeight: 800,
+    },
+  }))
+
+  useIsomorphicLayoutEffect(() => {
+    const maxHeight =
+      item.isSelected && item?.size?.content?.height > 0
+        ? item.size.content.height
+        : 800
+    api.start({
+      to: {
+        opacity: 1,
+        maxHeight,
+      },
+      // immediate: true,
+    })
+  }, [item, api])
+
   return (
     <Wrap
       ref={wrapRef}
-      autoHeight={item.isSelected}
+      // autoHeight={item.isSelected}
       data-observed-group={item.key}
       data-observed-id={'wrap'}
       style={{
         '--item-wrap-height': `${item?.size?.wrap?.height ?? 0}px`,
         '--item-content-height': `${item?.size?.content?.height ?? 0}px`,
+        ...style,
       }}
     >
       <Content

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ConstrainedAccordionItem } from './ConstrainedAccordionItem'
 import { Dev } from './Elements'
 import { Scroll } from './Scroll'
+import { useItemLayout } from './useItemLayout'
 import { useObservedElements } from './useObservedElements'
 import { useOccludedContent } from './useOccludedContent'
+import { useSelected } from './useSelected'
 
 const Wrap = styled.div`
   position: relative;
@@ -27,53 +28,6 @@ const Content = styled.div`
   align-items: stretch;
   touch-action: ${(p) => (p.isOccluded ? 'auto' : 'none')};
 `
-
-const useSelected = () => {
-  const [selected, setSelected] = useState(null)
-  const onSelect = useCallback((key) => {
-    setSelected(key)
-  }, [])
-  const onDismiss = useCallback(() => {
-    setSelected(null)
-  }, [])
-  const hasSelection = selected !== null
-  return {
-    selected,
-    hasSelection,
-    onSelect,
-    onDismiss,
-  }
-}
-
-const useItemLayout = (items, dimensions) => {
-  const [layout, setLayout] = useState(null)
-  useEffect(() => {
-    if (!items || !dimensions) return
-    const measuredItems = items.map(({ key }) => {
-      const size = dimensions[key] ?? {}
-      return {
-        key,
-        wrap: size?.wrap?.height,
-        content: size?.content?.height,
-      }
-    })
-    const contentHeightCalculated = measuredItems.reduce((acc, item) => {
-      const itemHeight = item?.wrap ?? 0
-      acc += itemHeight
-      return acc
-    }, 0)
-    setLayout({
-      contentHeightCalculated,
-      measuredItems,
-    })
-  }, [items, dimensions])
-
-  useEffect(() => {
-    console.log({ layout })
-  }, [layout])
-
-  return layout
-}
 
 export const ConstrainedAccordion = ({
   items = [],

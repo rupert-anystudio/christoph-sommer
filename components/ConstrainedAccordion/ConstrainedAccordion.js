@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { ConstrainedAccordionItem } from './ConstrainedAccordionItem'
 import { Dev } from './Elements'
@@ -30,7 +31,7 @@ const Content = styled.div`
 `
 
 export const ConstrainedAccordion = ({
-  items = [],
+  items: givenItems = [],
   renderItem = () => null,
 }) => {
   /* prettier-ignore */
@@ -53,33 +54,30 @@ export const ConstrainedAccordion = ({
     dimensions,
     observer,
   } = useObservedElements()
-  /* prettier-ignore */
-  const layout = useItemLayout(items, dimensions)
 
-  const renderItems = items.map((item, index) => {
-    const size = dimensions?.[item.key] ?? {}
-    const isOccluded = size?.content?.height > size?.wrap?.height
-    const isSelected = item.key === selected
-    return {
-      ...item,
-      index,
-      isSelected,
-      isOccluded,
-      size,
-      isFirst: index === 0,
-      isLast: index === items.length - 1,
-      onSelect: () => onSelect(item.key),
-      onDismiss,
-      hasSelection,
-    }
-  })
+  const items = useMemo(() => {
+    return givenItems.map((item, index) => {
+      const maxHeight = dimensions?.item?.[item.key]?.height
+      const isSelected = item.key === selected
+      const currentHeight = isSelected && maxHeight ? maxHeight : 90
+      return {
+        ...item,
+        isSelected,
+        currentHeight,
+        isFirst: index === 0,
+        isLast: index === givenItems.length - 1,
+        onSelect: () => onSelect(item.key),
+        onDismiss,
+      }
+    })
+  }, [givenItems, dimensions, selected, onDismiss, onSelect])
 
   return (
     <>
       <Wrap ref={wrapRef}>
         <Scroll>
           <Content ref={contentRef} isOccluded={isOccluded}>
-            {renderItems.map((item) => {
+            {items.map((item) => {
               return (
                 <ConstrainedAccordionItem
                   key={item.key}

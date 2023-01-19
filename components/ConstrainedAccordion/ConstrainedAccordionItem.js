@@ -3,6 +3,7 @@ import {
   useIsomorphicLayoutEffect,
   useSpring,
 } from '@react-spring/web'
+import { useHover } from '@use-gesture/react'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -17,8 +18,6 @@ const Wrap = styled(animated.div)`
   flex: 1 0 auto;
 `
 
-// style={{ flex: isSelected ? '1 0 auto' : '0 0 80px' }}
-
 const Content = styled.div`
   flex: 0;
   position: relative;
@@ -27,58 +26,52 @@ const Content = styled.div`
 `
 
 export const ConstrainedAccordionItem = ({ children, item, observer }) => {
-  const wrapRef = useRef(null)
   const contentRef = useRef(null)
 
   useEffect(() => {
-    const wrapEl = wrapRef.current
     const contentEl = contentRef.current
-    if (!wrapEl || !contentEl) return
-    observer.observe(wrapEl)
+    if (!contentEl) return
     observer.observe(contentEl)
     return () => {
-      observer.unobserve(wrapEl)
       observer.unobserve(contentEl)
     }
-  }, [observer, wrapRef, contentRef])
+  }, [observer, contentRef])
 
   const [style, api] = useSpring(() => ({
     from: {
       opacity: 0,
-      maxHeight: 800,
     },
   }))
 
   useIsomorphicLayoutEffect(() => {
-    const maxHeight =
-      item.isSelected && item?.size?.content?.height > 0
-        ? item.size.content.height
-        : 800
+    // const maxHeight = item?.size?.height
+    // if (!maxHeight) return
+    // const height = item.isSelected ? maxHeight : 90
     api.start({
       to: {
         opacity: 1,
-        maxHeight,
+        height: item.currentHeight,
       },
-      // immediate: true,
     })
   }, [item, api])
 
+  // const bind = useHover((state = {}) => {
+  //   const { hovering } = state
+  //   console.log('useHover', state)
+  //   api.start({
+  //     to: {
+  //       opacity: 1,
+  //       height: hovering && !item.isSelected ? height + 60 : height,
+  //     },
+  //   })
+  // })
+
   return (
-    <Wrap
-      ref={wrapRef}
-      // autoHeight={item.isSelected}
-      data-observed-group={item.key}
-      data-observed-id={'wrap'}
-      style={{
-        '--item-wrap-height': `${item?.size?.wrap?.height ?? 0}px`,
-        '--item-content-height': `${item?.size?.content?.height ?? 0}px`,
-        ...style,
-      }}
-    >
+    <Wrap style={style}>
       <Content
         ref={contentRef}
-        data-observed-group={item.key}
-        data-observed-id={'content'}
+        data-observed-group={'item'}
+        data-observed-id={item.key}
       >
         {children}
       </Content>

@@ -11,4 +11,5 @@ export const Dev = styled.div`
   font-size: 12px;
   background: yellow;
   color: black;
+  z-index: 2;
 `

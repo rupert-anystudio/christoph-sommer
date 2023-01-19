@@ -4,6 +4,7 @@ const ThemeDark = createGlobalStyle`
   :root {
     /* COLORS */
     --color-bg: var(--color-black);
+    --color-bg-value: var(--color-black-value);
     --color-txt: var(--color-blue);
     --color-border: var(--color-blue);
     --color-project-bg: #0b6b36;

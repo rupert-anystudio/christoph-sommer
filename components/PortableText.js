@@ -1,9 +1,9 @@
 import { PortableText as PortableTextReact } from '@portabletext/react'
 import styled from 'styled-components'
 import ExternalLink from './ExternalLink'
-import { Title } from './Primitives'
+import { Body, Title } from './Primitives'
 
-const Wrap = styled.div`
+const Wrap = styled(Body).attrs({ as: 'div' })`
   position: relative;
   display: block;
   max-width: 100%;

@@ -9,9 +9,13 @@ export const Body = styled(Text)`
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
   font-style: var(--fx-suisse);
-  font-size: var(--fs-small);
-  line-height: var(--lh-small);
+  font-size: var(--fs-smaller);
+  line-height: var(--lh-smaller);
   @media (min-width: 400px) {
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+  }
+  @media (min-width: 1024px) {
     font-size: var(--fs-root);
     line-height: var(--lh-root);
   }

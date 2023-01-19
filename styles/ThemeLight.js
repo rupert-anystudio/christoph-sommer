@@ -4,6 +4,7 @@ const ThemeLight = createGlobalStyle`
   :root {
     /* COLORS */
     --color-bg: var(--color-offwhite);
+    --color-bg-value: var(--color-offwhite-value);
     --color-txt: var(--color-blue);
     --color-border: var(--color-blue);
     --color-project-bg: var(--color-blue);

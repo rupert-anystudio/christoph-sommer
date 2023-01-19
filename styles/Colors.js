@@ -5,9 +5,11 @@ const Colors = createGlobalStyle`
     /* COLOR PALETTE */
     --color-white: white;
     --color-offwhite: #eeeeee;
+    --color-offwhite-value: 238;
     --color-grey: #CFCFCF;
     --color-darkgrey: #272727;
     --color-black: black;
+    --color-black-value: 0;
     --color-offblack: #080808;
     --color-blue-before:#3959FF;
     --color-blue:#2040df;

@@ -299,6 +299,7 @@ export const Annoucements = ({
   } = useAnnoucement()
 
   useEffect(() => {
+    return
     if (amount < 1) return
     const timeout = setTimeout(() => {
       setOpen(true)

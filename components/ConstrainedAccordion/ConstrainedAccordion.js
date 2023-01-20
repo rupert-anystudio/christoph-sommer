@@ -29,6 +29,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  overflow: hidden;
   /* touch-action: ${(p) => (p.isOccluded ? 'auto' : 'none')}; */
 `
 

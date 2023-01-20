@@ -76,7 +76,7 @@ export const ConstrainedAccordionItem = ({
     if (!isSelected) return
     setViewportY({
       y: currentY,
-      // immediate: true,
+      immediate: true,
     })
   }, [currentY, isSelected, setViewportY])
 

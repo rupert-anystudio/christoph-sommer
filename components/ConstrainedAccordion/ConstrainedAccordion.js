@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { config, useSpring } from '@react-spring/web'
+import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { ConstrainedAccordionItem } from './ConstrainedAccordionItem'
 import { Dev } from './Elements'
@@ -27,25 +28,16 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  touch-action: ${(p) => (p.isOccluded ? 'auto' : 'none')};
+  /* touch-action: ${(p) => (p.isOccluded ? 'auto' : 'none')}; */
 `
 
 export const ConstrainedAccordion = ({
-  items: givenItems = [],
+  items: items = [],
   renderItem = () => null,
 }) => {
   /* prettier-ignore */
   const {
-    isOccluded,
-    contentDimensions,
-    wrapDimensions,
-    wrapRef,
-    contentRef
-  } = useOccludedContent()
-  /* prettier-ignore */
-  const {
     selected,
-    hasSelection,
     onSelect,
     onDismiss,
   } = useSelected()
@@ -55,34 +47,86 @@ export const ConstrainedAccordion = ({
     observer,
   } = useObservedElements()
 
-  const items = useMemo(() => {
-    return givenItems.map((item, index) => {
-      const maxHeight = dimensions?.item?.[item.key]?.height
+  const wrapRef = useRef(null)
+  useEffect(() => {
+    const wrapEl = wrapRef.current
+    if (!wrapEl) return
+    observer.observe(wrapEl)
+    return () => {
+      observer.unobserve(wrapEl)
+    }
+  }, [observer, wrapRef])
+
+  const preparedItems = useMemo(() => {
+    return items.map((item, index) => {
       const isSelected = item.key === selected
-      const currentHeight = isSelected && maxHeight ? maxHeight : 90
+      const isFirst = index === 0
+      const isLast = index === items.length - 1
       return {
         ...item,
         isSelected,
-        currentHeight,
-        isFirst: index === 0,
-        isLast: index === givenItems.length - 1,
+        isFirst,
+        isLast,
         onSelect: () => onSelect(item.key),
         onDismiss,
       }
     })
-  }, [givenItems, dimensions, selected, onDismiss, onSelect])
+  }, [items, selected, onDismiss, onSelect])
+
+  const wrapHeight = dimensions?.layout?.wrap?.height ?? 0
+  const minHeightCalculated = wrapHeight / preparedItems.length
+  const minHeightBase = 90
+  const minHeight = Math.max(minHeightBase, minHeightCalculated)
+
+  const measuredItems = preparedItems.reduce((acc, item, index) => {
+    const prevItem = acc[index - 1] ?? {}
+    const maxHeight = dimensions?.item?.[item.key]?.height
+    const currentHeight = item.isSelected && maxHeight ? maxHeight : minHeight
+    const currentY = (prevItem?.currentY ?? 0) + (prevItem?.currentHeight ?? 0)
+    acc.push({
+      ...item,
+      maxHeight,
+      currentHeight,
+      currentY,
+    })
+    return acc
+  }, [])
+
+  const currentContentHeight = measuredItems.reduce(
+    (acc, curr) => acc + curr.currentHeight,
+    0
+  )
+
+  const scrollRef = useRef(null)
+  // const [viewportY, setViewportY] = useSpring(() => ({
+  //   immediate: false,
+  //   y: 0,
+  //   onChange: (_, ctrl) => {
+  //     if (!scrollRef.current) return
+  //     const y = ctrl.get().y
+  //     scrollRef.current.scroll(0, y)
+  //   },
+  //   config: config.slow,
+  // }))
+
+  // console.log({ measuredItems })
 
   return (
     <>
-      <Wrap ref={wrapRef}>
-        <Scroll>
-          <Content ref={contentRef} isOccluded={isOccluded}>
-            {items.map((item) => {
+      <Wrap
+        ref={wrapRef}
+        data-observed-group={'layout'}
+        data-observed-id={'wrap'}
+      >
+        <Scroll viewportRef={scrollRef}>
+          <Content style={{ minHeight: currentContentHeight }}>
+            {measuredItems.map((item) => {
               return (
                 <ConstrainedAccordionItem
                   key={item.key}
+                  itemKey={item.key}
                   observer={observer}
-                  item={item}
+                  {...item}
                 >
                   {renderItem(item)}
                 </ConstrainedAccordionItem>
@@ -91,14 +135,16 @@ export const ConstrainedAccordion = ({
           </Content>
         </Scroll>
       </Wrap>
-      {false && (
+      {true && (
         <Dev>
           <pre>
             {JSON.stringify(
               {
-                wrapHeight: wrapDimensions?.height,
-                contentHeight: contentDimensions?.height,
-                ...layout,
+                wrapHeight,
+                currentContentHeight,
+                minHeightCalculated,
+                minHeightBase,
+                minHeight,
               },
               null,
               2

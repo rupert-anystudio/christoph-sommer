@@ -11,7 +11,7 @@ const Content = styled.div`
   padding: var(--padding-page);
   border-top: ${(p) => (p.hasBorder ? 'var(--border)' : 'none')};
   cursor: pointer;
-  /* background: yellow; */
+  background: var(--color-bg);
 `
 
 const Label = styled(Small)`

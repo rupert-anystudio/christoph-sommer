@@ -15,7 +15,7 @@ const Wrap = styled(animated.div)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  flex: 1 0 auto;
+  flex: 0 0 auto;
 `
 
 const Content = styled.div`
@@ -25,7 +25,13 @@ const Content = styled.div`
   height: auto;
 `
 
-export const ConstrainedAccordionItem = ({ children, item, observer }) => {
+export const ConstrainedAccordionItem = ({
+  children,
+  currentHeight,
+  currentY,
+  itemKey,
+  observer,
+}) => {
   const contentRef = useRef(null)
 
   useEffect(() => {
@@ -44,16 +50,30 @@ export const ConstrainedAccordionItem = ({ children, item, observer }) => {
   }))
 
   useIsomorphicLayoutEffect(() => {
-    // const maxHeight = item?.size?.height
-    // if (!maxHeight) return
-    // const height = item.isSelected ? maxHeight : 90
+    api.start({
+      to: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      },
+      immediate: true,
+    })
     api.start({
       to: {
         opacity: 1,
-        height: item.currentHeight,
+        height: currentHeight,
+        y: currentY,
       },
     })
-  }, [item, api])
+  }, [currentHeight, currentY, api])
+
+  // useEffect(() => {
+  //   if (!isSelected) return
+  //   console.log('isSelected', isSelected)
+  //   const contentEl = contentRef.current
+  //   if (!contentEl) return
+  //   contentEl.scrollIntoView()
+  // }, [isSelected, api])
 
   // const bind = useHover((state = {}) => {
   //   const { hovering } = state
@@ -71,7 +91,7 @@ export const ConstrainedAccordionItem = ({ children, item, observer }) => {
       <Content
         ref={contentRef}
         data-observed-group={'item'}
-        data-observed-id={item.key}
+        data-observed-id={itemKey}
       >
         {children}
       </Content>

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ConstrainedAccordionItem } from './ConstrainedAccordionItem'
 import { Dev } from './Elements'
 import { Scroll } from './Scroll'
+import { springConfig } from './springConfig'
 import { useItemLayout } from './useItemLayout'
 import { useObservedElements } from './useObservedElements'
 import { useOccludedContent } from './useOccludedContent'
@@ -98,16 +99,20 @@ export const ConstrainedAccordion = ({
   )
 
   const scrollRef = useRef(null)
-  // const [viewportY, setViewportY] = useSpring(() => ({
-  //   immediate: false,
-  //   y: 0,
-  //   onChange: (_, ctrl) => {
-  //     if (!scrollRef.current) return
-  //     const y = ctrl.get().y
-  //     scrollRef.current.scroll(0, y)
-  //   },
-  //   config: config.slow,
-  // }))
+  const [viewportY, setViewportY] = useSpring(() => ({
+    immediate: false,
+    y: 0,
+    onChange: (_, ctrl) => {
+      if (!scrollRef.current) return
+      const y = ctrl.get().y
+      scrollRef.current.scroll(0, y)
+    },
+    config: springConfig,
+  }))
+
+  // useEffect(() => {
+  //   const selectedItem
+  // }, [preparedItems])
 
   // console.log({ measuredItems })
 
@@ -119,13 +124,14 @@ export const ConstrainedAccordion = ({
         data-observed-id={'wrap'}
       >
         <Scroll viewportRef={scrollRef}>
-          <Content style={{ minHeight: currentContentHeight }}>
+          <Content style={{ height: currentContentHeight }}>
             {measuredItems.map((item) => {
               return (
                 <ConstrainedAccordionItem
                   key={item.key}
                   itemKey={item.key}
                   observer={observer}
+                  setViewportY={setViewportY}
                   {...item}
                 >
                   {renderItem(item)}

@@ -13,6 +13,7 @@ export const useObservedElements = () => {
   const onObserve = useCallback(
     (entries) => {
       const newDimensions = entries.reduce((acc, entry) => {
+        console.log({ entry })
         const { target, contentRect } = entry
         const id = target.getAttribute('data-observed-id')
         const group = target.getAttribute('data-observed-group')

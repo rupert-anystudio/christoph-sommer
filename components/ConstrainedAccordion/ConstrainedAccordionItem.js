@@ -6,6 +6,7 @@ import {
 import { useHover } from '@use-gesture/react'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import { springConfig } from './springConfig'
 
 const Wrap = styled(animated.div)`
   position: relative;
@@ -29,8 +30,11 @@ export const ConstrainedAccordionItem = ({
   children,
   currentHeight,
   currentY,
+  isSelected,
   itemKey,
   observer,
+  setViewportY,
+  isLast,
 }) => {
   const contentRef = useRef(null)
 
@@ -47,6 +51,7 @@ export const ConstrainedAccordionItem = ({
     from: {
       opacity: 0,
     },
+    config: springConfig,
   }))
 
   useIsomorphicLayoutEffect(() => {
@@ -66,6 +71,14 @@ export const ConstrainedAccordionItem = ({
       },
     })
   }, [currentHeight, currentY, api])
+
+  useEffect(() => {
+    if (!isSelected) return
+    setViewportY({
+      y: currentY,
+      // immediate: true,
+    })
+  }, [currentY, isSelected, setViewportY])
 
   // useEffect(() => {
   //   if (!isSelected) return
@@ -87,7 +100,9 @@ export const ConstrainedAccordionItem = ({
   // })
 
   return (
-    <Wrap style={style}>
+    <Wrap
+      style={{ ...style, borderBottom: !isLast ? '2px solid blue' : 'none' }}
+    >
       <Content
         ref={contentRef}
         data-observed-group={'item'}

@@ -9,7 +9,7 @@ const Content = styled.div`
   width: 100%;
   height: auto;
   padding: var(--padding-page);
-  border-top: ${(p) => (p.hasBorder ? 'var(--border)' : 'none')};
+  /* border-bottom: ${(p) => (p.hasBorder ? 'var(--border)' : 'none')}; */
   cursor: pointer;
   background: var(--color-bg);
 `
@@ -41,8 +41,8 @@ const Label = styled(Small)`
 //   );
 // `
 
-const Item = ({ label, content, isFirst, isSelected, onSelect, onDismiss }) => (
-  <Content hasBorder={!isFirst} onClick={isSelected ? onDismiss : onSelect}>
+const Item = ({ label, content, isLast, isSelected, onSelect, onDismiss }) => (
+  <Content hasBorder={!isLast} onClick={isSelected ? onDismiss : onSelect}>
     <Label>{label}</Label>
     <PortableText value={content} />
   </Content>

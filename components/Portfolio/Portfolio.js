@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import usePortfolioEntries from '../hooks/usePortfolioEntries'
+import usePortfolioEntries from '../../hooks/usePortfolioEntries'
 import PortfolioEntry from './PortfolioEntry'
-import useAnimatedAccordion from '../hooks/useAnimatedAccordion'
-import { EntryToggle } from './EntryToggle'
-import EntryGradient from './EntryGradient'
+import useAnimatedAccordion from '../../hooks/useAnimatedAccordion'
+import { EntryToggle } from '../EntryToggle'
+import EntryGradient from '../EntryGradient'
 
 const returnScrollTargetId = (key) => `entry-${key}`
 
@@ -111,7 +111,7 @@ const classes = {
   entryChild: 'entry-child',
 }
 
-const Portfolio = () => {
+export const Portfolio = () => {
   const entries = usePortfolioEntries()
   const { rootRef, value, onValueChange } = useAnimatedAccordion({
     returnScrollTargetId,
@@ -168,5 +168,3 @@ const Portfolio = () => {
     </Wrap>
   )
 }
-
-export default Portfolio

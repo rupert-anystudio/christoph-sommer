@@ -7,7 +7,7 @@ import FooterNav from './FooterNav'
 import LandingAccordion from './LandingAccordion'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
-import Portfolio from './Portfolio'
+import { Portfolio } from './Portfolio'
 
 const Container = styled.div`
   position: relative;
@@ -164,7 +164,6 @@ const Layout = () => {
         )}
         <Main>
           {layout === 'static' && <StaticPage />}
-          {/* {layout === 'portfolio' && <PortfolioPage />} */}
           {layout === 'portfolio' && <Portfolio />}
         </Main>
         <Footer>

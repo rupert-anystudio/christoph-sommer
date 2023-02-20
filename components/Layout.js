@@ -21,7 +21,7 @@ const Container = styled.div`
     'Header'
     'Infos'
     'Scrollables';
-  @media (min-width: 800px) {
+  @media (min-width: 920px) {
     grid-template-columns: 5fr 5fr;
     grid-template-rows: var(--height-header) 1fr;
     grid-template-areas:
@@ -48,7 +48,7 @@ const Header = styled(Element)`
   display: flex;
   justify-content: center;
   align-items: center;
-  @media (min-width: 800px) {
+  @media (min-width: 920px) {
     position: sticky;
     top: 0;
     border-right: var(--border);
@@ -66,13 +66,13 @@ const Infos = styled(Area)`
   @media (max-width: 919px) {
     border-bottom: var(--border);
   }
-  @media (min-width: 800px) {
+  @media (min-width: 920px) {
     grid-template-rows: calc(100vh - var(--height-header));
     border-right: var(--border);
   }
   > div {
     position: relative;
-    @media (min-width: 800px) {
+    @media (min-width: 920px) {
       position: sticky;
       top: var(--height-header);
     }
@@ -138,8 +138,8 @@ const Layout = () => {
           <Logo />
           <Annoucements
             style={{
-              top: '28.9%',
-              left: '78%',
+              top: '21%',
+              left: '98%',
             }}
           />
           {/* <Annoucements

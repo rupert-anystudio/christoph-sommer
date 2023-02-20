@@ -142,12 +142,6 @@ const Layout = () => {
               left: '98%',
             }}
           />
-          {/* <Annoucements
-            style={{
-              top: '38.9%',
-              left: '18%',
-            }}
-          /> */}
         </div>
       </Header>
       <Infos>

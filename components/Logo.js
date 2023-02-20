@@ -17,6 +17,7 @@ const LogoText = styled.a`
   white-space: pre;
   text-align: center;
   outline: none;
+  letter-spacing: -0.03em;
   &:hover,
   &:focus,
   &:active {

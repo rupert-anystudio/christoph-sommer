@@ -31,7 +31,7 @@ const LogoText = styled.a`
     &:first-child {
       text-indent: -3em;
       font-size: 0.64em;
-      line-height: 0.78;
+      line-height: 0.5;
     }
   }
 `

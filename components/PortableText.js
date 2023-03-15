@@ -1,9 +1,9 @@
 import { PortableText as PortableTextReact } from '@portabletext/react'
 import styled from 'styled-components'
 import ExternalLink from './ExternalLink'
-import { Title } from './Primitives'
+import { Title, Body } from './Primitives'
 
-const Wrap = styled.div`
+const Wrap = styled(Body).attrs({ as: 'div' })`
   position: relative;
   display: block;
   max-width: 100%;
@@ -36,7 +36,7 @@ const PortableText = ({ value = [], isDisabled }) => {
             h3: ({ children }) => <h3>{children}</h3>,
             h4: ({ children }) => <h4>{children}</h4>,
             h5: ({ children }) => <h5>{children}</h5>,
-            blockquote: ({ children }) => <block>{children}</block>,
+            blockquote: ({ children }) => <blockquote>{children}</blockquote>,
             // custom blocks
             title: ({ children }) => <Title as="p">{children}</Title>,
           },

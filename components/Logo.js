@@ -7,7 +7,7 @@ export const LogoWrap = styled.div`
 `
 
 const LogoText = styled.a`
-  font-size: calc(var(--height-header) * 0.42);
+  font-size: calc(var(--height-header) * 0.48);
   line-height: 0.8334;
   font-family: var(--ff-suisse);
   font-weight: var(--fw-suisse);
@@ -17,6 +17,7 @@ const LogoText = styled.a`
   white-space: pre;
   text-align: center;
   outline: none;
+  letter-spacing: -0.03em;
   &:hover,
   &:focus,
   &:active {
@@ -30,7 +31,7 @@ const LogoText = styled.a`
     &:first-child {
       text-indent: -3em;
       font-size: 0.64em;
-      line-height: 0.78;
+      line-height: 0.5;
     }
   }
 `

@@ -20,8 +20,6 @@ const Sizings = createGlobalStyle`
     @media (min-width: 400px) {
       --padding-card-h: 2rem;
     }
-    @media (min-width: 800px) {
-    }
     @media (min-width: 1024px) {
       --padding-portfolio: 2rem;
     }

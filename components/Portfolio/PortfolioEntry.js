@@ -1,11 +1,14 @@
 import React from 'react'
-import { getEntryTypeLabel, returnPublicationProps } from '../lib/entryHelpers'
-import PortableText from './PortableText'
-import { Body, Title } from './Primitives'
-import Card, { CardLabel, CardSection, CardTag, CardTags } from './Card'
-import LinkList from './LinkList'
-import PublicationList from './PublicationList'
-import { formatProjectTimeframe } from '../lib/dateHelpers'
+import {
+  getEntryTypeLabel,
+  returnPublicationProps,
+} from '../../lib/entryHelpers'
+import PortableText from '../PortableText'
+import { Body, Title } from '../Primitives'
+import Card, { CardLabel, CardSection, CardTag, CardTags } from '../Card'
+import LinkList from '../LinkList'
+import PublicationList from '../PublicationList'
+import { formatProjectTimeframe } from '../../lib/dateHelpers'
 
 const returnLabel = (type, timeframe) => {
   const label = getEntryTypeLabel(type)

@@ -7,16 +7,27 @@ if (typeof window !== 'undefined') {
   }
 }
 
-export const useObservedElements = () => {
+export const useObservedElements = (cb = () => {}) => {
   const [dimensions, setDimensions] = useState(null)
 
   const onObserve = useCallback(
     (entries) => {
-      const newDimensions = entries.reduce((acc, entry) => {
-        console.log({ entry })
+      const measuredEntries = entries.map((entry) => {
         const { target, contentRect } = entry
         const id = target.getAttribute('data-observed-id')
         const group = target.getAttribute('data-observed-group')
+        return {
+          id,
+          group,
+          contentRect,
+          target,
+        }
+      })
+      if (typeof cb === 'function') {
+        cb(measuredEntries)
+      }
+      const newDimensions = measuredEntries.reduce((acc, entry) => {
+        const { contentRect, id, group } = entry
         if (!id || !group) return acc
         const prevGroup = acc[group]
         const { height, width } = contentRect
@@ -40,10 +51,18 @@ export const useObservedElements = () => {
         )
       })
     },
-    [setDimensions]
+    [setDimensions, cb]
   )
 
   const observer = useRef(new ResizeObserver(onObserve))
 
-  return { observer: observer.current, dimensions }
+  const returnObservedProps = (group, id) => {
+    if (!id || !group) return null
+    return {
+      'data-observed-group': group,
+      'data-observed-id': id,
+    }
+  }
+
+  return { observer: observer.current, dimensions, returnObservedProps }
 }

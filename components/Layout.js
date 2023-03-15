@@ -7,7 +7,7 @@ import FooterNav from './FooterNav'
 import Logo from './Logo'
 import StaticPage from './StaticPage'
 import Portfolio from './Portfolio'
-import { ConstrainedLandingAccordion } from './ConstrainedLandingAccordion'
+import LandingAccordion from './LandingAccordion'
 
 const Container = styled.div`
   position: relative;
@@ -155,8 +155,7 @@ const Layout = () => {
       </Header>
       <Infos>
         <div>
-          <ConstrainedLandingAccordion />
-          {/* <LandingAccordion /> */}
+          <LandingAccordion />
         </div>
       </Infos>
       <Scrollables>

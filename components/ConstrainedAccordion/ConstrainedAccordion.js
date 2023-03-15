@@ -6,7 +6,7 @@ import { Dev } from './Elements'
 import { Scroll } from './Scroll'
 import { springConfig } from './springConfig'
 import { useItemLayout } from './useItemLayout'
-import { useObservedElements } from './useObservedElements'
+import { useObservedElements } from '../../any-hooks/useObservedElements'
 import { useOccludedContent } from './useOccludedContent'
 import { useSelected } from './useSelected'
 
@@ -44,10 +44,7 @@ export const ConstrainedAccordion = ({
     onDismiss,
   } = useSelected()
   /* prettier-ignore */
-  const {
-    dimensions,
-    observer,
-  } = useObservedElements()
+  const [observer, dimensions] = useObservedElements()
 
   const wrapRef = useRef(null)
   useEffect(() => {

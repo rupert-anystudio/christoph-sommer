@@ -41,6 +41,10 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap"
             rel="stylesheet"
           />
+          <meta
+            name="description"
+            content="Christoph Sommer erforscht Städtetourismus als einen Motor der Stadtentwicklung. Auf ueber-tourismus.de geht es um mehr als „Übertourismus“ (Overtourism)."
+          />
         </Head>
         <body>
           <Main />

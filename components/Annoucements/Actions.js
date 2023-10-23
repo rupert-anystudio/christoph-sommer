@@ -24,6 +24,10 @@ const ArrowButton = styled.button`
   color: inherit;
   cursor: pointer;
   user-select: none;
+  outline: none;
+  &:focus {
+    outline: none;
+  }
 `
 
 const Label = styled.span`

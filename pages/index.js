@@ -25,6 +25,9 @@ export async function getStaticProps({ preview = false }) {
       docs,
       about,
       annoucements,
+      page: {
+        title: 'Christoph Sommer',
+      },
     },
   }
 }
